@@ -1,0 +1,28 @@
+schema {
+ query: Query
+}
+
+type Query {
+ allTemplates: [Template]
+ template(id: String): Template
+ allTemplateVersions: [TemplateVersion]
+ templateVersion(id: String): TemplateVersion
+}
+
+type Template {
+  templateId: String
+  templateName: String
+  templateUUID: String
+  alertType: String
+  appCode: String
+}
+
+type TemplateVersion {
+  templateVersionId: String
+  templateVersionName: String
+  templateHash: String
+  body: String
+  version: String
+  templateStatus: String
+  teamsWebhookId: String
+}
