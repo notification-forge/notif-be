@@ -13,9 +13,9 @@ class Template {
      * A user defined id of the template. Alphanumeric, dashes and dots only
      */
     @Id
-    @Column(name = "template_id", length = 56, nullable = false)
-    @Pattern(regexp = "[A-Za-z0-9\\-.]")
-    var templateId: String? = null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "template_id")
+    var templateId: Long? = null
 
     @Column(name = "template_name")
     var templateName: String? = null
@@ -25,7 +25,7 @@ class Template {
     var templateUUID: UUID? = null
 
     enum class AlertType {
-        TEAMS_NOTIFICATION, EMAIL
+        TEAMS, EMAIL
     }
 
     @Enumerated(EnumType.STRING)
@@ -35,17 +35,4 @@ class Template {
     @Column(name = "app_code")
     var appCode: String? = null
 
-    @Column(name = "created_by", length = 24, nullable = false)
-    val createdBy: String? = null
-
-//    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_created", nullable = false)
-    val dateCreated: OffsetDateTime? = null
-
-    @Column(name = "updated_by", length = 24)
-    val updatedBy: String? = null
-
-//    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_updated", nullable = false)
-    val dateUpdated: OffsetDateTime? = null
 }

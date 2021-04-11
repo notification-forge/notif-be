@@ -1,28 +1,28 @@
-schema {
- query: Query
-}
-
-type Query {
- allTemplates: [Template]
- template(id: String): Template
- allTemplateVersions: [TemplateVersion]
- templateVersion(id: String): TemplateVersion
-}
-
 type Template {
   templateId: String
   templateName: String
   templateUUID: String
   alertType: String
   appCode: String
+  templateVersions: [TemplateVersion]
+}
+
+enum AlertType {
+    TEAMS, EMAIL
 }
 
 type TemplateVersion {
+  templateId: String
   templateVersionId: String
   templateVersionName: String
   templateHash: String
   body: String
+  settings: String
   version: String
-  templateStatus: String
+  templateStatus: TemplateStatus
   teamsWebhookId: String
+}
+
+enum TemplateStatus {
+    DRAFT, PUBLISHED
 }
