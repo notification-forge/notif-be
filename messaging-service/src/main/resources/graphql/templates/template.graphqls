@@ -1,0 +1,28 @@
+type Template {
+  templateId: String
+  templateName: String
+  templateUUID: String
+  alertType: String
+  appCode: String
+  templateVersions: [TemplateVersion]
+}
+
+enum AlertType {
+    TEAMS, EMAIL
+}
+
+type TemplateVersion {
+  templateId: String
+  templateVersionId: String
+  templateVersionName: String
+  templateHash: String
+  body: String
+  settings: String
+  version: String
+  templateStatus: TemplateStatus
+  teamsWebhookId: String
+}
+
+enum TemplateStatus {
+    DRAFT, PUBLISHED
+}

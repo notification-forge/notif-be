@@ -1,0 +1,23 @@
+input CreateTemplateInput {
+    templateName: String
+    alertType: AlertType
+    appCode: String
+}
+
+input UpdateTemplateInput {
+    templateId: Long
+    templateName: String
+}
+
+input CreateTemplateVersionInput{
+    templateId: Long
+}
+
+input UpdateTemplateVersionInput{
+    templateVersionId: Long
+    templateVersionName: String
+    settings: String
+    body: String,
+    templateStatus: TemplateStatus
+    teamsWebhookId: Long
+}

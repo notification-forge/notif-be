@@ -22,8 +22,6 @@ open class TenantService(private val tenantRepository: TenantRepository) {
             throw TenantAlreadyExistException("App code already exist.")
         }
 
-
-
         return newTenant
     }
 

@@ -1,0 +1,6 @@
+type Query {
+    template(templateId: Long): Template
+    templates: [Template]
+    templateVersion(templateVersionId: Long): TemplateVersion
+}
+
