@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "2.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
+    kotlin("jvm")
     application
     id("rt")
     idea
@@ -23,6 +24,10 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
 }
 
 apply(plugin= "io.spring.dependency-management")
