@@ -1,6 +1,5 @@
-
 plugins {
-	id("java")
+    id("java")
     checkstyle
     idea
 }
@@ -13,6 +12,7 @@ val mockkVersion = "1.11.0"
 
 dependencies {
     implementation(kotlin("reflect"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.+")
 
     testImplementation("io.mockk:mockk:${mockkVersion}")
     testImplementation(kotlin("test-junit5"))

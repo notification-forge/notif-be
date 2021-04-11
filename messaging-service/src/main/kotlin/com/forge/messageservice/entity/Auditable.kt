@@ -4,6 +4,7 @@ import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.EntityListeners
 import javax.persistence.MappedSuperclass
@@ -14,15 +15,15 @@ open class Auditable {
 
     @CreatedDate
     @Column(name = "created_timestamp", nullable = false)
-    var createdDate: LocalDate? = null
+    var createdDate: LocalDateTime = LocalDateTime.now()
 
     @CreatedBy
     @Column(name = "created_by", nullable = false)
-    var createdBy: String? = null
+    var createdBy: String = ""
 
     @LastModifiedDate
     @Column(name = "last_modified_timestamp", nullable = false)
-    var lastModifiedDate: LocalDate? = null
+    var lastModifiedDate: LocalDateTime? = null
 
     @LastModifiedBy
     @Column(name = "last_modified_by", nullable = false)
