@@ -1,9 +1,7 @@
 package com.forge.messageservice.entity
 
-import java.time.OffsetDateTime
 import java.util.*
 import javax.persistence.*
-import javax.validation.constraints.Pattern
 
 @Entity
 @Table(name = "templates")

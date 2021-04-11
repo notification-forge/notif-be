@@ -37,14 +37,12 @@ class Plugins {
     @Column(name = "created_by", length = 24, nullable = false)
     val createdBy: String? = null
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_created", nullable = false)
     val dateCreated: OffsetDateTime? = null
 
     @Column(name = "updated_by", length = 24)
     val updatedBy: String? = null
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_updated", nullable = false)
     val dateUpdated: OffsetDateTime? = null
 
