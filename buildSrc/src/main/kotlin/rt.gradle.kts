@@ -9,7 +9,7 @@ repositories {
     mavenCentral()
 }
 
-val mockkVersion = "1.10.3-jdk8"
+val mockkVersion = "1.11.0"
 
 dependencies {
     implementation(kotlin("reflect"))
