@@ -12,7 +12,7 @@ import java.util.*
 @Service
 open class TemplateService(private val templateRepository: TemplateRepository) {
 
-    fun retrieveAllTemplates(): List<Template> {
+    fun retrieveAllTemplates(searchValue: String, appCodes: List<String>): List<Template> {
         return templateRepository.findAll()
     }
 
@@ -25,16 +25,20 @@ open class TemplateService(private val templateRepository: TemplateRepository) {
         return optionalTemplate.get()
     }
 
+    fun retrieveTemplateIdAfterCursor(appCodes: List<String>, cursor: Long): List<Template>{
+        return templateRepository.findAllInAppCodesAfterTemplateId(appCodes, cursor)
+    }
+
     private fun retrieveTemplateByTemplateNameAndAppCode(templateName: String, appCode: String): Template? {
-        return templateRepository.findByTemplateNameAndAppCode(templateName, appCode)
+        return templateRepository.findByNameAndAppCode(templateName, appCode)
     }
 
     fun createTemplate(templateInput: CreateTemplateInput): Template{
-        ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.templateName, templateInput.appCode)
+        ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.name, templateInput.appCode)
 
         return saveTemplate(Template().apply {
-            templateUUID = UUID.randomUUID()
-            templateName = templateInput.templateName
+            uuid = UUID.randomUUID()
+            name = templateInput.name
             alertType = templateInput.alertType
             appCode = templateInput.appCode
         })
@@ -45,9 +49,9 @@ open class TemplateService(private val templateRepository: TemplateRepository) {
     }
 
     fun updateTemplate(templateInput: UpdateTemplateInput): Template {
-        val template = retrieveTemplateById(templateInput.templateId)
+        val template = retrieveTemplateById(templateInput.id)
 
-        ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.templateName, template.appCode!!)
+        ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.name, template.appCode!!)
 
         update(templateInput, template)
         return saveTemplate(template)
@@ -55,7 +59,7 @@ open class TemplateService(private val templateRepository: TemplateRepository) {
 
     fun update(templateInput: UpdateTemplateInput, template: Template) {
         template.apply {
-            templateName = templateInput.templateName
+            name = templateInput.name
         }
     }
 

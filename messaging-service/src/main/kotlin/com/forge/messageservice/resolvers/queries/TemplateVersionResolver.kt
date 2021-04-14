@@ -1,4 +1,4 @@
-package com.forge.messageservice.resolvers
+package com.forge.messageservice.resolvers.queries
 
 import com.forge.messageservice.entity.Template
 import com.forge.messageservice.entity.TemplateVersion
@@ -21,7 +21,7 @@ class TemplateVersionResolver(
     fun templateVersions(template: Template?): CompletableFuture<List<TemplateVersion>>? {
         return CompletableFuture.supplyAsync(
             Supplier {
-                templateVersionService.retrieveAllTemplateVersionsByTemplateId(template!!.templateId!!)
+                templateVersionService.retrieveAllTemplateVersionsByTemplateId(template!!.id!!)
             },
             executorService
         )

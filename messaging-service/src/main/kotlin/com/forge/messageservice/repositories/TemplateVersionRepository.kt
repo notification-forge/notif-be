@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TemplateVersionRepository : JpaRepository<TemplateVersion, Long> {
     fun findAllByTemplateId(templateId: Long): List<TemplateVersion>
-    fun findByTemplateIdAndTemplateStatus(templateId: Long, status: TemplateStatus): TemplateVersion?
+    fun findByTemplateIdAndStatus(templateId: Long, status: TemplateStatus): TemplateVersion?
     @Query("SELECT MAX(t.version) FROM TemplateVersion t where t.templateId = :templateId")
     fun findCurrentVersionNumberByTemplateId(templateId: Long): Long
 }

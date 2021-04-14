@@ -1,0 +1,7 @@
+type Image {
+    id: ID
+    appCode: String
+    tenant: String
+    fileName: String
+    imageData: String
+}

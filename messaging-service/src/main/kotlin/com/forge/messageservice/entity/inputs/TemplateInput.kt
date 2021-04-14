@@ -1,14 +1,22 @@
 package com.forge.messageservice.entity.inputs
 
 import com.forge.messageservice.entity.Template
+import org.springframework.validation.annotation.Validated
+import javax.validation.constraints.NotBlank
 
+@Validated
 data class CreateTemplateInput(
-    val templateName: String,
+    @NotBlank
+    val name: String,
     val alertType: Template.AlertType,
+    @NotBlank
     val appCode: String
 )
 
+@Validated
 data class UpdateTemplateInput(
-    val templateId: Long,
-    val templateName: String
+    @NotBlank
+    val id: Long,
+    @NotBlank
+    val name: String
 )

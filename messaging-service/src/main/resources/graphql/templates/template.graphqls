@@ -1,10 +1,12 @@
 type Template {
-  templateId: String
-  templateName: String
-  templateUUID: String
+  id: ID
+  name: String
+  uuid: String
   alertType: String
   appCode: String
   templateVersions: [TemplateVersion]
+  createdDate: Date
+  lastModifiedDate: Date
 }
 
 enum AlertType {
@@ -12,15 +14,16 @@ enum AlertType {
 }
 
 type TemplateVersion {
-  templateId: String
-  templateVersionId: String
-  templateVersionName: String
+  templateId: ID
+  id: Int
+  name: String
   templateHash: String
   body: String
   settings: String
   version: String
-  templateStatus: TemplateStatus
-  teamsWebhookId: String
+  status: TemplateStatus
+  createdDate: Date
+  lastModifiedDate: Date
 }
 
 enum TemplateStatus {
