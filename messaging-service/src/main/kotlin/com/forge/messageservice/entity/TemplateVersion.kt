@@ -1,10 +1,11 @@
 package com.forge.messageservice.entity
 
+import Auditable
 import javax.persistence.*
 
 @Entity
 @Table(name = "template_versions")
-class TemplateVersion {
+class TemplateVersion : Auditable() {
 
     /**
      * A user defined id of the template version. Alphanumeric, dashes and dots only
@@ -12,10 +13,10 @@ class TemplateVersion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_version_id")
-    var templateVersionId: Long? = null
+    var id: Long? = null
 
     @Column(name = "template_version_name")
-    var templateVersionName: String? = null
+    var name: String? = null
 
     /**
      * A user defined id of the template. Alphanumeric, dashes and dots only
@@ -68,10 +69,6 @@ class TemplateVersion {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "template_status", length = 24, nullable = false)
-    var templateStatus: TemplateStatus = TemplateStatus.DRAFT
-
-    @Column(name = "teams_webhook_id")
-    var teamsWebhookId: Long? = null
-
+    var status: TemplateStatus = TemplateStatus.DRAFT
 
 }

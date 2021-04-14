@@ -1,11 +1,12 @@
 package com.forge.messageservice.entity
 
+import Auditable
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "templates")
-class Template {
+class Template : Auditable(){
 
     /**
      * A user defined id of the template. Alphanumeric, dashes and dots only
@@ -13,14 +14,14 @@ class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id")
-    var templateId: Long? = null
+    var id: Long? = null
 
     @Column(name = "template_name")
-    var templateName: String? = null
+    var name: String? = null
 
     @org.hibernate.annotations.Type(type = "uuid-char")
     @Column(name = "template_UUID")
-    var templateUUID: UUID? = null
+    var uuid: UUID? = null
 
     enum class AlertType {
         TEAMS, EMAIL
@@ -32,5 +33,4 @@ class Template {
 
     @Column(name = "app_code")
     var appCode: String? = null
-
 }

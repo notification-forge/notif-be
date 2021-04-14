@@ -1,23 +1,29 @@
 input CreateTemplateInput {
-    templateName: String
+    name: String
     alertType: AlertType
     appCode: String
 }
 
 input UpdateTemplateInput {
-    templateId: Long
-    templateName: String
+    id: ID
+    name: String
 }
 
 input CreateTemplateVersionInput{
-    templateId: Long
+    templateId: ID
+}
+
+input CloneTemplateVersionInput{
+    templateId: ID
+    name: String
+    settings: String
+    body: String
 }
 
 input UpdateTemplateVersionInput{
-    templateVersionId: Long
-    templateVersionName: String
+    id: ID
+    name: String
     settings: String
     body: String,
-    templateStatus: TemplateStatus
-    teamsWebhookId: Long
+    status: TemplateStatus
 }

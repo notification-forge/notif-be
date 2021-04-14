@@ -1,15 +1,15 @@
 package com.forge.messageservice.entity
 
-import java.time.OffsetDateTime
+import Auditable
 import javax.persistence.*
 
 @Entity
 @Table(name = "images")
-class Images {
+class Image : Auditable() {
 
     @Id
     @Column(name = "image_id", length = 255, nullable = false)
-    var imageId: String? = null
+    var id: String? = null
 
     @Column(name = "app_code", length = 255, nullable = false)
     var appCode: String? = null
@@ -27,16 +27,4 @@ class Images {
     @Lob
     @Column(name = "image_data", nullable = false)
     var imageData: String? = null
-
-    @Column(name = "created_by", length = 24, nullable = false)
-    val createdBy: String? = null
-
-    @Column(name = "date_created", nullable = false)
-    val dateCreated: OffsetDateTime? = null
-
-    @Column(name = "updated_by", length = 24)
-    val updatedBy: String? = null
-
-    @Column(name = "date_updated", nullable = false)
-    val dateUpdated: OffsetDateTime? = null
 }

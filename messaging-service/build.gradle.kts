@@ -15,17 +15,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-//    implementation("com.graphql-java:graphql-java:11.0")
-//    implementation("com.graphql-java:graphql-java-tools:5.2.4")
-//    implementation("com.graphql-java:graphql-spring-boot-starter:5.0.2")
-//    implementation("com.graphql-java:graphiql-spring-boot-starter:5.0.2")
-//    implementation("com.graphql-java:voyager-spring-boot-starter:5.0.2")
-//    implementation("com.expediagroup:graphql-kotlin-spring-server:1.4.2")
-//    implementation("com.graphql-java:graphql-java-servlet:6.1.3")
 
     implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:7.1.0")
     implementation("com.graphql-java-kickstart:playground-spring-boot-starter:7.1.0")
     implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:7.1.0")
+    implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
+    implementation("com.graphql-java:graphql-java")
+
+    implementation("org.hibernate.validator:hibernate-validator")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 

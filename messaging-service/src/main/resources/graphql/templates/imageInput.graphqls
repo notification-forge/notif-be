@@ -1,0 +1,14 @@
+input CreateImageInput {
+    appCode: String
+    tenant: String
+    fileName: String
+    imageData: String
+}
+
+input UpdateImageInput {
+    id: ID
+    appCode: String
+    tenant: String
+    fileName: String
+    imageData: String
+}

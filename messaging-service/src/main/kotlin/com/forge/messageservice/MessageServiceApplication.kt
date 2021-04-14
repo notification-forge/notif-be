@@ -9,4 +9,3 @@ open class MessageServiceApplication
 fun main(args: Array<String>){
     runApplication<MessageServiceApplication>(*args)
 }
-
