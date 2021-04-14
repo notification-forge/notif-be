@@ -58,10 +58,7 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           echo "::set-output name=ecrRepo::$ECR_REGISTRY/$ECR_REPOSITORY"
       - name: Webhook
-        uses: distributhor/workflow-webhook
-        with:
-          url: "http://54.179.227.126:9000/hooks/redeploy-webhook"
-
-      # Runs a set of commands using the runners shell
-
-
+        uses: distributhor/workflow-webhook@v1
+        env:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
