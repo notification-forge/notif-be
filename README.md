@@ -41,11 +41,11 @@ include("app", "lib", "shared")
 
 ### `main` and `development`
 
-There are 2 main branches in the project: `master` and `development`.
+There are 2 main branches in the project: `main` and `development`.
 
 `development` branch contain stable versions of the app. Developers should branch out from the `development` branch to begin development.
 
-Once development branch is ready, or once a `hot-fix` branch is ready, it will be merged into `master` with an annotated tag. Click here to read more about [tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
+Once development branch is ready, or once a `hot-fix` branch is ready, it will be merged into `main` with an annotated tag. Click here to read more about [tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
 
 ### `feature`, `bug`, `chore`, `refactor` and `hot-fix`
 
@@ -65,7 +65,7 @@ Branches should be named: `type/description` (e.g `feature/login`)
 | `bug`       | `development` |
 | `chore`     | `development` |
 | `refactor`  | `development` |
-| `hot-fix`   | `master`      |
+| `hot-fix`   | `main`      |
 
 ### Versioning
 
