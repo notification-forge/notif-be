@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notif-be
+  labels:
+    app: notif-be
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notif-be
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: notif-be
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: notif-be
+          image: 501716994299.dkr.ecr.ap-southeast-1.amazonaws.com/notif-be:latest
+          imagePullPolicy: Always # Since we reuse tags, we should always pull
+          envFrom:
+            - secretRef:
+                name: backend
+          env:
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "512m"
+              memory: "512Mi"
+            limits:
+              cpu: "2000m"
+              memory: "2Gi"
+      imagePullSecrets:
+        - name: steam-image-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notif-be-service
+  namespace: dev
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8686
+      targetPort: 8080
+  selector:
+    app: notif-be

@@ -5,7 +5,7 @@ services:
     image: mariadb:10.5.9
     restart: always
     ports:
-      - 3306:3306
+      - 6603:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=root
@@ -13,5 +13,5 @@ services:
       - MYSQL_USER=alphamail
       - MYSQL_PASSWORD=alphamail
     volumes:
-      - ./.mariadb:/var/lib/mysql
+      - ./volumes/mariadb:/var/lib/mysql
       - ./cfg:/docker-entrypoint-initdb.d

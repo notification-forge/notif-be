@@ -24,11 +24,11 @@ plugins {
 }
 ```
 
-[shared](shared) - Contains the classes that are common to both [lib](lib) and [app](app)
+[shared](shared) - Contains the classes that are common to both [lib](lib) and [messaging-service](messaging-service)
 
-[lib](lib) - The standalone jar that will be loaded by [app](app) at runtime.
+[lib](lib) - The standalone jar that will be loaded by [messaging-service](messaging-service) at runtime.
 
-[app](app) - The application's main interface.
+[messaging-service](messaging-service) - The application's main interface.
 
 ## Declaring the multi-module gradle project
 [settings.gradle.kts](settings.gradle.kts)
@@ -39,17 +39,9 @@ include("app", "lib", "shared")
 
 ## Git Branching Strategy
 
-### `main` and `development`
-
-There are 2 main branches in the project: `main` and `development`.
-
-`development` branch contain stable versions of the app. Developers should branch out from the `development` branch to begin development.
-
-Once development branch is ready, or once a `hot-fix` branch is ready, it will be merged into `main` with an annotated tag. Click here to read more about [tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
-
 ### `feature`, `bug`, `chore`, `refactor` and `hot-fix`
 
-These branches are short-lived. Below are the descriptions of the branche types:
+These branches are short-lived. Below are the descriptions of the branch types:
 
 1. `feature`: Contain code for any new feature
 2. `bug`: Fixes for any bug discovered
@@ -61,10 +53,10 @@ Branches should be named: `type/description` (e.g `feature/login`)
 
 | Branch Type | Branch From   |
 | ----------- | ------------- |
-| `feature`   | `development` |
-| `bug`       | `development` |
-| `chore`     | `development` |
-| `refactor`  | `development` |
+| `feature`   | `main` |
+| `bug`       | `main` |
+| `chore`     | `main` |
+| `refactor`  | `main` |
 | `hot-fix`   | `main`      |
 
 ### Versioning
