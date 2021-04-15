@@ -1,9 +1,8 @@
 package com.forge.messageservice.common.extensions
 
-import com.forge.messageservice.common.files.SimilarFilenameGenerator
 import com.forge.messageservice.common.files.SimilarFilenameGenerator.generateFilename
-import com.forge.messageservice.entity.Image
-import org.junit.jupiter.api.Assertions.*
+import com.forge.messageservice.entities.Image
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class SimilarFilenameGeneratorTest {

@@ -1,8 +1,8 @@
 package com.forge.messageservice.controllers.v1
 
 
-import com.forge.messageservice.entity.Image
-import com.forge.messageservice.entity.Tenant
+import com.forge.messageservice.entities.Image
+import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.services.ImageService
 import com.forge.messageservice.services.TenantService
 import com.ninjasquad.springmockk.MockkBean
