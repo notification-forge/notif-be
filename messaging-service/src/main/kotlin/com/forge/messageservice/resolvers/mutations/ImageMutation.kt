@@ -6,6 +6,7 @@ import graphql.kickstart.servlet.context.DefaultGraphQLServletContext
 import graphql.kickstart.tools.GraphQLMutationResolver
 import graphql.schema.DataFetchingEnvironment
 import org.springframework.stereotype.Component
+import java.io.ByteArrayOutputStream
 
 @Component
 class ImageMutation(
@@ -14,17 +15,21 @@ class ImageMutation(
 
     fun uploadImage(env: DataFetchingEnvironment): Image {
         val context = env.getContext<DefaultGraphQLServletContext>()
-        val image = Image()
         val appCode = "BCAT"
 
-        context.fileParts.map { it ->
-            {
-                image.appCode = appCode
-                image.fileName = it.submittedFileName
-                image.imageData = it.inputStream.toString()
+        val image = context.fileParts.mapNotNull { parts ->
+            parts.inputStream.use { `is` ->
+                ByteArrayOutputStream().use { os ->
+                    os.writeBytes(`is`.readAllBytes())
+                    Image().apply {
+                        this.appCode = appCode
+                        this.fileName = parts.submittedFileName
+                        this.imageData = os.toByteArray()
+                    }
+                }
             }
         }
 
-        return imageService.save(image)
+        return imageService.create(image.first())
     }
 }

@@ -1,7 +1,7 @@
 package com.forge.messageservice.services
 
-import com.forge.messageservice.controllers.exceptions.TenantAlreadyExistException
 import com.forge.messageservice.entities.Tenant
+import com.forge.messageservice.exceptions.TenantAlreadyExistException
 import com.forge.messageservice.repositories.TenantRepository
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
@@ -16,13 +16,17 @@ open class TenantService(private val tenantRepository: TenantRepository) {
      */
     @Transactional(Transactional.TxType.REQUIRED)
     open fun register(newTenant: Tenant): Tenant {
-        assert(newTenant.appCode != null)
 
-        if(tenantRepository.findByAppCode(newTenant.appCode!!) != null) {
+        if(tenantRepository.findByAppCode(newTenant.appCode) != null) {
             throw TenantAlreadyExistException("App code already exist.")
         }
 
         return newTenant
+    }
+
+    @Transactional(Transactional.TxType.NEVER)
+    open fun findTenant(appCode: String): Tenant? {
+        return tenantRepository.findByAppCode(appCode)
     }
 
 }

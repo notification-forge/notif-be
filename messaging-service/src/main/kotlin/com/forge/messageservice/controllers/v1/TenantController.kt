@@ -27,7 +27,7 @@ class TenantController(private val tenantService: TenantService) {
 
         return ResponseEntity.ok(
             TenantRegistrationResponseV1(
-                newTenant.appCode!!,
+                newTenant.appCode,
                 newTenant.status.toString()
             )
         )

@@ -8,19 +8,11 @@ import javax.persistence.*
 class Tenant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tenant_id", length = 24, nullable = false)
-    var tenantId: Int? = null
-
-    /**
-     *
-     * TODO(christianj): This must be unique
-     */
-    @Column(name = "appcode", length = 24, nullable = false)
-    var appCode: String? = null
+    @Column(name = "appcode", length = 24, nullable = false, unique = true)
+    var appCode: String = ""
 
     @Column(name = "display_name", length = 56, nullable = false)
-    var displayName: String? = null
+    var displayName: String = ""
 
     @Column(name = "primary_owner_name", length = 256, nullable = false)
     var primaryOwnerName: String? = null
@@ -80,7 +72,7 @@ class Tenant {
      *
      */
     @Lob
-    @Column(name = "app_settings", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "app_settings", nullable = true, columnDefinition = "TEXT")
     val appSettings: String? = null
 
     @Column(name = "created_by", length = 24, nullable = false)
@@ -92,6 +84,6 @@ class Tenant {
     @Column(name = "updated_by", length = 24)
     val updatedBy: String? = null
 
-    @Column(name = "date_updated", nullable = false)
+    @Column(name = "date_updated")
     val dateUpdated: OffsetDateTime? = null
 }

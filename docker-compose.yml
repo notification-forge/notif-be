@@ -13,5 +13,10 @@ services:
       - MYSQL_USER=alphamail
       - MYSQL_PASSWORD=alphamail
     volumes:
-      - ./.mariadb:/var/lib/mysql
+      - ./volumes/mariadb:/var/lib/mysql
       - ./cfg:/docker-entrypoint-initdb.d
+  backend:
+    image: 501716994299.dkr.ecr.ap-southeast-1.amazonaws.com/notif-be:latest
+    restart: always
+    ports:
+      - 8080: 8080

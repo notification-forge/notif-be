@@ -1,4 +1,3 @@
-
 plugins {
     id("org.springframework.boot") version "2.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -35,9 +34,11 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
 
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
+
 }
 
 tasks.test {
@@ -48,4 +49,4 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
 
-apply(plugin= "io.spring.dependency-management")
+apply(plugin = "io.spring.dependency-management")
