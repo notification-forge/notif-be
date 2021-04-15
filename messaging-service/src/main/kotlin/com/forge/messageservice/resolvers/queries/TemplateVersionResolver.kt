@@ -1,7 +1,7 @@
 package com.forge.messageservice.resolvers.queries
 
-import com.forge.messageservice.entity.Template
-import com.forge.messageservice.entity.TemplateVersion
+import com.forge.messageservice.entities.Template
+import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.services.TemplateVersionService
 import graphql.kickstart.tools.GraphQLResolver
 import org.springframework.stereotype.Component

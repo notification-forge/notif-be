@@ -1,7 +1,7 @@
 package com.forge.messageservice.repositories
 
-import com.forge.messageservice.entity.TemplateVersion
-import com.forge.messageservice.entity.TemplateVersion.TemplateStatus
+import com.forge.messageservice.entities.TemplateVersion
+import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository

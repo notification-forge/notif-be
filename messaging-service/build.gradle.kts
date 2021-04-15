@@ -15,6 +15,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    implementation("org.springframework.security:spring-security-ldap:5.4.6")
+    implementation("org.springframework.security:spring-security-core:5.4.6")
+    implementation("org.springframework.security:spring-security-crypto:5.4.6")
+    implementation("org.springframework.security:spring-security-web:5.4.6")
+    implementation("org.springframework.security:spring-security-config:5.4.6")
+
+    implementation("io.jsonwebtoken:jjwt-api:0.11.1")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.1")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.1")
+
     implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:7.1.0")
     implementation("com.graphql-java-kickstart:playground-spring-boot-starter:7.1.0")
     implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:7.1.0")

@@ -1,6 +1,6 @@
-package com.forge.messageservice.entity.inputs
+package com.forge.messageservice.entities.inputs
 
-import com.forge.messageservice.entity.TemplateVersion.TemplateStatus
+import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
 import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 
@@ -24,10 +24,9 @@ data class UpdateTemplateVersionInput(
 @Validated
 data class CloneTemplateVersionInput(
     @NotBlank
-    val id: Long,
+    val templateId: Long,
     @NotBlank
     val name: String,
     val settings: String,
     val body: String,
-    val status: TemplateStatus
 )

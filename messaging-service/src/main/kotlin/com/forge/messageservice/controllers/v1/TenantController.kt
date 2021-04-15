@@ -2,7 +2,7 @@ package com.forge.messageservice.controllers.v1
 
 import com.forge.messageservice.controllers.v1.api.TenantRegistrationRequestV1
 import com.forge.messageservice.controllers.v1.api.TenantRegistrationResponseV1
-import com.forge.messageservice.entity.Tenant
+import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.services.TenantService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

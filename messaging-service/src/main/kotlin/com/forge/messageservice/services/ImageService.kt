@@ -1,7 +1,7 @@
 package com.forge.messageservice.services
 
 import com.forge.messageservice.common.files.SimilarFilenameGenerator
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 
 import com.forge.messageservice.repositories.ImageRepository
 import org.springframework.stereotype.Service

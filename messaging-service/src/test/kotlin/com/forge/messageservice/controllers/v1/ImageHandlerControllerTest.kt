@@ -1,38 +1,31 @@
 package com.forge.messageservice.controllers.v1
 
 
-import com.forge.messageservice.entity.Image
-import com.forge.messageservice.entity.Tenant
+import com.forge.messageservice.entities.Image
+import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.services.ImageService
 import com.forge.messageservice.services.TenantService
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import org.hamcrest.Matchers.containsString
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockMultipartFile
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import kotlin.test.assertEquals
 
-
-@ExtendWith(SpringExtension::class)
-@WebMvcTest(ImageHandlerController::class)
+@ExtendWith(MockKExtension::class)
 internal class ImageHandlerControllerTest {
 
-    @Autowired
-    lateinit var mockMvc: MockMvc
-
-    @MockkBean
+    @MockK
     lateinit var imageService: ImageService
 
-    @MockkBean
+    @MockK
     lateinit var tenantService: TenantService
+
+    @InjectMockKs
+    lateinit var imageHandlerController: ImageHandlerController
 
     @Test
     fun shouldReturnNewlyUploadedImageData() {
@@ -53,15 +46,9 @@ internal class ImageHandlerControllerTest {
             "image/png",
             byteArrayOf()
         )
-
-        this.mockMvc
-            .perform(
-                multipart("/v1/images/upload/some-tenant")
-                    .file("file", mockImage.bytes)
-            )
-            .andDo(print())
-            .andExpect(status().isOk)
-            .andExpect(content().string(containsString("imageId")))
+        val resp = imageHandlerController.handleUpload("some-tenant", mockImage)
+        assertEquals(HttpStatus.OK, resp.statusCode)
+        assertEquals(1L, resp.body!!.imageId)
 
     }
 }

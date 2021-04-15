@@ -1,11 +1,11 @@
 package com.forge.messageservice.services
 
-import com.forge.messageservice.entity.TemplateVersion
-import com.forge.messageservice.entity.TemplateVersion.TemplateStatus
-import com.forge.messageservice.entity.TemplateVersion.TemplateStatus.*
-import com.forge.messageservice.entity.inputs.CloneTemplateVersionInput
-import com.forge.messageservice.entity.inputs.CreateTemplateVersionInput
-import com.forge.messageservice.entity.inputs.UpdateTemplateVersionInput
+import com.forge.messageservice.entities.TemplateVersion
+import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
+import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.*
+import com.forge.messageservice.entities.inputs.CloneTemplateVersionInput
+import com.forge.messageservice.entities.inputs.CreateTemplateVersionInput
+import com.forge.messageservice.entities.inputs.UpdateTemplateVersionInput
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.repositories.TemplateRepository
 import com.forge.messageservice.repositories.TemplateVersionRepository
@@ -53,12 +53,12 @@ open class TemplateVersionService(
     }
 
     fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
-        val currentTemplateVersion = retrieveTemplateVersionByTemplateIdAndStatus(templateVersionInput.id, DRAFT)
+        val currentTemplateVersion = retrieveTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
-        ensureTemplateExist(templateVersionInput.id)
+        ensureTemplateExist(templateVersionInput.templateId)
 
         val newTemplateVersion = TemplateVersion().apply {
-            templateId = templateVersionInput.id
+            templateId = templateVersionInput.templateId
         }
 
         if (currentTemplateVersion != null){

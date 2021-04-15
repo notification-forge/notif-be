@@ -1,4 +1,4 @@
-package com.forge.messageservice.entity
+package com.forge.messageservice.entities
 
 
 import Auditable

@@ -1,6 +1,6 @@
 package com.forge.messageservice.repositories
 
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 
 interface ImageRepositoryCustom {
 
