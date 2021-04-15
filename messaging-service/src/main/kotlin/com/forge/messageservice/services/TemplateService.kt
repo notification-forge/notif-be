@@ -12,8 +12,8 @@ import java.util.*
 @Service
 open class TemplateService(private val templateRepository: TemplateRepository) {
 
-    fun retrieveAllTemplates(searchValue: String, appCodes: List<String>): List<Template> {
-        return templateRepository.findAll()
+    fun retrieveAllTemplatesWithTemplateNameAndInAppCodes(searchValue: String, appCodes: List<String>): List<Template> {
+        return templateRepository.findAllLikeNameAndInAppCodes(searchValue, appCodes)
     }
 
     fun retrieveTemplateById(templateId: Long): Template {

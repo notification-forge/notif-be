@@ -44,7 +44,7 @@ class TemplateResolver(
 
     private fun getAllTemplates(name: String, appCodes: List<String>, cursor: Long?): List<Template> {
         if (cursor == null) {
-            return templateService.retrieveAllTemplates(name, appCodes)
+            return templateService.retrieveAllTemplatesWithTemplateNameAndInAppCodes(name, appCodes)
         }
         return templateService.retrieveTemplateIdAfterCursor(appCodes, cursor)
     }
