@@ -1,8 +1,8 @@
 package com.forge.messageservice.services
 
-import com.forge.messageservice.entity.Template
-import com.forge.messageservice.entity.inputs.CreateTemplateInput
-import com.forge.messageservice.entity.inputs.UpdateTemplateInput
+import com.forge.messageservice.entities.Template
+import com.forge.messageservice.entities.inputs.CreateTemplateInput
+import com.forge.messageservice.entities.inputs.UpdateTemplateInput
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.repositories.TemplateRepository

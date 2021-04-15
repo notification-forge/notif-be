@@ -1,7 +1,7 @@
 package com.forge.messageservice.services
 
 import com.forge.messageservice.controllers.exceptions.TenantAlreadyExistException
-import com.forge.messageservice.entity.Tenant
+import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.repositories.TenantRepository
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional

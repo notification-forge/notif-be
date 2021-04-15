@@ -1,7 +1,7 @@
 package com.forge.messageservice.resolvers.queries
 
 import com.forge.messageservice.connections.CursorUtil
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 import com.forge.messageservice.services.ImageService
 import graphql.kickstart.tools.GraphQLQueryResolver
 import graphql.relay.*

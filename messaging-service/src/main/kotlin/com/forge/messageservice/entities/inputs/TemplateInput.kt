@@ -1,6 +1,6 @@
-package com.forge.messageservice.entity.inputs
+package com.forge.messageservice.entities.inputs
 
-import com.forge.messageservice.entity.Template
+import com.forge.messageservice.entities.Template
 import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 

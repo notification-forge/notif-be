@@ -1,6 +1,6 @@
 package com.forge.messageservice.resolvers.mutations
 
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 import com.forge.messageservice.services.ImageService
 import graphql.kickstart.servlet.context.DefaultGraphQLServletContext
 import graphql.kickstart.tools.GraphQLMutationResolver

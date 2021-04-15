@@ -1,6 +1,6 @@
 package com.forge.messageservice.repositories
 
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
