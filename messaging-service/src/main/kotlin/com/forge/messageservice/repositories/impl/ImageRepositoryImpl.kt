@@ -1,6 +1,6 @@
 package com.forge.messageservice.repositories.impl
 
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 import com.forge.messageservice.repositories.ImageRepositoryCustom
 import org.springframework.stereotype.Repository
 import javax.persistence.EntityManager

@@ -1,11 +1,9 @@
 package com.forge.messageservice.controllers.v1.helpers
 
 import com.forge.messageservice.controllers.v1.api.ImageUploadResponseV1
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 import org.springframework.util.Base64Utils
-import java.time.LocalTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 
 object ResponseMapper {
 

@@ -2,7 +2,7 @@ package com.forge.messageservice.controllers.v1
 
 import com.forge.messageservice.controllers.v1.api.ImageUploadResponseV1
 import com.forge.messageservice.controllers.v1.helpers.ResponseMapper
-import com.forge.messageservice.entity.Image
+import com.forge.messageservice.entities.Image
 import com.forge.messageservice.exceptions.TenantNotFoundException
 
 import com.forge.messageservice.services.ImageService
