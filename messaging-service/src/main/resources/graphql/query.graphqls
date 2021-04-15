@@ -1,7 +1,7 @@
 type Query {
-    template(templateId: ID): Template
+    template(id: ID): Template
     templates(searchValue: String, appCodes: [String], limit: Int!, after: Int): TemplateConnection @connection (for: "Template")
-    templateVersion(templateVersionId: ID): TemplateVersion
+    templateVersion(id: ID): TemplateVersion
     images(appCode: String, limit: Int!, after: Int): ImageConnection @connection (for: "Image")
 }
 
