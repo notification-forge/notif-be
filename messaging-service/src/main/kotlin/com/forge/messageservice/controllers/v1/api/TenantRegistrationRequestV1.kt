@@ -1,10 +1,28 @@
 package com.forge.messageservice.controllers.v1.api
 
-class TenantRegistrationRequestV1 {
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 
-    var appCode: String? = null
-    var displayName: String? = null
-    var requesterEmailAddress: String? = null
-    var primaryOwnerEmailAddress: String? = null
-    var secondaryOwnerEmailAddress: String? = null
-}
+data class TenantRegistrationRequestV1(
+
+    @NotNull
+    @NotEmpty
+    val appCode: String = "",
+
+    @NotNull
+    @NotEmpty
+    val displayName: String = "",
+
+    @NotNull
+    @NotEmpty
+    val requesterEmailAddress: String? = null,
+
+    @NotNull
+    @NotEmpty
+    val primaryOwnerEmailAddress: String? = null,
+
+    @NotNull
+    @NotEmpty
+    val secondaryOwnerEmailAddress: String? = null
+)
+
