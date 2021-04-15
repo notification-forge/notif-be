@@ -5,6 +5,7 @@ type Mutation{
     createTemplate(input: CreateTemplateInput!): Template!
     updateTemplate(input: UpdateTemplateInput!): Template!
     createTemplateVersion(input: CreateTemplateVersionInput!): TemplateVersion!
+    cloneTemplateVersion(input: CloneTemplateVersionInput!): TemplateVersion!
     updateTemplateVersion(input: UpdateTemplateVersionInput!): TemplateVersion!
     uploadImage: Image!
 }

@@ -24,10 +24,9 @@ data class UpdateTemplateVersionInput(
 @Validated
 data class CloneTemplateVersionInput(
     @NotBlank
-    val id: Long,
+    val templateId: Long,
     @NotBlank
     val name: String,
     val settings: String,
     val body: String,
-    val status: TemplateStatus
 )

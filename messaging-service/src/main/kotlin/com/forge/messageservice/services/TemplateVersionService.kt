@@ -53,12 +53,12 @@ open class TemplateVersionService(
     }
 
     fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
-        val currentTemplateVersion = retrieveTemplateVersionByTemplateIdAndStatus(templateVersionInput.id, DRAFT)
+        val currentTemplateVersion = retrieveTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
-        ensureTemplateExist(templateVersionInput.id)
+        ensureTemplateExist(templateVersionInput.templateId)
 
         val newTemplateVersion = TemplateVersion().apply {
-            templateId = templateVersionInput.id
+            templateId = templateVersionInput.templateId
         }
 
         if (currentTemplateVersion != null){
