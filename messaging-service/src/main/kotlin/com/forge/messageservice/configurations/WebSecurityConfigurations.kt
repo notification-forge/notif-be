@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.http.HttpMethod
 import org.springframework.ldap.core.support.LdapContextSource
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.BeanIds
@@ -28,6 +27,7 @@ import kotlin.jvm.Throws
 open class LDAPConfigHolder {
     @Value("\${ldap.user.base:}")
     lateinit var userSearchBase: String
+
     @Value("\${ldap.user.filter:sAMAccountName={0}}")
     lateinit var userSearchFilter: String
 }
@@ -36,6 +36,7 @@ open class LDAPConfigHolder {
 open class SecurityConfigHolder {
     @Value("\${app.auth.auth-free.urls}")
     lateinit var authFreeURLs: Array<String>
+
     @Value("\${app.auth.groups-permitted}")
     lateinit var groups: Array<String>
 }
@@ -104,13 +105,11 @@ open class WebSecurityConfigurations(
 @Profile("dev | test | integration-test")
 open class LocalSecurityConfigurations(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val contextSource: LdapContextSource,
     private val unauthorizedHandler: JwtAuthenticationEntryPoint,
     private val apiClientRepository: ApiClientRepository,
     private val securityConfigHolder: SecurityConfigHolder,
-    private val ldapSearchConfigHolder: LDAPConfigHolder,
     private val ldapUserService: LdapUserService
-): WebSecurityConfigurerAdapter(){
+) : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
