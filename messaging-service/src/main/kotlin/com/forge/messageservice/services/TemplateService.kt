@@ -2,21 +2,28 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.inputs.CreateTemplateInput
+import com.forge.messageservice.entities.inputs.PaginationInput
 import com.forge.messageservice.entities.inputs.UpdateTemplateInput
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.repositories.TemplateRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-open class TemplateService(private val templateRepository: TemplateRepository) {
+open class TemplateService(
+    private val templateRepository: TemplateRepository
+) {
 
-    fun retrieveAllTemplatesWithTemplateNameAndInAppCodes(searchValue: String, appCodes: List<String>): List<Template> {
-        return templateRepository.findAllLikeNameAndInAppCodes(searchValue, appCodes)
+    fun getAllTemplatesWithTemplateNameAndInAppCodes(name: String, appCodes: List<String>, paginationInput: PaginationInput): Page<Template> {
+        val pageable = pageRequest(paginationInput)
+        return templateRepository.findAllLikeNameAndInAppCodes("%$name%", appCodes, pageable)
     }
 
-    fun retrieveTemplateById(templateId: Long): Template {
+    fun getTemplateById(templateId: Long): Template {
         val optionalTemplate = templateRepository.findById(templateId)
 
         if (optionalTemplate.isEmpty){
@@ -25,12 +32,12 @@ open class TemplateService(private val templateRepository: TemplateRepository) {
         return optionalTemplate.get()
     }
 
-    fun retrieveTemplateIdAfterCursor(appCodes: List<String>, cursor: Long): List<Template>{
-        return templateRepository.findAllInAppCodesAfterTemplateId(appCodes, cursor)
+    private fun findTemplateByTemplateNameAndAppCode(templateName: String, appCode: String): Template? {
+        return templateRepository.findByNameAndAppCode(templateName, appCode)
     }
 
-    private fun retrieveTemplateByTemplateNameAndAppCode(templateName: String, appCode: String): Template? {
-        return templateRepository.findByNameAndAppCode(templateName, appCode)
+    private fun pageRequest(paginationInput: PaginationInput): Pageable{
+        return PageRequest.of(paginationInput.pageNumber, paginationInput.rowPerPage, paginationInput.sortDirection, paginationInput.sortField)
     }
 
     fun createTemplate(templateInput: CreateTemplateInput): Template{
@@ -49,7 +56,7 @@ open class TemplateService(private val templateRepository: TemplateRepository) {
     }
 
     fun updateTemplate(templateInput: UpdateTemplateInput): Template {
-        val template = retrieveTemplateById(templateInput.id)
+        val template = getTemplateById(templateInput.id)
 
         ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.name, template.appCode!!)
 
@@ -64,7 +71,7 @@ open class TemplateService(private val templateRepository: TemplateRepository) {
     }
 
     private fun ensureNoTemplateWithSameNameAndAppCodeExist(templateName: String, appCode: String){
-        val existingTemplate = retrieveTemplateByTemplateNameAndAppCode(templateName, appCode)
+        val existingTemplate = findTemplateByTemplateNameAndAppCode(templateName, appCode)
 
         if (existingTemplate != null){
             throw TemplateExistedException("Template with template name $templateName already exist in $appCode")

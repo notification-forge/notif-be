@@ -1,6 +1,9 @@
 package com.forge.messageservice.entities
 
 import Auditable
+import org.hibernate.internal.util.collections.ArrayHelper.hash
+import java.util.*
+import java.util.Objects.hash
 import javax.persistence.*
 
 @Entity
@@ -51,8 +54,8 @@ class TemplateVersion : Auditable() {
      *
      * `TemplateHash` is the SHA256 of the template body.
      */
-    @Column(name = "template_hash", length = 128, nullable = false)
-    var templateHash: String = ""
+    @Column(name = "template_hash", nullable = false)
+        var templateHash: Int? = null
 
     /**
      * The body of the template. Can
@@ -71,4 +74,7 @@ class TemplateVersion : Auditable() {
     @Column(name = "template_status", length = 24, nullable = false)
     var status: TemplateStatus = TemplateStatus.DRAFT
 
+    fun templateHash(): Int {
+        return Objects.hash(templateId, settings, body, status)
+    }
 }

@@ -17,11 +17,11 @@ open class TemplateVersionService(
     private val templateRepository: TemplateRepository
 ) {
 
-    fun retrieveAllTemplateVersionsByTemplateId(templateVersionId: Long): List<TemplateVersion> {
+    fun getAllTemplateVersionsByTemplateId(templateVersionId: Long): List<TemplateVersion> {
         return templateVersionRepository.findAllByTemplateId(templateVersionId)
     }
 
-    fun retrieveTemplateVersionById(templateVersionId: Long): TemplateVersion {
+    fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
         val optionalTemplateVersion = templateVersionRepository.findById(templateVersionId)
 
         if (optionalTemplateVersion.isEmpty){
@@ -30,30 +30,32 @@ open class TemplateVersionService(
         return optionalTemplateVersion.get()
     }
 
-    private fun retrieveTemplateVersionByTemplateIdAndStatus(templateVersionId: Long, status: TemplateStatus): TemplateVersion? {
+    private fun findTemplateVersionByTemplateIdAndStatus(templateVersionId: Long, status: TemplateStatus): TemplateVersion? {
         return templateVersionRepository.findByTemplateIdAndStatus(templateVersionId, status)
     }
 
     fun createTemplateVersion(templateVersionInput: CreateTemplateVersionInput): TemplateVersion {
-        val templateVersion = retrieveTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
+        val templateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
         ensureTemplateExist(templateVersionInput.templateId)
 
-        if (templateVersion != null){
-            return saveTemplateVersion(TemplateVersion().apply {
-                id = templateVersion.templateId
-                templateId = templateVersionInput.templateId
-                status = DRAFT
-            })
+        val newTemplateVersion = TemplateVersion().apply {
+            templateId = templateVersionInput.templateId
+            status = DRAFT
+            templateHash = 0
         }
 
-        return saveTemplateVersion(TemplateVersion().apply {
-            templateId = templateVersionInput.templateId
-        })
+        if (templateVersion != null){
+            return newTemplateVersion.apply {
+                id = templateVersion.templateId
+            }
+        }
+
+        return saveTemplateVersion(newTemplateVersion)
     }
 
     fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
-        val currentTemplateVersion = retrieveTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
+        val currentTemplateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
         ensureTemplateExist(templateVersionInput.templateId)
 
@@ -72,6 +74,7 @@ open class TemplateVersionService(
             version = templateVersionRepository.findCurrentVersionNumberByTemplateId(newTemplateVersion.templateId!!) + 1
             status = DRAFT
         }
+        newTemplateVersion.templateHash = newTemplateVersion.templateHash()
 
         return saveTemplateVersion(newTemplateVersion)
     }
@@ -81,7 +84,7 @@ open class TemplateVersionService(
     }
 
     fun updateTemplateVersion(templateVersionInput: UpdateTemplateVersionInput): TemplateVersion {
-        val templateVersion = retrieveTemplateVersionById(templateVersionInput.id)
+        val templateVersion = getTemplateVersionById(templateVersionInput.id)
 
         templateVersion.apply {
             name = templateVersionInput.name
@@ -90,6 +93,7 @@ open class TemplateVersionService(
             version = templateVersionRepository.findCurrentVersionNumberByTemplateId(templateVersion.templateId!!) + 1
             status = templateVersionInput.status
         }
+        templateVersion.templateHash = templateVersion.templateHash()
 
         return saveTemplateVersion(templateVersion)
     }

@@ -1,0 +1,10 @@
+input PaginationInput {
+    pageNumber: Int
+    rowPerPage: Int
+    sortDirection: SortDirection
+    sortField: String
+}
+
+enum SortDirection {
+   ASC, DESC
+}
