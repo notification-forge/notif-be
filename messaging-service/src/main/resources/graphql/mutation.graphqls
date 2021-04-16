@@ -2,10 +2,32 @@ scalar DateTime
 scalar Date
 
 type Mutation{
+    """
+    Mutation on template creation
+    """
     createTemplate(input: CreateTemplateInput!): Template!
+    """
+    Mutation on template update
+    """
     updateTemplate(input: UpdateTemplateInput!): Template!
+    """
+    Mutation on template version creation
+    Template Version creation will always be DRAFT status
+    Overwrites any current draft version
+    No content within template version
+    """
     createTemplateVersion(input: CreateTemplateVersionInput!): TemplateVersion!
+    """
+    Mutation on cloning any current template version
+    Template Version cloning will always be DRAFT status
+    Overwrites any current draft version
+    Copies content of cloned template version
+    """
     cloneTemplateVersion(input: CloneTemplateVersionInput!): TemplateVersion!
+    """
+    Mutation on DRAFT template version moditification
+    Based on template status given, it will be a overwrite of current DRAFT / PUBLISHING
+    """
     updateTemplateVersion(input: UpdateTemplateVersionInput!): TemplateVersion!
     uploadImage: Image!
 }

@@ -1,11 +1,20 @@
 input CreateTemplateInput {
+    """
+    name of the template has to be unique to each application
+    """
     name: String
+    """
+    choosing between email or teams messaging
+    """
     alertType: AlertType
     appCode: String
 }
 
 input UpdateTemplateInput {
     id: ID
+    """
+    name of the template has to be unique to each application
+    """
     name: String
 }
 
@@ -15,15 +24,47 @@ input CreateTemplateVersionInput{
 
 input CloneTemplateVersionInput{
     templateId: ID
+    id: Int
+    """
+    Name of the template version
+    """
     name: String
+    """
+    Settings to be set within the template.
+    Note: EMAILS and TEAMS_MESSAGE have different settings
+    refer to template version entity for more info
+    """
     settings: String
+    """
+    Template body
+    EMAILS -> HTML format
+    TEAMS MESSAGE -> JSON format
+    """
     body: String
 }
 
 input UpdateTemplateVersionInput{
     id: ID
+    """
+    Name of the template version
+    """
     name: String
+    """
+    Settings to be set within the template.
+    Note: EMAILS and TEAMS_MESSAGE have different settings
+    refer to template version entity for more info
+    """
     settings: String
+    """
+    Template body
+    EMAILS -> HTML format
+    TEAMS MESSAGE -> JSON format
+    """
     body: String,
+    """
+    Status of the template version
+    There could only be one DRAFT at any given time
+    Only PUBLISHED templates can be triggered to send notifications
+    """
     status: TemplateStatus
 }
