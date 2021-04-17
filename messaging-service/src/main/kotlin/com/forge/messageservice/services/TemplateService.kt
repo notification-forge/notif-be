@@ -18,15 +18,19 @@ open class TemplateService(
     private val templateRepository: TemplateRepository
 ) {
 
-    fun getAllTemplatesWithTemplateNameAndInAppCodes(name: String, appCodes: List<String>, paginationInput: PaginationInput): Page<Template> {
+    fun getAllTemplatesWithTemplateNameAndInAppCodes(
+        name: String,
+        appCodes: List<String>,
+        paginationInput: PaginationInput
+    ): Page<Template> {
         val pageable = pageRequest(paginationInput)
-        return templateRepository.findAllLikeNameAndInAppCodes("%$name%", appCodes, pageable)
+        return templateRepository.findAllLikeNameAndInAppCodes(name, appCodes, pageable)
     }
 
     fun getTemplateById(templateId: Long): Template {
         val optionalTemplate = templateRepository.findById(templateId)
 
-        if (optionalTemplate.isEmpty){
+        if (optionalTemplate.isEmpty) {
             throw TemplateDoesNotExistException("Template with template id $templateId does not exist")
         }
         return optionalTemplate.get()
@@ -36,11 +40,16 @@ open class TemplateService(
         return templateRepository.findByNameAndAppCode(templateName, appCode)
     }
 
-    private fun pageRequest(paginationInput: PaginationInput): Pageable{
-        return PageRequest.of(paginationInput.pageNumber, paginationInput.rowPerPage, paginationInput.sortDirection, paginationInput.sortField)
+    private fun pageRequest(paginationInput: PaginationInput): Pageable {
+        return PageRequest.of(
+            paginationInput.pageNumber,
+            paginationInput.rowPerPage,
+            paginationInput.sortDirection,
+            paginationInput.sortField
+        )
     }
 
-    fun createTemplate(templateInput: CreateTemplateInput): Template{
+    fun createTemplate(templateInput: CreateTemplateInput): Template {
         ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.name, templateInput.appCode)
 
         return saveTemplate(Template().apply {
@@ -70,10 +79,10 @@ open class TemplateService(
         }
     }
 
-    private fun ensureNoTemplateWithSameNameAndAppCodeExist(templateName: String, appCode: String){
+    private fun ensureNoTemplateWithSameNameAndAppCodeExist(templateName: String, appCode: String) {
         val existingTemplate = findTemplateByTemplateNameAndAppCode(templateName, appCode)
 
-        if (existingTemplate != null){
+        if (existingTemplate != null) {
             throw TemplateExistedException("Template with template name $templateName already exist in $appCode")
         }
     }

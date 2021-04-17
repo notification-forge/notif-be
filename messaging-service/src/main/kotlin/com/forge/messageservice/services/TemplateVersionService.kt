@@ -17,8 +17,8 @@ open class TemplateVersionService(
     private val templateRepository: TemplateRepository
 ) {
 
-    fun getAllTemplateVersionsByTemplateId(templateVersionId: Long): List<TemplateVersion> {
-        return templateVersionRepository.findAllByTemplateId(templateVersionId)
+    fun getAllTemplateVersionsByTemplateId(templateId: Long): List<TemplateVersion> {
+        return templateVersionRepository.findAllByTemplateId(templateId)
     }
 
     fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
