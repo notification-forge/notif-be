@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "app.auth.jwtSecret",
+      "type": "java.lang.String",
+      "description": "Description for app.auth.jwtSecret."
+    },
+    {
+      "name": "app.auth.jwtExpirationInMs",
+      "type": "java.lang.String",
+      "description": "Description for app.auth.jwtExpirationInMs."
+    },
+    {
+      "name": "app.auth.auth-free.urls",
+      "type": "java.lang.String",
+      "description": "Description for app.auth.auth-free.urls."
+    },
+    {
+      "name": "app.auth.groups-permitted",
+      "type": "java.lang.String",
+      "description": "Description for app.auth.groups-permitted."
+    }
+  ]
+}

@@ -11,6 +11,8 @@ plugins {
 dependencies {
     implementation(project(":shared"))
 
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -39,6 +41,10 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
 
+}
+
+tasks.compileJava {
+    this.inputs.files(tasks.processResources)
 }
 
 tasks.test {
