@@ -33,10 +33,8 @@ object SimilarFilenameGenerator {
     private fun highestIndexInGroupOf(similarImages: List<Image>): Int {
         return similarImages
             // check if filename matches our file pattern
-            .mapNotNull { m -> fileNamePattern.matchEntire(m.fileName) }
-            // check if file pattern contains file index
-            .mapNotNull { m -> m.groups["fileIndex"] }
+            .mapNotNull { m -> fileNamePattern.matchEntire(m.fileName)?.groups?.get("fileIndex")?.value }
             // find highest index
-            .maxByOrNull { z -> z.value.toInt() }?.value?.toInt() ?: 0
+            .maxByOrNull { z -> z.toInt() }?.toInt() ?: 0
     }
 }
