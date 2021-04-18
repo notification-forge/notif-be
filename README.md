@@ -35,7 +35,7 @@ or just overriding the individual parameters. The parameter properties are as fo
 
 * `db.url` - The url to your database e.g. jdbc:mariadb://localhost:3306/alphamail
 * `db.username` - Your database's username
-* `db.password`messaging-service/src/main/kotlin/com/forge/messageservice/common/files/SimilarFilenameGenerator.kt - Your database's password
+* `db.password` - Your database's password
 
 ## Git Branching Strategy
 
