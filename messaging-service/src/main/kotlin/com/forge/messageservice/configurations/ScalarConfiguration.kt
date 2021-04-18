@@ -1,5 +1,6 @@
 package com.forge.messageservice.configurations
 
+import graphql.kickstart.servlet.apollo.ApolloScalars
 import graphql.scalars.ExtendedScalars
 import graphql.schema.GraphQLScalarType
 import org.springframework.context.annotation.Bean
@@ -11,18 +12,15 @@ import java.time.Clock
 open class ScalarConfiguration {
 
     @Bean
-    open fun dateTime(): GraphQLScalarType {
-        return ExtendedScalars.DateTime
-    }
+    open fun dateTime(): GraphQLScalarType = ExtendedScalars.DateTime
 
     @Bean
-    open fun date(): GraphQLScalarType {
-        return ExtendedScalars.Date
-    }
+    open fun date(): GraphQLScalarType = ExtendedScalars.Date
 
     @Bean
-    open fun clock(): Clock {
-        return Clock.systemUTC()
-    }
+    open fun uploadScalar(): GraphQLScalarType = ApolloScalars.Upload
+
+    @Bean
+    open fun clock(): Clock = Clock.systemUTC()
 }
 

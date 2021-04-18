@@ -1,5 +1,6 @@
 scalar DateTime
 scalar Date
+scalar Upload
 
 type Mutation{
     createTemplate(input: CreateTemplateInput!): Template!
@@ -7,5 +8,5 @@ type Mutation{
     createTemplateVersion(input: CreateTemplateVersionInput!): TemplateVersion!
     cloneTemplateVersion(input: CloneTemplateVersionInput!): TemplateVersion!
     updateTemplateVersion(input: UpdateTemplateVersionInput!): TemplateVersion!
-    uploadImage: Image!
+    uploadImage(image: Upload!): Image!
 }
