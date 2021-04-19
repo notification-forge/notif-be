@@ -1,6 +1,21 @@
+##
+//@no-log
+POST http://{{host}}:{{port}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "ntfusr1",
+  "password": "secret"
+}
+
+> {%
+client.global.set("token", response.body.accessToken)
+%}
+
+
 ###
 //@no-log
-POST http://localhost:8080/v1/images/upload/Alphamail
+POST http://{{host}}:{{port}}/v1/images/upload/Alphamail
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -9,4 +24,25 @@ Content-Disposition: form-data; name="file"; filename="headshot.png"
 < ./headshot.png
 --WebAppBoundary--
 
+###
+//@no-log
+POST http://{{host}}:{{port}}/graphql
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer {{token}}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="operations"
+Content-Type: application/json
+
+{ "query": "mutation UploadImage($appCode: String, $file: Upload!) { uploadImage(appCode: $appCode, file: $file) { id } }", "variables": { "file": null, "appCode": "alphamail" } }
+
+--WebAppBoundary
+Content-Disposition: form-data; name="map"
+
+{ "0": ["variables.file"] }
+--WebAppBoundary
+Content-Disposition: form-data; name="0"; filename="headshot.png"
+
+< ./headshot.png
+--WebAppBoundary--
 ###
