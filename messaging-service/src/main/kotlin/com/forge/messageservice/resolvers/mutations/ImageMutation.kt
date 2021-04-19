@@ -7,13 +7,14 @@ import graphql.kickstart.tools.GraphQLMutationResolver
 import graphql.schema.DataFetchingEnvironment
 import org.springframework.stereotype.Component
 import java.io.ByteArrayOutputStream
+import javax.servlet.http.Part
 
 @Component
 class ImageMutation(
     private val imageService: ImageService
 ) : GraphQLMutationResolver {
 
-    fun uploadImage(env: DataFetchingEnvironment): Image {
+    fun uploadImage(image: Part, env: DataFetchingEnvironment): Image {
         val context = env.getContext<DefaultGraphQLServletContext>()
         val appCode = "BCAT"
 
