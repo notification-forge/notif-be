@@ -75,6 +75,6 @@ class TemplateVersion : Auditable() {
     var status: TemplateStatus = TemplateStatus.DRAFT
 
     fun templateHash(): Int {
-        return Objects.hash(templateId, settings, body, status)
+        return Objects.hash(settings, body)
     }
 }

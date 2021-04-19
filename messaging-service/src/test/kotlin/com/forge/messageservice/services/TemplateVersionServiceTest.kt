@@ -6,6 +6,7 @@ import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.PUBLISHED
 import com.forge.messageservice.entities.inputs.CreateTemplateVersionInput
 import com.forge.messageservice.entities.inputs.UpdateTemplateVersionInput
+import com.forge.messageservice.exceptions.TemplateHashExistedException
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.repositories.TemplateRepository
 import com.forge.messageservice.repositories.TemplateVersionRepository
@@ -105,16 +106,12 @@ class TemplateVersionServiceTest {
     private fun mockListOfTemplateVersions() = listOf(mockTemplateVersionOnePublished(), mockTemplateVersionTwoDraft())
 
     @Test
-    fun itShouldReturnTemplateVersionsWhenTemplateIdExistAndEmptyListWhenTemplateIdDoesNotExist() {
+    fun itShouldReturnTemplateVersionsWhenTemplateIdExist() {
         val templateId = 1L
-        val templateIdThatDoesNotExist = 0L
 
         every { templateVersionRepository.findAllByTemplateId(templateId) } returns mockListOfTemplateVersions()
-        every { templateVersionRepository.findAllByTemplateId(templateIdThatDoesNotExist) } returns listOf()
 
         val templateVersions = templateVersionService.getAllTemplateVersionsByTemplateId(templateId)
-        val blankTemplateVersions =
-            templateVersionService.getAllTemplateVersionsByTemplateId(templateIdThatDoesNotExist)
 
         assert(templateVersions.isNotEmpty())
         templateVersions.forEach { templateVersion ->
@@ -122,22 +119,37 @@ class TemplateVersionServiceTest {
                 assert(templateVersion.templateId == templateId)
             }
         }
+    }
+
+
+    @Test
+    fun itShouldReturnEmptyListWhenTemplateIdDoesNotExist() {
+        val templateIdThatDoesNotExist = 0L
+
+        every { templateVersionRepository.findAllByTemplateId(templateIdThatDoesNotExist) } returns listOf()
+
+        val blankTemplateVersions = templateVersionService.getAllTemplateVersionsByTemplateId(templateIdThatDoesNotExist)
+
         assert(blankTemplateVersions.isNullOrEmpty())
     }
 
     @Test
-    fun itShouldReturnTemplateVersionWhenTemplateVersionIdExistAndThrowsExceptionWhenTemplateVersionIdDoesNotExist() {
+    fun itShouldReturnTemplateVersionWhenTemplateVersionIdExist() {
         val templateVersionIdExist = 1L
-        val templateVersionIdDoesNotExist = 0L
 
-        every { templateVersionRepository.findById(templateVersionIdExist) } returns Optional.of(
-            mockTemplateVersionOnePublished()
-        )
-        every { templateVersionRepository.findById(templateVersionIdDoesNotExist) } returns Optional.empty()
+        every { templateVersionRepository.findById(templateVersionIdExist) } returns Optional.of(mockTemplateVersionOnePublished())
 
         val templateVersion = templateVersionService.getTemplateVersionById(templateVersionIdExist)
 
         assert(templateVersion.id == templateVersionIdExist)
+    }
+
+    @Test
+    fun itShouldThrowAnExceptionWhenTemplateVersionIdDoesNotExist() {
+        val templateVersionIdDoesNotExist = 0L
+
+        every { templateVersionRepository.findById(templateVersionIdDoesNotExist) } returns Optional.empty()
+
         assertThrows<TemplateVersionDoesNotExistException> {
             templateVersionService.getTemplateVersionById(
                 templateVersionIdDoesNotExist
@@ -146,12 +158,10 @@ class TemplateVersionServiceTest {
     }
 
     @Test
-    fun itShouldReturnTemplateWhenCreatingTemplateVersionAndExceptionWhenTemplateDoesNotExist() {
+    fun itShouldReturnTemplateWhenCreatingTemplateVersion() {
         val templateIdExist = 1L
-        val templateIdDoesNotExist = 0L
 
         val createTemplateVersionInput = CreateTemplateVersionInput(templateIdExist)
-        val createTemplateVersionInputWithTemplateIdDoesNotExist = CreateTemplateVersionInput(templateIdDoesNotExist)
 
         val mockTemplateVersion = TemplateVersion().apply {
             templateId = templateIdExist
@@ -165,9 +175,7 @@ class TemplateVersionServiceTest {
                 DRAFT
             )
         } returns mockTemplateVersionTwoDraft()
-        every { templateVersionRepository.findByTemplateIdAndStatus(templateIdDoesNotExist, DRAFT) } returns null
         every { templateRepository.findById(templateIdExist) } returns Optional.of(mockTemplate())
-        every { templateRepository.findById(templateIdDoesNotExist) } returns Optional.empty()
         every { templateVersionRepository.save(mockTemplateVersion) } returns mockTemplateVersion
 
         val templateVersion = templateVersionService.createTemplateVersion(createTemplateVersionInput)
@@ -175,6 +183,16 @@ class TemplateVersionServiceTest {
         assert(templateVersion.id == templateIdExist)
         assert(templateVersion.status == DRAFT)
         assert(templateVersion.templateHash == 0)
+    }
+
+    @Test
+    fun itShouldThrowAnExceptionWhenCreatingTemplateVersionWhereTemplateDoesNotExist() {
+        val templateIdDoesNotExist = 0L
+
+        val createTemplateVersionInputWithTemplateIdDoesNotExist = CreateTemplateVersionInput(templateIdDoesNotExist)
+
+        every { templateVersionRepository.findByTemplateIdAndStatus(templateIdDoesNotExist, DRAFT) } returns null
+        every { templateRepository.findById(templateIdDoesNotExist) } returns Optional.empty()
 
         assertThrows<TemplateVersionDoesNotExistException> {
             templateVersionService.createTemplateVersion(
@@ -184,16 +202,12 @@ class TemplateVersionServiceTest {
     }
 
     @Test
-    fun itShouldReturnTemplateVersionWhenUpdatingTemplateVersionAndThrowsExceptionWhenTemplateVersionIdDoesNotExist() {
+    fun itShouldReturnTemplateVersionWhenUpdatingTemplateVersion() {
         val templateVersionId = 1L
-        val templateVersionIdDoesNotExist = 0L
         val templateVersionName = "New Template Version Name"
         val templateVersionSettings = "{ \"to\": [\"receipient@company.com\"] }"
         val templateVersionBody = "Hi {{ username }}, this email is to inform you about your bill alert."
 
-        val missingTemplateVersionIdInput = UpdateTemplateVersionInput(
-            templateVersionIdDoesNotExist, templateVersionName, templateVersionSettings, templateVersionBody, DRAFT
-        )
         val updatePublishTemplateVersionInput = UpdateTemplateVersionInput(
             templateVersionId, templateVersionName, templateVersionSettings, templateVersionBody, PUBLISHED
         )
@@ -209,18 +223,66 @@ class TemplateVersionServiceTest {
         mockPublishedTemplateVersion.templateHash = mockPublishedTemplateVersion.templateHash()
 
         every { templateVersionRepository.findById(templateVersionId) } returns Optional.of(mockTemplateVersionOneDraft())
-        every { templateVersionRepository.findById(templateVersionIdDoesNotExist) } returns Optional.empty()
         every { templateVersionRepository.save(any()) } returns mockPublishedTemplateVersion
         every { templateVersionRepository.findCurrentVersionNumberByTemplateId(1L) } returns 3L
+
+        every { templateVersionRepository.existsByTemplateIdAndTemplateHash(1L, mockPublishedTemplateVersion.templateHash!! ) } returns false
 
         val publishTemplateVersion = templateVersionService.updateTemplateVersion(updatePublishTemplateVersionInput)
 
         assert(publishTemplateVersion.id == templateVersionId)
         assert(publishTemplateVersion.status == PUBLISHED)
+    }
+
+    @Test
+    fun itShouldThrowsExceptionWhenUpdatingTemplateVesionWhereTemplateVersionIdDoesNotExist() {
+        val templateVersionIdDoesNotExist = 0L
+        val templateVersionName = "New Template Version Name"
+        val templateVersionSettings = "{ \"to\": [\"receipient@company.com\"] }"
+        val templateVersionBody = "Hi {{ username }}, this email is to inform you about your bill alert."
+
+        val missingTemplateVersionIdInput = UpdateTemplateVersionInput(
+            templateVersionIdDoesNotExist, templateVersionName, templateVersionSettings, templateVersionBody, DRAFT
+        )
+
+        every { templateVersionRepository.findById(templateVersionIdDoesNotExist) } returns Optional.empty()
 
         assertThrows<TemplateVersionDoesNotExistException> {
             templateVersionService.updateTemplateVersion(
                 missingTemplateVersionIdInput
+            )
+        }
+    }
+
+    @Test
+    fun itShouldThrowsAnExceptionWhenUpdatingTemplateVersionWhereBodyAndSettingAlreadyExist() {
+        val templateVersionId = 1L
+        val templateVersionName = "New Template Version Name"
+        val templateVersionSettings = "{ \"to\": [\"receipient@company.com\"] }"
+        val templateVersionBody = "Hi {{ username }}, this email is to inform you about your bill alert."
+
+        val updatePublishTemplateVersionInput = UpdateTemplateVersionInput(
+            templateVersionId, templateVersionName, templateVersionSettings, templateVersionBody, PUBLISHED
+        )
+
+        val mockPublishedTemplateVersion = TemplateVersion().apply {
+            id = templateVersionId
+            name = templateVersionName
+            settings = templateVersionSettings
+            body = templateVersionBody
+            version = 3L
+            status = PUBLISHED
+        }
+        mockPublishedTemplateVersion.templateHash = mockPublishedTemplateVersion.templateHash()
+
+        every { templateVersionRepository.findById(templateVersionId) } returns Optional.of(mockTemplateVersionOneDraft())
+        every { templateVersionRepository.findCurrentVersionNumberByTemplateId(1L) } returns 3L
+
+        every { templateVersionRepository.existsByTemplateIdAndTemplateHash(1L, mockPublishedTemplateVersion.templateHash!! ) } returns true
+
+        assertThrows<TemplateHashExistedException> {
+            templateVersionService.updateTemplateVersion(
+                updatePublishTemplateVersionInput
             )
         }
     }

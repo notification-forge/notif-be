@@ -6,6 +6,7 @@ import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.*
 import com.forge.messageservice.entities.inputs.CloneTemplateVersionInput
 import com.forge.messageservice.entities.inputs.CreateTemplateVersionInput
 import com.forge.messageservice.entities.inputs.UpdateTemplateVersionInput
+import com.forge.messageservice.exceptions.TemplateHashExistedException
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.repositories.TemplateRepository
 import com.forge.messageservice.repositories.TemplateVersionRepository
@@ -80,6 +81,7 @@ open class TemplateVersionService(
     }
 
     private fun saveTemplateVersion(templateVersion: TemplateVersion): TemplateVersion {
+        ensureTemplateHashDoesNotExist(templateVersion)
         return templateVersionRepository.save(templateVersion)
     }
 
@@ -103,6 +105,13 @@ open class TemplateVersionService(
         if (optionalTemplate.isEmpty){
             throw TemplateVersionDoesNotExistException("Template with template Id $templateId does not exist")
         }
+    }
+
+    private fun ensureTemplateHashDoesNotExist(templateVersion: TemplateVersion){
+        if (templateVersionRepository.existsByTemplateIdAndTemplateHash(templateVersion.templateId!!, templateVersion.templateHash!!)){
+            throw TemplateHashExistedException("Template with the exact same body and setting has already exist")
+        }
+
     }
 
 }

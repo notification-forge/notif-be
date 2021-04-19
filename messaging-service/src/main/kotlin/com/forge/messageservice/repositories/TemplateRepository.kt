@@ -13,5 +13,5 @@ interface TemplateRepository : JpaRepository<Template, Long> {
     fun findByNameAndAppCode(name: String, appCode: String): Template?
 
     @Query("SELECT t FROM Template t WHERE t.name LIKE %:name% AND t.appCode in :appCodes")
-    fun findAllLikeNameAndInAppCodes(name: String, appCodes: List<String>, pageable: Pageable): Page<Template>
+    fun findWithNamesLike(name: String, appCodes: List<String>, pageable: Pageable): Page<Template>
 }

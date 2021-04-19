@@ -12,4 +12,5 @@ interface TemplateVersionRepository : JpaRepository<TemplateVersion, Long> {
     fun findByTemplateIdAndStatus(templateId: Long, status: TemplateStatus): TemplateVersion?
     @Query("SELECT MAX(t.version) FROM TemplateVersion t where t.templateId = :templateId")
     fun findCurrentVersionNumberByTemplateId(templateId: Long): Long
+    fun existsByTemplateIdAndTemplateHash(templateId: Long, templateHash: Int): Boolean
 }

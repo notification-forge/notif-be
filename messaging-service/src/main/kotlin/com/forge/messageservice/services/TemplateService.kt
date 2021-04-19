@@ -24,7 +24,7 @@ open class TemplateService(
         paginationInput: PaginationInput
     ): Page<Template> {
         val pageable = pageRequest(paginationInput)
-        return templateRepository.findAllLikeNameAndInAppCodes(name, appCodes, pageable)
+        return templateRepository.findWithNamesLike(name, appCodes, pageable)
     }
 
     fun getTemplateById(templateId: Long): Template {

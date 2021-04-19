@@ -80,7 +80,7 @@ class TemplateServiceTest {
         )
 
         every {
-            templateRepository.findAllLikeNameAndInAppCodes(
+            templateRepository.findWithNamesLike(
                 searchValue,
                 appCodes,
                 pageable
@@ -113,14 +113,12 @@ class TemplateServiceTest {
     }
 
     @Test
-    fun itShouldReturnTemplateWhenCreatingTemplateAndExceptionWhenTemplateNameAndAppCodeAlreadyExist() {
+    fun itShouldReturnTemplateWhenCreatingTemplate() {
         val templateName = "Apology Template Four"
-        val templateNameExisted = "Apology Template One"
         val templateAppCode = "AppOne"
         val templateAlertType = AlertType.EMAIL
 
         val createTemplateInput = CreateTemplateInput(templateName, templateAlertType, templateAppCode)
-        val createTemplateExistedInput = CreateTemplateInput(templateNameExisted, templateAlertType, templateAppCode)
 
         val mockTemplate = Template().apply {
             name = templateName
@@ -129,12 +127,6 @@ class TemplateServiceTest {
         }
 
         every { templateRepository.findByNameAndAppCode(templateName, templateAppCode) } returns null
-        every {
-            templateRepository.findByNameAndAppCode(
-                templateNameExisted,
-                templateAppCode
-            )
-        } returns mockTemplateOne()
         every { templateRepository.save(any()) } returns mockTemplate
 
         val template = templateService.createTemplate(createTemplateInput)
@@ -143,21 +135,34 @@ class TemplateServiceTest {
         assert(template.alertType == templateAlertType)
         assert(template.appCode == templateAppCode)
 
-        assertThrows<TemplateExistedException> { templateService.createTemplate(createTemplateExistedInput) }
     }
 
     @Test
-    fun itShouldReturnTemplateWhenUpdatingTemplateAndExceptionWhenTemplateNameAndAppCodeAlreadyExist() {
-        val templateId = 1L
-        val templateIdDoesNotExist = 0L
-        val templateName = "Apology Template Four"
+    fun itShouldThrowAnExceptionWhenCreatingTemplateWhereTemplateNameAndAppCodeAlreadyExist(){
         val templateNameExisted = "Apology Template One"
         val templateAppCode = "AppOne"
         val templateAlertType = AlertType.EMAIL
 
+        val createTemplateExistedInput = CreateTemplateInput(templateNameExisted, templateAlertType, templateAppCode)
+        every {
+            templateRepository.findByNameAndAppCode(
+                templateNameExisted,
+                templateAppCode
+            )
+        } returns mockTemplateOne()
+
+        assertThrows<TemplateExistedException> { templateService.createTemplate(createTemplateExistedInput) }
+
+    }
+
+    @Test
+    fun itShouldReturnTemplateWhenUpdatingTemplate() {
+        val templateId = 1L
+        val templateName = "Apology Template Four"
+        val templateAppCode = "AppOne"
+        val templateAlertType = AlertType.EMAIL
+
         val updateTemplateInput = UpdateTemplateInput(templateId, templateName)
-        val updateTemplateIdDoesNotExistInput = UpdateTemplateInput(templateIdDoesNotExist, templateNameExisted)
-        val updateTemplateExistedInput = UpdateTemplateInput(templateId, templateNameExisted)
 
         val mockTemplate = Template().apply {
             id = templateId
@@ -167,14 +172,7 @@ class TemplateServiceTest {
         }
 
         every { templateRepository.findById(templateId) } returns Optional.of(mockTemplateOne())
-        every { templateRepository.findById(templateIdDoesNotExist) } returns Optional.empty()
         every { templateRepository.findByNameAndAppCode(templateName, templateAppCode) } returns null
-        every {
-            templateRepository.findByNameAndAppCode(
-                templateNameExisted,
-                templateAppCode
-            )
-        } returns mockTemplateOne()
         every { templateRepository.save(any()) } returns mockTemplate
 
 
@@ -184,7 +182,37 @@ class TemplateServiceTest {
         assert(template.alertType == templateAlertType)
         assert(template.appCode == templateAppCode)
 
+    }
+
+
+    @Test
+    fun itShouldThrowAnExceptionWhenUpdatingAnTemplateWhereTemplateIdDoesNotExist(){
+        val templateIdDoesNotExist = 0L
+        val templateName = "Apology Template One"
+
+        val updateTemplateIdDoesNotExistInput = UpdateTemplateInput(templateIdDoesNotExist, templateName)
+        every { templateRepository.findById(templateIdDoesNotExist) } returns Optional.empty()
+
         assertThrows<TemplateDoesNotExistException> { templateService.updateTemplate(updateTemplateIdDoesNotExistInput) }
+
+    }
+
+    @Test
+    fun itShouldThrowAnExceptionWhenUpdatingTemplateWhereTemplateNameAndAppCodeAlreadyExist(){
+        val templateId = 1L
+        val templateNameExisted = "Apology Template One"
+        val templateAppCode = "AppOne"
+
+        val updateTemplateExistedInput = UpdateTemplateInput(templateId, templateNameExisted)
+
+        every { templateRepository.findById(templateId) } returns Optional.of(mockTemplateOne())
+        every {
+            templateRepository.findByNameAndAppCode(
+                templateNameExisted,
+                templateAppCode
+            )
+        } returns mockTemplateOne()
+
         assertThrows<TemplateExistedException> { templateService.updateTemplate(updateTemplateExistedInput) }
     }
 }

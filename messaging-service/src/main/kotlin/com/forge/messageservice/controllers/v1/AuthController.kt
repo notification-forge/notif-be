@@ -2,7 +2,7 @@ package com.forge.messageservice.controllers.v1
 
 import com.forge.messageservice.authentication.jwt.JwtAuthenticationResponse
 import com.forge.messageservice.authentication.jwt.JwtTokenProvider
-import com.forge.messageservice.configurations.SecurityConfigHolder
+import com.forge.messageservice.configurations.security.SecurityConfigHolder
 import com.forge.messageservice.controllers.v1.api.request.LoginRequest
 import com.forge.messageservice.controllers.v1.api.response.ApiResponse
 import org.slf4j.LoggerFactory
