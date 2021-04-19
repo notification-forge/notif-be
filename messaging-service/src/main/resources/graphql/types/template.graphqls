@@ -1,0 +1,103 @@
+type Template {
+  id: ID
+  """
+  Name of the template has to be unique to each application
+  """
+  name: String
+  """
+  UUID to be displayed on the frontend as a unqiue identifier to users
+  """
+  uuid: String
+  """
+  Setting template Type to choose between email or teams messaging
+  """
+  alertType: String
+  """
+  Connecting template to the application that uses this template
+  """
+  appCode: String
+  """
+  List of template versions for this template.
+  Unique key of App
+  One Template to Many Template Versions relationship
+  """
+  templateVersions: [TemplateVersion]
+  createdDate: Date
+  lastModifiedDate: Date
+}
+
+
+"""
+Setting template Type to choose between email or teams messaging
+"""
+enum AlertType {
+    TEAMS, EMAIL
+}
+
+type TemplatePages {
+
+  totalElements: Int
+  totalPages: Int
+  content: [Template]
+  isEmpty: Boolean
+  isFirst: Boolean
+  isLast: Boolean
+  number:  Int
+  numberOfElements: Int
+  size: Int
+  sort: Sort
+}
+
+type TemplateVersion {
+  """
+  Connecting template version to the template that owns this version
+  Unique key of template
+  Many Template Version to One Template relationship
+  """
+  templateId: ID
+  id: Int
+  """
+  Name of the template version
+  """
+  name: String
+  """
+  Hash of the template version
+  Ensuring that each template version is different
+  Hashing -> TemplateId, body, settings, status
+  """
+  templateHash: String
+  """
+  Template body
+  EMAILS -> HTML format
+  TEAMS MESSAGE -> JSON format
+  """
+  body: String
+  """
+  Settings to be set within the template.
+  Note: EMAILS and TEAMS_MESSAGE have different settings
+  refer to template version entity for more info
+  """
+  settings: String
+  """
+  Version number of the template version (auto increment)
+  """
+  version: String
+  """
+  Status of the template version
+  There could only be one DRAFT at any given time
+  Only PUBLISHED templates can be triggered to send notifications
+  """
+  status: TemplateStatus
+  createdDate: Date
+  lastModifiedDate: Date
+}
+
+
+"""
+Status of the template version
+There could only be one DRAFT at any given time
+Only PUBLISHED templates can be triggered to send notifications
+"""
+enum TemplateStatus {
+    DRAFT, PUBLISHED
+}

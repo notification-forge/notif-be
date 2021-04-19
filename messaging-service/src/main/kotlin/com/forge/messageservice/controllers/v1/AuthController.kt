@@ -1,4 +1,4 @@
-package com.forge.messageservice.controllers.v1.api
+package com.forge.messageservice.controllers.v1
 
 import com.forge.messageservice.authentication.jwt.JwtAuthenticationResponse
 import com.forge.messageservice.authentication.jwt.JwtTokenProvider

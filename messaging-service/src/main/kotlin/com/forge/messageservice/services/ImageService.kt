@@ -31,11 +31,11 @@ open class ImageService(
         return imageRepository.save(image)
     }
 
-    fun retrieveAllImages(appCode: String): List<Image> {
+    fun getAllImages(appCode: String): List<Image> {
         return imageRepository.findAllByAppCode(appCode)
     }
 
-    fun retrieveImageIdAfterCursor(appCode: String, cursor: Long): List<Image> {
+    fun getAllImageIdAfterCursor(appCode: String, cursor: Long): List<Image> {
         return imageRepository.findAllByAppCodeAfterImageId(appCode, cursor)
     }
 }

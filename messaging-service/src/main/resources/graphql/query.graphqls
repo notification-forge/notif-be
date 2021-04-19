@@ -1,7 +1,19 @@
 type Query {
+    """
+    Query on an individual template
+    id -> Template's id
+    """
     template(id: ID): Template
-    templates(searchValue: String, appCodes: [String], limit: Int!, after: Int): TemplateConnection @connection (for: "Template")
+    """
+    Query on templates with pagination
+    name -> search for template name
+    appCodes -> filter by the List of app codes user wish to view
+    paginationInput -> pagination inputs such as current page, page limit and sort
+    """
+    templatePages(name: String, appCodes: [String], paginationInput: PaginationInput): TemplatePages
+    """
+    Query on an individual template version
+    id -> Template Version's id
+    """
     templateVersion(id: ID): TemplateVersion
-    images(appCode: String, limit: Int!, after: Int): ImageConnection @connection (for: "Image")
 }
-

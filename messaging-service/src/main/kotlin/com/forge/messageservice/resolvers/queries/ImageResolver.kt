@@ -33,8 +33,8 @@ class ImageResolver(
 
     private fun getAllImages(appCode: String, cursor: Long?): List<Image> {
         if (cursor == null) {
-            return imageService.retrieveAllImages(appCode)
+            return imageService.getAllImages(appCode)
         }
-        return imageService.retrieveImageIdAfterCursor(appCode, cursor)
+        return imageService.getAllImageIdAfterCursor(appCode, cursor)
     }
 }
