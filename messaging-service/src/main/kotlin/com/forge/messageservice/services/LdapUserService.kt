@@ -57,37 +57,37 @@ class MockLdapUserService(
     override fun getMembersOf(group: String): Set<GroupMember> {
         return getMembersUserDetails(
             listOf(
-                "notificationforgeusr1",
-                "notificationforgeusr2",
-                "notificationforgeapvr"
+                "ntfuser1",
+                "ntfuser2",
+                "ntfapvr"
             )
         ).toSet()
     }
 
     override fun getUserDetail(attribute: String, value: String): GroupMember? {
         when (value) {
-            "notificationforgeusr1" -> {
+            "ntfusr1" -> {
                 return GroupMember(
-                    "notificationforgeusr1",
+                    "ntfusr1",
                     "Notification Forge User 1",
-                    "notificationforgeusr1",
-                    "notificationforgeusr1@notification.com"
+                    "ntfusr1",
+                    "ntfusr1@notification.com"
                 )
             }
-            "notificationforgeusr2" -> {
+            "ntfusr2" -> {
                 return GroupMember(
-                    "notificationforgeusr2",
+                    "ntfusr2",
                     "Notification Forge User 2",
-                    "notificationforgeusr2",
-                    "notificationforgeusr2@notification.com"
+                    "ntfusr2",
+                    "ntfusr2@notification.com"
                 )
             }
-            "notificationforgeapvr" -> {
+            "ntfapvr" -> {
                 return GroupMember(
-                    "notificationforgeapvr",
+                    "ntfapvr",
                     "Notification Forge Approver",
-                    "notificationforgeapvr",
-                    "notificationforgeapvr@notification.com"
+                    "ntfapvr",
+                    "ntfapvr@notification.com"
                 )
             }
         }

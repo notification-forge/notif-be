@@ -63,15 +63,15 @@ open class DevSecurityConfigurations(
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.inMemoryAuthentication()
-            .withUser("notificationforgeusr1")
+            .withUser("ntfusr1")
             .password("{noop}secret")
             .roles("NOTIFICATION_FORGE")
             .and()
-            .withUser("notificationforgeusr2")
+            .withUser("ntfusr2")
             .password("{noop}secret")
             .roles("NOTIFICATION_FORGE")
             .and()
-            .withUser("notificationforgeapvr")
+            .withUser("ntfapvr")
             .password("{noop}secret")
             .roles("NOTIFICATION_FORGE")
     }
