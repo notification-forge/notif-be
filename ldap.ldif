@@ -26,10 +26,10 @@ dn: cn=sg_ops,ou=groups,dc=alphamail,dc=com
 objectclass: top
 objectclass: groupOfNames
 cn: alphamail_developer
-member: uid=ops,ou=people,dc=alphamail,dc=com
+member: uid=dev1,ou=people,dc=alphamail,dc=com
 
 dn: cn=sg_sale,ou=groups,dc=alphamail,dc=com
 objectclass: top
 objectclass: groupOfNames
 cn: sendgrid_applead
-member: uid=ops,ou=people,dc=alphamail,dc=com
+member: uid=dev1,ou=people,dc=alphamail,dc=com
