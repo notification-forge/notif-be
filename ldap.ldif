@@ -1,0 +1,35 @@
+# Root Group
+dn: ou=groups,dc=alphamail,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+# Root User
+dn: ou=people,dc=alphamail,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+# Actual User
+dn: uid=ops,ou=people,dc=alphamail,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Dev1
+sn: Dev1
+uid: dev1
+userPassword: secret
+
+# User Group Mapping
+dn: cn=sg_ops,ou=groups,dc=alphamail,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: alphamail_developer
+member: uid=dev1,ou=people,dc=alphamail,dc=com
+
+dn: cn=sg_sale,ou=groups,dc=alphamail,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: sendgrid_applead
+member: uid=dev1,ou=people,dc=alphamail,dc=com
