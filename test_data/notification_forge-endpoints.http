@@ -34,7 +34,13 @@ Authorization: Bearer {{token}}
 Content-Disposition: form-data; name="operations"
 Content-Type: application/json
 
-{ "query": "mutation UploadImage($appCode: String, $file: Upload!) { uploadImage(appCode: $appCode, file: $file) { id } }", "variables": { "file": null, "appCode": "alphamail" } }
+{
+  "query": "mutation UploadImage($appCode: String, $file: Upload!) { uploadImage(appCode: $appCode, file: $file) { id } }",
+  "variables": {
+    "file": null,
+    "appCode": "alphamail"
+  }
+}
 
 --WebAppBoundary
 Content-Disposition: form-data; name="map"
@@ -45,4 +51,5 @@ Content-Disposition: form-data; name="0"; filename="headshot.png"
 
 < ./headshot.png
 --WebAppBoundary--
+
 ###
