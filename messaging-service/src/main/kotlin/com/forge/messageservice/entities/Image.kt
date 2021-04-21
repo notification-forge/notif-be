@@ -34,9 +34,9 @@ class Image : Auditable() {
     var appCode: String = ""
 
     @Column(name = "content_type", length = 255, nullable = false)
-    @NotNull
+    @NotEmpty
     @Size(max = 255, message = "image.contentType.maxSize")
-    var contentType: String? = null
+    var contentType: String = ""
 
     @ManyToOne
     @JoinColumn(name = "app_code", insertable = false, updatable = false)

@@ -30,7 +30,10 @@ type Mutation{
     Based on template status given, it will be a overwrite of current DRAFT / PUBLISHING
     """
     updateTemplateVersion(input: UpdateTemplateVersionInput!): TemplateVersion!
-    uploadImage(image: Upload!): Image!
+    """
+    Mutation for uploading an image
+    """
+    uploadImage(appCode: String, file: Upload!): Image!
     """
     Mutation on App onboarding
     """
