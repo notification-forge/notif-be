@@ -2,15 +2,17 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.common.files.SimilarFilenameGenerator
 import com.forge.messageservice.entities.Image
-
+import com.forge.messageservice.entities.inputs.PaginationInput
 import com.forge.messageservice.repositories.ImageRepository
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
 
 open class ImageService(
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+    private val paginationService: PaginationService
 ) {
 
     @Transactional(Transactional.TxType.REQUIRED)
@@ -31,11 +33,12 @@ open class ImageService(
         return imageRepository.save(image)
     }
 
-    fun getAllImages(appCode: String): List<Image> {
-        return imageRepository.findAllByAppCode(appCode)
-    }
-
-    fun getAllImageIdAfterCursor(appCode: String, cursor: Long): List<Image> {
-        return imageRepository.findAllByAppCodeAfterImageId(appCode, cursor)
+    fun getAllImagesWithImageNameAndInAppCodes(
+        appCodes: List<String>,
+        name: String,
+        paginationInput: PaginationInput
+    ): Page<Image> {
+        val pageable = paginationService.pageRequest(paginationInput)
+        return imageRepository.findWithNamesLike(appCodes, name, pageable)
     }
 }

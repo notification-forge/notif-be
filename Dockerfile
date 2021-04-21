@@ -4,4 +4,4 @@ EXPOSE 8080
 RUN apk add --no-cache bash
 WORKDIR /opt/app
 COPY ${JAR_FILE} app.jar
-CMD ["java","-Dspring.profiles.active=prod","-jar","app.jar"]
+CMD ["java","-Dspring.profiles.active=dev","-jar","app.jar"]

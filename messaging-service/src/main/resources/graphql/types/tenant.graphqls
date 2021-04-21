@@ -1,0 +1,84 @@
+type Tenant {
+    """
+    App code of application
+    Unique ID of application
+    """
+    appCode: ID
+    """
+    Name of the application
+    """
+    displayName: String
+    """
+    API Token generated to each onboarded application
+    """
+    apiToken: String
+    """
+    App's onboarding status
+    """
+    status: AppStatus
+    """
+    Justification for why App should be onboarded
+    """
+    justification: String
+    """
+    Description of App
+    """
+    description: String
+    """
+    primaryOwnerName of App
+    """
+    primaryOwnerName: String
+    """
+    primaryOwnerId of App
+    """
+    primaryOwnerId: String
+    """
+    secondaryOwnerName of App
+    """
+    secondaryOwnerName: String
+    """
+    secondaryOwnerId of App
+    """
+    secondaryOwnerId: String
+    """
+    encryptionKey of App
+    """
+    encryptionKey: String
+    """
+    appSettings of App
+    """
+    appSettings: String
+    """
+    List of onboardings for this App
+    Unique key of appCode
+    One App to Many Onboarding relationship
+    """
+    onboardings: [Onboarding]
+    """
+    Username of approved
+    """
+    approvedBy: String
+    """
+    Date of the approved
+    """
+    approvedDate: Date
+    """
+    Username of rejected
+    """
+    rejectedBy: String
+    """
+    Date of the rejection
+    """
+    rejectedDate: Date
+    """
+    Rejected reason
+    """
+    rejectedReason: String
+}
+
+"""
+App's onboarding status
+"""
+enum AppStatus {
+    ACTIVE, INACTIVE, PENDING_OWNER_APPROVAL, REJECTED
+}

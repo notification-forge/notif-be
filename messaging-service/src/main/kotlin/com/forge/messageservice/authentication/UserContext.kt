@@ -10,7 +10,7 @@ object UserContext {
     fun loggedInUser(): JwtUser{
         if (SecurityContextHolder.getContext().authentication != null)
             return SecurityContextHolder.getContext().authentication.principal as JwtUser
-        return JwtUser("SYSTEM", "SYSTEM", Date.from(Instant.now()))
+        return JwtUser("SYSTEM", "SYSTEM", Date.from(Instant.now()), listOf())
     }
 
     fun loggedInUsername() = loggedInUser().username

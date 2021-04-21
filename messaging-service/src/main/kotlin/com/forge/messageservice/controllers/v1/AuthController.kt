@@ -1,20 +1,20 @@
 package com.forge.messageservice.controllers.v1
 
+import com.forge.messageservice.authentication.UserContext
 import com.forge.messageservice.authentication.jwt.JwtAuthenticationResponse
 import com.forge.messageservice.authentication.jwt.JwtTokenProvider
+import com.forge.messageservice.authentication.jwt.JwtUser
 import com.forge.messageservice.configurations.security.SecurityConfigHolder
 import com.forge.messageservice.controllers.v1.api.request.LoginRequest
 import com.forge.messageservice.controllers.v1.api.response.ApiResponse
+import com.forge.messageservice.services.OnboardingService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/v1/auth")

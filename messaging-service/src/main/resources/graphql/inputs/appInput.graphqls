@@ -1,0 +1,27 @@
+input CreateAppInput {
+    appCode: String
+    name: String
+    justification: String
+    description: String
+    primaryOwnerName: String
+    primaryOwnerId: String
+    secondaryOwnerName: String
+    secondaryOwnerId: String
+}
+
+input UpdateAppInput {
+    appCode: String
+    name: String
+    justification: String
+    description: String
+    primaryOwnerName: String
+    primaryOwnerId: String
+    secondaryOwnerName: String
+    secondaryOwnerId: String
+}
+
+input ApprovalAppInput {
+    appCode: String
+    status: AppStatus
+    rejectedReason: String
+}

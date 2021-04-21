@@ -31,4 +31,21 @@ type Mutation{
     """
     updateTemplateVersion(input: UpdateTemplateVersionInput!): TemplateVersion!
     uploadImage(image: Upload!): Image!
+    """
+    Mutation on App onboarding
+    """
+    onboardApp(input: CreateAppInput!): Tenant!
+    """
+    Mutation on App updates
+    """
+    updateApp(input: UpdateAppInput!): Tenant!
+    """
+    Mutation on App approval
+    Approvers can approve or reject app onboarding application
+    """
+    approveOrRejectAppInput(input: ApprovalAppInput!): Tenant!
+    """
+    Mutation on User onboarding
+    """
+    onboardUser(input: OnboardingUserInput!): User!
 }
