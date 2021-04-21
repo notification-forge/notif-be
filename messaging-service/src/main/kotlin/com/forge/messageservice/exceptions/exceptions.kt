@@ -3,17 +3,18 @@ package com.forge.messageservice.exceptions
 
 import graphql.GraphQLException
 
-class TemplateExistedException(message: String) : GraphQLException(message)
-class TemplateDoesNotExistException(message: String) : GraphQLException(message)
-class TemplateVersionExistedException(message: String) : GraphQLException(message)
-class TemplateHashExistedException(message: String) : GraphQLException(message)
-class TemplateVersionDoesNotExistException(message: String) : GraphQLException(message)
+class TemplateExistedException(message: String) : BusinessException(message)
+class TemplateDoesNotExistException(message: String) : BusinessException(message)
+class TemplateVersionExistedException(message: String) : BusinessException(message)
+class TemplateHashExistedException(message: String) : BusinessException(message)
+class TemplateVersionDoesNotExistException(message: String) : BusinessException(message)
 
-class AppExistedException(message: String): GraphQLException(message)
-class AppDoesNotExistException(message: String) : GraphQLException(message)
+class TenantExistedException(message: String): BusinessException(message)
+class TenantDoesNotExistException(message: String) : BusinessException(message)
+class OwnersMissingException(message: String): BusinessException(message)
 
-class UserHaveYetToOnboardException(message: String) : GraphQLException(message)
+class UserHaveYetToOnboardException(message: String) : BusinessException(message)
 
-open class BusinessException(msg: String) : Exception(msg)
+open class BusinessException(msg: String) : GraphQLException(msg)
 class TenantAlreadyExistException(msg: String) : BusinessException(msg)
 class TenantNotFoundException(msg: String) : BusinessException(msg)

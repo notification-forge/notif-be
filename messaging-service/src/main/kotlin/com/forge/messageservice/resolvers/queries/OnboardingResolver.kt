@@ -12,7 +12,7 @@ class OnboardingResolver(
 ) : GraphQLQueryResolver {
 
     fun tenant(appCode: String): Tenant {
-        return onboardingService.getAppByAppCode(appCode)
+        return onboardingService.getTenantByAppCode(appCode)
     }
 
     fun user(username: String): User {

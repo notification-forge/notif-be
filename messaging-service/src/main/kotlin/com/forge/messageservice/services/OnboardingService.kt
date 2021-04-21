@@ -8,8 +8,9 @@ import com.forge.messageservice.entities.inputs.ApprovalAppInput
 import com.forge.messageservice.entities.inputs.CreateAppInput
 import com.forge.messageservice.entities.inputs.OnboardUserInput
 import com.forge.messageservice.entities.inputs.UpdateAppInput
-import com.forge.messageservice.exceptions.AppDoesNotExistException
-import com.forge.messageservice.exceptions.AppExistedException
+import com.forge.messageservice.exceptions.TenantDoesNotExistException
+import com.forge.messageservice.exceptions.TenantExistedException
+import com.forge.messageservice.exceptions.OwnersMissingException
 import com.forge.messageservice.exceptions.UserHaveYetToOnboardException
 import com.forge.messageservice.repositories.OnboardingRepository
 import com.forge.messageservice.repositories.TenantRepository
@@ -58,10 +59,10 @@ open class OnboardingService(
             username = onboardUserInput.username
             name = onboardUserInput.name
         })
-        val app = getAppByAppCode(onboardUserInput.appCode)
+        val tenant = getTenantByAppCode(onboardUserInput.appCode)
 
         onboardingRepository.save(Onboarding().apply {
-            appCode = app.appCode
+            appCode = tenant.appCode
             username = user.username
         })
         return user
@@ -77,20 +78,20 @@ open class OnboardingService(
     }
 
     fun updateApp(appInput: UpdateAppInput): Tenant {
-        val app = getAppByAppCode(appInput.appCode)
-        update(app, appInput)
-        return tenantRepository.save(app)
+        val tenant = getTenantByAppCode(appInput.appCode)
+        update(tenant, appInput)
+        return tenantRepository.save(tenant)
     }
 
     fun approveOrRejectApp(appInput: ApprovalAppInput): Tenant {
-        val app = getAppByAppCode(appInput.appCode)
-        approveOrReject(app, appInput)
-        return tenantRepository.save(app)
+        val tenant = getTenantByAppCode(appInput.appCode)
+        approveOrReject(tenant, appInput)
+        return tenantRepository.save(tenant)
     }
 
-    fun getAppByAppCode(appCode: String): Tenant {
+    fun getTenantByAppCode(appCode: String): Tenant {
         return tenantRepository.findByAppCode(appCode)
-            ?: throw AppDoesNotExistException("App with app code $appCode does not exist")
+            ?: throw TenantDoesNotExistException("App with app code $appCode does not exist")
     }
 
     fun getUserByUsername(username: String): User {
@@ -111,11 +112,11 @@ open class OnboardingService(
 
     fun getAppsOwnsByUser(username: String): List<Tenant> {
         return getOnboardingsByUsername(username).map {
-            getAppByAppCode(it.appCode!!)
+            getTenantByAppCode(it.appCode!!)
         }
     }
 
-    private fun update(app: Tenant, appInput: UpdateAppInput) {
+    private fun update(tenant: Tenant, appInput: UpdateAppInput) {
         val primaryOwner = createOrGetCurrentUser(User().apply {
             username = appInput.primaryOwnerId
             name = appInput.primaryOwnerName
@@ -125,7 +126,7 @@ open class OnboardingService(
             name = appInput.secondaryOwnerName
         })
 
-        app.apply {
+        tenant.apply {
             displayName = appInput.name
             description = appInput.description
             justification = appInput.justification
@@ -136,18 +137,20 @@ open class OnboardingService(
         }
     }
 
-    private fun approveOrReject(app: Tenant, appInput: ApprovalAppInput) {
-        app.apply {
+    private fun approveOrReject(tenant: Tenant, appInput: ApprovalAppInput) {
+        tenant.apply {
             status = appInput.status
         }
-        if (app.status == Tenant.AppStatus.ACTIVE) {
-            app.apiToken = "12345"
-            app.approvedBy = UserContext.loggedInUsername()
-            app.approvedDate = LocalDateTime.now()
-        } else if (app.status == Tenant.AppStatus.REJECTED) {
-            app.rejectedReason = appInput.rejectedReason
-            app.rejectedBy = UserContext.loggedInUsername()
-            app.rejectedDate = LocalDateTime.now()
+        if (tenant.status == Tenant.AppStatus.ACTIVE) {
+            ensureOwnersExist(tenant.primaryOwnerId)
+            ensureOwnersExist(tenant.secondaryOwnerId)
+            tenant.apiToken = "12345"
+            tenant.approvedBy = UserContext.loggedInUsername()
+            tenant.approvedDate = LocalDateTime.now()
+        } else if (tenant.status == Tenant.AppStatus.REJECTED) {
+            tenant.rejectedReason = appInput.rejectedReason
+            tenant.rejectedBy = UserContext.loggedInUsername()
+            tenant.rejectedDate = LocalDateTime.now()
         }
     }
 
@@ -155,7 +158,18 @@ open class OnboardingService(
         val existingApp = tenantRepository.findById(appCode)
 
         if (existingApp.isPresent) {
-            throw AppExistedException("App with app code $appCode already exist")
+            throw TenantExistedException("App with app code $appCode already exist")
         }
+    }
+
+    private fun ensureOwnersExist(owner: String?) {
+        if (!userExist(owner)){
+            throw OwnersMissingException("Owners cannot be missing when approving application")
+        }
+    }
+
+    private fun userExist(username : String?): Boolean{
+        if (username == null) return false
+        return userRepository.existsById(username)
     }
 }
