@@ -22,11 +22,11 @@ open class Auditable {
     var createdBy: String = ""
 
     @LastModifiedDate
-    @Column(name = "last_modified_timestamp", nullable = false)
+    @Column(name = "last_modified_timestamp")
     var lastModifiedDate: LocalDateTime? = null
 
     @LastModifiedBy
-    @Column(name = "last_modified_by", nullable = false)
+    @Column(name = "last_modified_by")
     var lastModifiedBy: String? = null
 
 }

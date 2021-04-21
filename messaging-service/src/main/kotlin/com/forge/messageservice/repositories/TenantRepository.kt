@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TenantRepository : JpaRepository<Tenant, Long> {
+interface TenantRepository : JpaRepository<Tenant, String> {
 
-    @Query("select t from Tenant t where lower(t.appCode) = lower(:appCode) and t.status = 'ACTIVE'")
+    @Query("select t from Tenant t where lower(t.appCode) = lower(:appCode) and t.status in ('ACTIVE' , 'PENDING_OWNER_APPROVAL')")
     fun findByAppCode(appCode: String): Tenant?
 
 }

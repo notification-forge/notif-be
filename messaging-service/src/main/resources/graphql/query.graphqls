@@ -16,4 +16,21 @@ type Query {
     id -> Template Version's id
     """
     templateVersion(id: ID): TemplateVersion
+    """
+    Query on templates with pagination
+    name -> search for template name
+    appCodes -> filter by the List of app codes user wish to view
+    paginationInput -> pagination inputs such as current page, page limit and sort
+    """
+    imagePages(name: String, appCodes: [String], paginationInput: PaginationInput): ImagePages
+    """
+    Query on an individual app
+    id -> App's app code
+    """
+    tenant(id: ID): Tenant
+    """
+    Query on an individual user
+    id -> User's 1BankID
+    """
+    user(username: ID): User
 }

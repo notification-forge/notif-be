@@ -1,18 +1,29 @@
 package com.forge.messageservice.entities
 
+import Auditable
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "tenants")
-class Tenant {
+class Tenant : Auditable(){
 
     @Id
-    @Column(name = "appcode", length = 24, nullable = false, unique = true)
+    @Column(name = "app_code", length = 24, nullable = false, unique = true)
     var appCode: String = ""
 
     @Column(name = "display_name", length = 56, nullable = false)
     var displayName: String = ""
+
+    @Column(name = "api_token")
+    var apiToken: String? = null
+
+    @Column(name = "justification")
+    var justification: String? = null
+
+    @Column(name = "description")
+    var description: String? = null
 
     @Column(name = "primary_owner_name", length = 256, nullable = false)
     var primaryOwnerName: String? = null
@@ -34,11 +45,11 @@ class Tenant {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 24, nullable = false)
-    var status: Status =
-        Status.PENDING_OWNER_APPROVAL
+    var status: AppStatus =
+        AppStatus.PENDING_OWNER_APPROVAL
 
-    enum class Status {
-        ACTIVE, INACTIVE, PENDING_OWNER_APPROVAL
+    enum class AppStatus {
+        ACTIVE, INACTIVE, PENDING_OWNER_APPROVAL, REJECTED
     }
 
     /**
@@ -75,15 +86,22 @@ class Tenant {
     @Column(name = "app_settings", nullable = true, columnDefinition = "TEXT")
     val appSettings: String? = null
 
-    @Column(name = "created_by", length = 24, nullable = false)
-    val createdBy: String? = null
+    @Column(name = "approved_timestamp")
+    var approvedDate: LocalDateTime? = null
 
-    @Column(name = "date_created", nullable = false)
-    val dateCreated: OffsetDateTime? = null
+    @Column(name = "approved_by")
+    var approvedBy: String = ""
 
-    @Column(name = "updated_by", length = 24)
-    val updatedBy: String? = null
+    @Column(name = "rejected_timestamp")
+    var rejectedDate: LocalDateTime? = null
 
-    @Column(name = "date_updated")
-    val dateUpdated: OffsetDateTime? = null
+    @Column(name = "rejected_by")
+    var rejectedBy: String? = null
+
+    @Column(name = "rejected_reason")
+    var rejectedReason: String? = null
+
+    @OneToMany
+    @JoinColumn(name = "app_code")
+    var onboardings : List<Onboarding>? = null
 }

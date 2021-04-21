@@ -30,7 +30,7 @@ class Image : Auditable() {
 
     @Column(name = "app_code", length = 255, nullable = false)
     @NotEmpty
-    @Size(max = 24, message = "image.appcode.maxSize")
+    @Size(max = 24, message = "image.appCode.maxSize")
     var appCode: String = ""
 
     @Column(name = "content_type", length = 255, nullable = false)
@@ -60,9 +60,9 @@ class Image : Auditable() {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     @NotNull
-    var status: Status = Status.ACTIVE
+    var status: ImageStatus = ImageStatus.ACTIVE
 
-    enum class Status {
+    enum class ImageStatus {
         ACTIVE, DELETED
     }
 

@@ -94,7 +94,7 @@ class JwtTokenAuthenticationFilter (
         val username = claims.subject
         val roles = claims["roles"] as List<String>
         val authorities = roles.map { role -> SimpleGrantedAuthority(role) }
-        val userDetails = JwtUser(username, ldapUserService.getNameOfUser(username), claims.issuedAt)
+        val userDetails = JwtUser(username, ldapUserService.getNameOfUser(username), claims.issuedAt, listOf())
         val authentication = UsernamePasswordAuthenticationToken(userDetails, null, authorities)
         authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
         return authentication

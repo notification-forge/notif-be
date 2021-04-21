@@ -1,0 +1,12 @@
+type Onboarding{
+    id: ID
+    """
+    1BankID of the User
+    """
+    username: String
+    """
+    App code of the application
+    Unique ID of application
+    """
+    appCode: String
+}

@@ -28,11 +28,14 @@ class TemplateServiceTest {
     @MockK
     lateinit var templateRepository: TemplateRepository
 
+    @MockK
+    lateinit var paginationService: PaginationService
+
     lateinit var templateService: TemplateService
 
     @BeforeEach
     fun setUp() {
-        templateService = TemplateService(templateRepository)
+        templateService = TemplateService(templateRepository,paginationService)
     }
 
     @AfterEach
@@ -79,16 +82,21 @@ class TemplateServiceTest {
             paginationInput.sortField
         )
 
-        every {
-            templateRepository.findWithNamesLike(
-                searchValue,
+        every { templateRepository.findWithNamesLike(
                 appCodes,
+                searchValue,
                 pageable
             )
         } returns mockListOfTemplates()
 
-        val templates =
-            templateService.getAllTemplatesWithTemplateNameAndInAppCodes(searchValue, appCodes, paginationInput)
+        every { paginationService.pageRequest(paginationInput) } returns PageRequest.of(
+            paginationInput.pageNumber,
+            paginationInput.rowPerPage,
+            paginationInput.sortDirection,
+            paginationInput.sortField
+        )
+
+        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(appCodes, searchValue, paginationInput)
 
         templates.forEach { template ->
             run {

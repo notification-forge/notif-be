@@ -1,0 +1,16 @@
+type User{
+    """
+    1BankID of the User
+    """
+    username: ID
+    """
+    Name of User
+    """
+    name: String
+    """
+    List of onboardings for this User
+    Unique key of username
+    One User to Many Onboarding relationship
+    """
+    onboardings: [Onboarding]
+}

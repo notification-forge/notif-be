@@ -8,23 +8,22 @@ import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.repositories.TemplateRepository
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 open class TemplateService(
-    private val templateRepository: TemplateRepository
+    private val templateRepository: TemplateRepository,
+    private val paginationService: PaginationService
 ) {
 
     fun getAllTemplatesWithTemplateNameAndInAppCodes(
-        name: String,
         appCodes: List<String>,
+        name: String,
         paginationInput: PaginationInput
     ): Page<Template> {
-        val pageable = pageRequest(paginationInput)
-        return templateRepository.findWithNamesLike(name, appCodes, pageable)
+        val pageable = paginationService.pageRequest(paginationInput)
+        return templateRepository.findWithNamesLike(appCodes, name, pageable)
     }
 
     fun getTemplateById(templateId: Long): Template {
@@ -38,15 +37,6 @@ open class TemplateService(
 
     private fun findTemplateByTemplateNameAndAppCode(templateName: String, appCode: String): Template? {
         return templateRepository.findByNameAndAppCode(templateName, appCode)
-    }
-
-    private fun pageRequest(paginationInput: PaginationInput): Pageable {
-        return PageRequest.of(
-            paginationInput.pageNumber,
-            paginationInput.rowPerPage,
-            paginationInput.sortDirection,
-            paginationInput.sortField
-        )
     }
 
     fun createTemplate(templateInput: CreateTemplateInput): Template {
@@ -73,7 +63,7 @@ open class TemplateService(
         return saveTemplate(template)
     }
 
-    fun update(templateInput: UpdateTemplateInput, template: Template) {
+    private fun update(templateInput: UpdateTemplateInput, template: Template) {
         template.apply {
             name = templateInput.name
         }

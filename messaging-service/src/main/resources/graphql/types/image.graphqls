@@ -1,7 +1,49 @@
 type Image {
     id: ID
+    """
+    Connecting template to the application that uses this template
+    """
     appCode: String
+    """
+    Content type of the image file
+    """
+    contentType: String
     tenant: String
+    """
+    Name of the image
+    """
     fileName: String
+    """
+    An image SHA256
+    """
+    fileSignature: String
+    """
+    Status of the image, whether if it is currently active or been deleted
+    """
+    status: ImageStatus
+    """
+    ByteArray of the image
+    """
     imageData: String
+}
+
+type ImagePages {
+    totalElements: Int
+    totalPages: Int
+    content: [Image]
+    isEmpty: Boolean
+    isFirst: Boolean
+    isLast: Boolean
+    number:  Int
+    numberOfElements: Int
+    size: Int
+    sort: Sort
+}
+
+
+"""
+Status of the image, whether if it is currently active or been deleted
+"""
+enum ImageStatus {
+    ACTIVE, DELETED
 }

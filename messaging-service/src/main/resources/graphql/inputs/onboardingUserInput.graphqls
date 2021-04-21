@@ -1,0 +1,5 @@
+input OnboardingUserInput {
+    appCode: String
+    username: String
+    name: String
+}

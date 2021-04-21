@@ -6,10 +6,10 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "templates")
-class Template : Auditable(){
+class Template : Auditable() {
 
     /**
-     * A user defined id of the template. Alphanumeric, dashes and dots only
+     * A user defined id of the template. Auto generated sequence.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
