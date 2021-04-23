@@ -11,9 +11,12 @@ import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.repositories.TemplateRepository
 import com.forge.messageservice.repositories.TemplateVersionRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 open class TemplateVersionService(
+    private val templatePluginService: TemplatePluginService,
     private val templateVersionRepository: TemplateVersionRepository,
     private val templateRepository: TemplateRepository
 ) {
@@ -22,7 +25,7 @@ open class TemplateVersionService(
         return templateVersionRepository.findAllByTemplateId(templateId)
     }
 
-    fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
+    open fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
         val optionalTemplateVersion = templateVersionRepository.findById(templateVersionId)
 
         if (optionalTemplateVersion.isEmpty) {
@@ -58,6 +61,7 @@ open class TemplateVersionService(
         return saveTemplateVersion(newTemplateVersion)
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
         val currentTemplateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
@@ -75,21 +79,28 @@ open class TemplateVersionService(
             name = newTemplateVersion.name
             settings = newTemplateVersion.settings
             body = templateVersionInput.body
-            version =
-                templateVersionRepository.findCurrentVersionNumberByTemplateId(newTemplateVersion.templateId!!) + 1
+            version = templateVersionRepository.findCurrentVersionNumberByTemplateId(newTemplateVersion.templateId!!) + 1
             status = DRAFT
         }
         newTemplateVersion.templateHash = newTemplateVersion.templateHash()
 
-        return saveTemplateVersion(newTemplateVersion)
+        val savedTemplateVersion = saveTemplateVersion(newTemplateVersion)
+
+        templatePluginService.createTemplatePlugins(
+            savedTemplateVersion.templateId!!,
+            templateVersionInput.plugins
+        )
+
+        return savedTemplateVersion
     }
 
     private fun saveTemplateVersion(templateVersion: TemplateVersion): TemplateVersion {
-        ensureTemplateHashDoesNotExist(templateVersion)
+//        ensureTemplateHashDoesNotExist(templateVersion)
         return templateVersionRepository.save(templateVersion)
     }
 
-    fun updateTemplateVersion(templateVersionInput: UpdateTemplateVersionInput): TemplateVersion {
+    @Transactional(propagation = Propagation.REQUIRED)
+    open fun updateTemplateVersion(templateVersionInput: UpdateTemplateVersionInput): TemplateVersion {
         val templateVersion = getTemplateVersionById(templateVersionInput.id)
 
         templateVersion.apply {
@@ -101,7 +112,14 @@ open class TemplateVersionService(
         }
         templateVersion.templateHash = templateVersion.templateHash()
 
-        return saveTemplateVersion(templateVersion)
+        val savedTemplateVersion = saveTemplateVersion(templateVersion)
+
+        templatePluginService.createTemplatePlugins(
+            savedTemplateVersion.templateId!!,
+            templateVersionInput.plugins
+        )
+
+        return savedTemplateVersion
     }
 
     private fun ensureTemplateExist(templateId: Long) {

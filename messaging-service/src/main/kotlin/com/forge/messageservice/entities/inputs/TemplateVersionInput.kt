@@ -18,7 +18,8 @@ data class UpdateTemplateVersionInput(
     val name: String,
     val settings: String,
     val body: String,
-    val status: TemplateStatus
+    val status: TemplateStatus,
+    val plugins: PluginsInput
 )
 
 @Validated
@@ -29,4 +30,5 @@ data class CloneTemplateVersionInput(
     val name: String,
     val settings: String,
     val body: String,
+    val plugins: PluginsInput
 )

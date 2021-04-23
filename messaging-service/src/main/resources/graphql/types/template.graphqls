@@ -88,6 +88,8 @@ type TemplateVersion {
   Only PUBLISHED templates can be triggered to send notifications
   """
   status: TemplateStatus
+  plugins: [Plugin]
+
   createdDate: Date
   lastModifiedDate: Date
 }

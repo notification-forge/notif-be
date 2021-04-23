@@ -10,6 +10,7 @@ plugins {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(project(":lib"))
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-
 open class ImageService(
     private val imageRepository: ImageRepository,
     private val paginationService: PaginationService
@@ -33,7 +32,7 @@ open class ImageService(
         return imageRepository.save(image)
     }
 
-    fun getAllImagesWithImageNameAndInAppCodes(
+    open fun getAllImagesWithImageNameAndInAppCodes(
         appCodes: List<String>,
         name: String,
         paginationInput: PaginationInput

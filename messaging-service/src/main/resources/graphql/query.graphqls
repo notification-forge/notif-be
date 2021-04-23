@@ -33,4 +33,6 @@ type Query {
     id -> User's 1BankID
     """
     user(username: ID): User
+
+    plugins(appCode: String): [Plugin]
 }

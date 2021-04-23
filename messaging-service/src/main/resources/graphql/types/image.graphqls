@@ -1,14 +1,17 @@
 type Image {
     id: ID
     """
-    Connecting template to the application that uses this template
+    Connecting image to the application that uses this image
     """
     appCode: String
     """
     Content type of the image file
     """
     contentType: String
-    tenant: String
+    """
+    Application that uses this image
+    """
+    tenant: Tenant
     """
     Name of the image
     """

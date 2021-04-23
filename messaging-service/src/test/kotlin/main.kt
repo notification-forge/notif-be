@@ -14,7 +14,6 @@ class Loader {
         val instance = kClass.createInstance() as AlphamailPlugin
         return instance.beforeSend()
     }
-
 }
 
 
