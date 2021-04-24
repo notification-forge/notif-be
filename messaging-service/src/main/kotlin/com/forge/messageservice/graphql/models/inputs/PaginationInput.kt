@@ -1,4 +1,4 @@
-package com.forge.messageservice.entities.inputs
+package com.forge.messageservice.graphql.models.inputs
 
 import org.springframework.data.domain.Sort
 

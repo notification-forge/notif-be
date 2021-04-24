@@ -2,7 +2,7 @@ package com.forge.messageservice.resolvers.mutations
 
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplateVersion
-import com.forge.messageservice.entities.inputs.*
+import com.forge.messageservice.graphql.models.inputs.*
 import com.forge.messageservice.services.TemplateService
 import com.forge.messageservice.services.TemplateVersionService
 import graphql.kickstart.tools.GraphQLMutationResolver

@@ -27,20 +27,6 @@ type Image {
     imageData: String
 }
 
-type ImagePages {
-    totalElements: Int
-    totalPages: Int
-    content: [Image]
-    isEmpty: Boolean
-    isFirst: Boolean
-    isLast: Boolean
-    number:  Int
-    numberOfElements: Int
-    size: Int
-    sort: Sort
-}
-
-
 """
 Status of the image, whether if it is currently active or been deleted
 """

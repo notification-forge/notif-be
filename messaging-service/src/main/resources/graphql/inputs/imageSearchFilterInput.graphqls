@@ -1,0 +1,4 @@
+input ImageSearchFilterInput {
+    fileNamePortion: String
+    appCodes: [String]
+}
