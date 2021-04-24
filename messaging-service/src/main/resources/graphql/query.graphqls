@@ -10,19 +10,21 @@ type Query {
     appCodes -> filter by the List of app codes user wish to view
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
-    templatePages(name: String, appCodes: [String], paginationInput: PaginationInput): TemplatePages
+    templatePages(name: String, appCodes: [String], paginationInput: PaginationInput): TemplateConnection @connection(for: "Template")
+
     """
     Query on an individual template version
     id -> Template Version's id
     """
     templateVersion(id: ID): TemplateVersion
+
     """
     Query on templates with pagination
-    name -> search for template name
-    appCodes -> filter by the List of app codes user wish to view
+    searchFilter -> The search criteria
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
-    imagePages(name: String, appCodes: [String], paginationInput: PaginationInput): ImagePages
+    getImages(searchFilter: ImageSearchFilterInput, paginationInput: PaginationInput): ImageConnection @connection(for: "Image")
+
     """
     Query on an individual app
     id -> App's app code

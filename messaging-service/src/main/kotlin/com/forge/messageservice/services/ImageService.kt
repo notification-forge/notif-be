@@ -2,17 +2,15 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.common.files.SimilarFilenameGenerator
 import com.forge.messageservice.entities.Image
-import com.forge.messageservice.entities.inputs.PaginationInput
 import com.forge.messageservice.repositories.ImageRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-
 open class ImageService(
-    private val imageRepository: ImageRepository,
-    private val paginationService: PaginationService
+    private val imageRepository: ImageRepository
 ) {
 
     @Transactional(Transactional.TxType.REQUIRED)
@@ -33,12 +31,15 @@ open class ImageService(
         return imageRepository.save(image)
     }
 
-    fun getAllImagesWithImageNameAndInAppCodes(
+    /**
+     * Returns images in the requested `appCodes` whose filenames matches a portion of the requested `fileNamePortion`
+     */
+    @Transactional(Transactional.TxType.NEVER)
+    open fun findImagesWhoseFilenamesMatches(
         appCodes: List<String>,
-        name: String,
-        paginationInput: PaginationInput
+        fileNamePortion: String,
+        pageable: Pageable
     ): Page<Image> {
-        val pageable = paginationService.pageRequest(paginationInput)
-        return imageRepository.findWithNamesLike(appCodes, name, pageable)
+        return imageRepository.findWithNamesLike(appCodes, fileNamePortion, pageable)
     }
 }

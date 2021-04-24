@@ -3,9 +3,9 @@ package com.forge.messageservice.services
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
-import com.forge.messageservice.entities.inputs.CloneTemplateVersionInput
-import com.forge.messageservice.entities.inputs.CreateTemplateVersionInput
-import com.forge.messageservice.entities.inputs.UpdateTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.CloneTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.CreateTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.UpdateTemplateVersionInput
 import com.forge.messageservice.exceptions.TemplateHashExistedException
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.repositories.TemplateRepository
@@ -106,7 +106,7 @@ open class TemplateVersionService(
 
     private fun ensureTemplateExist(templateId: Long) {
         val optionalTemplate = templateRepository.findById(templateId)
-        if (optionalTemplate.isEmpty) {
+        if (optionalTemplate.isEmpty()) {
             throw TemplateVersionDoesNotExistException("Template with template Id $templateId does not exist")
         }
     }

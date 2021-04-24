@@ -4,8 +4,8 @@ import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.PUBLISHED
-import com.forge.messageservice.entities.inputs.CreateTemplateVersionInput
-import com.forge.messageservice.entities.inputs.UpdateTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.CreateTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.UpdateTemplateVersionInput
 import com.forge.messageservice.exceptions.TemplateHashExistedException
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.repositories.TemplateRepository
