@@ -13,7 +13,6 @@ import graphql.kickstart.tools.GraphQLQueryResolver
 
 import graphql.relay.DefaultEdge
 import graphql.relay.DefaultPageInfo
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,13 +20,11 @@ class ImageResolver(
     private val imageService: ImageService
 ) : GraphQLQueryResolver {
 
-    fun getImages(searchFilter: ImageSearchFilterInput, pageRequest: PaginationInput): Connection<Image> {
+    fun getImages(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): Connection<Image> {
         val paginatedList = imageService.findImagesWhoseFilenamesMatches(
             searchFilter.appCodes,
             searchFilter.fileNamePortion,
-            PageRequest.of(
-                pageRequest.pageNumber, pageRequest.rowPerPage, pageRequest.sortDirection, pageRequest.sortField
-            )
+            pageRequestInput.asPageRequest()
         )
 
         val edges = paginatedList.content.map { image ->
