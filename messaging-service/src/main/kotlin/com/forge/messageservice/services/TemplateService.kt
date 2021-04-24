@@ -2,7 +2,6 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
-import com.forge.messageservice.graphql.models.inputs.PaginationInput
 import com.forge.messageservice.graphql.models.inputs.UpdateTemplateInput
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
