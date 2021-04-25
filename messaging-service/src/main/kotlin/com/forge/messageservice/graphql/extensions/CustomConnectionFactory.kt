@@ -26,7 +26,6 @@ open class CustomConnectionFactory : TypeDefinitionFactory {
         connectionDirectives
             .flatMap { createDefinitions(it) }
             .forEach {
-
                 // Overwrite definitions created by `RelayConnectionFactory`
                 definitionsByName[it.name] = it
                 definitions.add(it)
