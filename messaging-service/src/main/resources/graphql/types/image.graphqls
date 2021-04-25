@@ -8,7 +8,7 @@ type Image {
     Content type of the image file
     """
     contentType: String
-    tenant: String
+
     """
     Name of the image
     """

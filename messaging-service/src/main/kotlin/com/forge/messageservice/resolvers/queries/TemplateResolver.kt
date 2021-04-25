@@ -28,8 +28,10 @@ class TemplateResolver(
         return templateVersionService.getTemplateVersionById(templateVersionId)
     }
 
-    fun templatePages(name: String, appCodes: List<String>, paginationInput: PaginationInput): Connection<Template> {
-        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(appCodes, name, paginationInput)
+    fun templatePages(name: String, appCodes: List<String>, pageRequestInput: PaginationInput): Connection<Template> {
+        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(
+            appCodes, name, pageRequestInput.asPageRequest()
+        )
 
         val edges = templates.content.map { template ->
             DefaultEdge(template, CursorResolver.from(template.id!!))
