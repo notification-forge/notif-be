@@ -1,28 +1,26 @@
 package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
-import com.forge.messageservice.entities.inputs.CreateTemplateInput
-import com.forge.messageservice.entities.inputs.PaginationInput
-import com.forge.messageservice.entities.inputs.UpdateTemplateInput
+import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
+import com.forge.messageservice.graphql.models.inputs.UpdateTemplateInput
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.repositories.TemplateRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 open class TemplateService(
-    private val templateRepository: TemplateRepository,
-    private val paginationService: PaginationService
+    private val templateRepository: TemplateRepository
 ) {
 
     fun getAllTemplatesWithTemplateNameAndInAppCodes(
         appCodes: List<String>,
         name: String,
-        paginationInput: PaginationInput
+        pageable: Pageable
     ): Page<Template> {
-        val pageable = paginationService.pageRequest(paginationInput)
         return templateRepository.findWithNamesLike(appCodes, name, pageable)
     }
 

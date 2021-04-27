@@ -28,11 +28,11 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.11.1")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.1")
 
-    implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:7.1.0")
-    implementation("com.graphql-java-kickstart:playground-spring-boot-starter:7.1.0")
-    implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:7.1.0")
+    implementation("com.graphql-java-kickstart:graphql-java-tools:11.0.0")
+    implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:11.0.0")
+    implementation("com.graphql-java-kickstart:playground-spring-boot-starter:11.0.0")
+    implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:11.0.0")
     implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
-    implementation("com.graphql-java:graphql-java")
 
     implementation("org.hibernate.validator:hibernate-validator")
 

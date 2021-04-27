@@ -26,8 +26,4 @@ class PluginResolver(
             pluginResponseConverter.convertToPluginResponse(plugin)
         }
     }
-
-    fun pluginsInput(): PluginsInput{
-        return PluginsInput(listOf())
-    }
 }

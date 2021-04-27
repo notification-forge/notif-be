@@ -19,7 +19,7 @@ services:
     image: 501716994299.dkr.ecr.ap-southeast-1.amazonaws.com/notif-be:latest
     restart: always
     ports:
-      - 8080: 8080
+    - 8080:8080
   ldap:
     image: osixia/openldap:1.2.3
     volumes:

@@ -5,6 +5,7 @@ import com.alphamail.plugin.api.PluginConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.forge.messageservice.common.mapper.PluginSettingToConfigurationEntityMapper
+import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplatePlugin
 import com.forge.messageservice.entities.inputs.ConfigurationInput
 import com.forge.messageservice.entities.inputs.PluginInput
@@ -32,12 +33,12 @@ open class TemplatePluginService(
         return optionalTemplatePlugin.get()
     }
 
-    open fun createTemplatePlugins(templateId: Long, pluginsInput: PluginsInput){
-        pluginsInput.plugins.forEach{pluginInput ->
+    open fun createTemplatePlugins(templateVersionId: Long, pluginsInput: PluginsInput): List<TemplatePlugin> {
+        return pluginsInput.plugins.map{pluginInput ->
             pluginService.ensurePluginExist(pluginInput.pluginId)
 
             templatePluginRepository.save(TemplatePlugin().apply {
-                this.templateVersionId = templateId
+                this.templateVersionId = templateVersionId
                 pluginId = pluginInput.pluginId
                 configuration = objectMapper.writeValueAsString(convertPluginConfiguration(pluginInput))
             })

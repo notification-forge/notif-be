@@ -2,10 +2,10 @@ type Plugin {
     id: ID
     name: String
     appCode: String
-    configurationDescriptors: [ConfigurationDescriptor]
+    configurations: [Configuration]
 }
 
-type ConfigurationDescriptor{
+type Configuration{
     name: String
     displayName: String
     fieldType: FieldType
@@ -13,6 +13,7 @@ type ConfigurationDescriptor{
     mandatory: Boolean
     allowedOptions: [String]
     validationExpr: String
+    value: String
 }
 
 enum FieldType{

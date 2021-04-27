@@ -3,7 +3,7 @@ package com.forge.messageservice.services
 import com.forge.messageservice.entities.Onboarding
 import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.entities.User
-import com.forge.messageservice.entities.inputs.*
+import com.forge.messageservice.graphql.models.inputs.*
 import com.forge.messageservice.exceptions.TenantDoesNotExistException
 import com.forge.messageservice.exceptions.TenantExistedException
 import com.forge.messageservice.repositories.OnboardingRepository

@@ -2,10 +2,10 @@ package com.forge.messageservice.resolvers.mutations
 
 import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.entities.User
-import com.forge.messageservice.entities.inputs.ApprovalAppInput
-import com.forge.messageservice.entities.inputs.CreateAppInput
-import com.forge.messageservice.entities.inputs.OnboardUserInput
-import com.forge.messageservice.entities.inputs.UpdateAppInput
+import com.forge.messageservice.graphql.models.inputs.ApprovalAppInput
+import com.forge.messageservice.graphql.models.inputs.CreateAppInput
+import com.forge.messageservice.graphql.models.inputs.OnboardUserInput
+import com.forge.messageservice.graphql.models.inputs.UpdateAppInput
 import com.forge.messageservice.services.OnboardingService
 import graphql.kickstart.tools.GraphQLMutationResolver
 import org.springframework.stereotype.Component

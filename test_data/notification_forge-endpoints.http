@@ -27,6 +27,52 @@ Content-Disposition: form-data; name="file"; filename="headshot.png"
 ###
 //@no-log
 POST http://{{host}}:{{port}}/graphql
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query getImages($filter: ImageSearchFilterInput, $paginationInput: PaginationInput) { getImages(searchFilter: $filter, paginationInput: $paginationInput) { totalCount edges { cursor node { id fileName } } pageInfo { endCursor hasNextPage } } }",
+  "variables": {
+    "filter": {
+      "fileNamePortion": "headshot",
+      "appCodes": [
+        "FABK"
+      ]
+    },
+    "paginationInput": {
+      "pageNumber": 0,
+      "rowPerPage": 10,
+      "sortDirection": "ASC",
+      "sortField": "fileName"
+    }
+  }
+}
+
+###
+//@no-log
+POST http://{{host}}:{{port}}/graphql
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query templatePages($name: String, $appCodes: [String], $paginationInput: PaginationInput) { templatePages(name: $name, appCodes: $appCodes, paginationInput: $paginationInput) { totalCount edges { node { __typename ... on Template { id } } cursor } pageInfo { endCursor hasNextPage } } }",
+  "variables": {
+    "name": "headshot",
+    "appCodes": [
+      "FABK"
+    ],
+    "paginationInput": {
+      "pageNumber": 0,
+      "rowPerPage": 10,
+      "sortDirection": "ASC",
+      "sortField": "name"
+    }
+  }
+}
+
+###
+//@no-log
+POST http://{{host}}:{{port}}/graphql
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 Authorization: Bearer {{token}}
 
@@ -38,7 +84,7 @@ Content-Type: application/json
   "query": "mutation UploadImage($appCode: String, $file: Upload!) { uploadImage(appCode: $appCode, file: $file) { id } }",
   "variables": {
     "file": null,
-    "appCode": "alphamail"
+    "appCode": "FABK"
   }
 }
 

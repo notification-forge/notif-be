@@ -1,4 +1,4 @@
-package com.forge.messageservice.entities.inputs
+package com.forge.messageservice.graphql.models.inputs
 
 import com.forge.messageservice.entities.Template
 import org.springframework.validation.annotation.Validated

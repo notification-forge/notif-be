@@ -9,10 +9,6 @@ type Image {
     """
     contentType: String
     """
-    Application that uses this image
-    """
-    tenant: Tenant
-    """
     Name of the image
     """
     fileName: String

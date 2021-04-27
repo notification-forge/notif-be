@@ -2,9 +2,9 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.Template.AlertType
-import com.forge.messageservice.entities.inputs.CreateTemplateInput
-import com.forge.messageservice.entities.inputs.PaginationInput
-import com.forge.messageservice.entities.inputs.UpdateTemplateInput
+import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
+import com.forge.messageservice.graphql.models.inputs.PaginationInput
+import com.forge.messageservice.graphql.models.inputs.UpdateTemplateInput
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.repositories.TemplateRepository
@@ -28,14 +28,11 @@ class TemplateServiceTest {
     @MockK
     lateinit var templateRepository: TemplateRepository
 
-    @MockK
-    lateinit var paginationService: PaginationService
-
     lateinit var templateService: TemplateService
 
     @BeforeEach
     fun setUp() {
-        templateService = TemplateService(templateRepository,paginationService)
+        templateService = TemplateService(templateRepository)
     }
 
     @AfterEach
@@ -88,15 +85,8 @@ class TemplateServiceTest {
                 pageable
             )
         } returns mockListOfTemplates()
-
-        every { paginationService.pageRequest(paginationInput) } returns PageRequest.of(
-            paginationInput.pageNumber,
-            paginationInput.rowPerPage,
-            paginationInput.sortDirection,
-            paginationInput.sortField
-        )
-
-        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(appCodes, searchValue, paginationInput)
+        
+        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(appCodes, searchValue, pageable)
 
         templates.forEach { template ->
             run {
