@@ -31,7 +31,7 @@ class ImageResolver(
         }
 
         return GraphQLConnection(
-            paginatedList.numberOfElements,
+            paginatedList.totalElements,
             edges,
             DefaultPageInfo(
                 startCursor(edges),
