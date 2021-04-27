@@ -10,7 +10,7 @@ type Query {
     appCodes -> filter by the List of app codes user wish to view
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
-    templatePages(name: String, appCodes: [String], pageRequestInput: PaginationInput): TemplateConnection @connection(for: "Template")
+    templates(name: String, appCodes: [String], pageRequestInput: PaginationInput): TemplateConnection @connection(for: "Template")
 
     """
     Query on an individual template version
@@ -23,18 +23,21 @@ type Query {
     searchFilter -> The search criteria
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
-    getImages(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): ImageConnection @connection(for: "Image")
+    images(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): ImageConnection @connection(for: "Image")
 
     """
     Query on an individual app
     id -> App's app code
     """
-    tenant(appCode: ID): Tenant
+    app(appCode: ID): App
     """
     Query on an individual user
-    id -> User's 1BankID
+    username -> User's 1BankID
     """
     user(username: ID): User
-
+    """
+    Query on available plugins for app
+    appCode -> App code onboarded
+    """
     plugins(appCode: String): [Plugin]
 }

@@ -5,12 +5,12 @@ import com.alphamail.plugin.api.PluginConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.forge.messageservice.common.mapper.PluginSettingToConfigurationEntityMapper
-import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplatePlugin
-import com.forge.messageservice.entities.inputs.ConfigurationInput
-import com.forge.messageservice.entities.inputs.PluginInput
-import com.forge.messageservice.entities.inputs.PluginsInput
+import com.forge.messageservice.graphql.models.inputs.ConfigurationInput
+import com.forge.messageservice.graphql.models.inputs.PluginInput
+import com.forge.messageservice.graphql.models.inputs.PluginsInput
 import com.forge.messageservice.exceptions.FieldValidationException
+import com.forge.messageservice.exceptions.TemplatePluginMissingException
 import com.forge.messageservice.repositories.TemplatePluginRepository
 import org.springframework.stereotype.Service
 import java.net.URL
@@ -24,8 +24,13 @@ open class TemplatePluginService(
     private val entityMapper: PluginSettingToConfigurationEntityMapper
 ) {
 
-    fun getTemplatePluginsByTemplateId(templateId: Long): List<TemplatePlugin> {
-        return templatePluginRepository.findAllByTemplateVersionId(templateId)
+    fun getTemplatePluginsByTemplateVersionId(templateVersionId: Long): List<TemplatePlugin> {
+        return templatePluginRepository.findAllByTemplateVersionId(templateVersionId)
+    }
+
+    fun getTemplatePluginsByTemplateVersionIdAndPluginId(templateVersionId: Long, pluginId: Long): TemplatePlugin {
+        return templatePluginRepository.findAllByTemplateVersionIdAndPluginId(templateVersionId, pluginId)
+            ?: throw TemplatePluginMissingException("Unable to find plugin with template version $templateVersionId and plugin $pluginId")
     }
 
     fun getTemplatePlugin(templatePluginId: Long): TemplatePlugin{
@@ -62,7 +67,7 @@ open class TemplatePluginService(
             val entityInstance = entityMapper.settingToConfigurationObject(
                 configurationMap,
                 fieldConfigurationMap,
-                Class.forName(plugin.configurationClassName, true, child).javaClass
+                Class.forName(plugin.configurationClassName, true, child)
             )
             return entityInstance as PluginConfiguration
         } catch (e: ClassNotFoundException){
@@ -75,4 +80,5 @@ open class TemplatePluginService(
             throw FieldValidationException("Field ${configurationInput.key} has Value ${configurationInput.value} is empty when it is supposed to be mandatory")
         }
     }
+
 }

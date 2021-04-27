@@ -1,4 +1,4 @@
-package com.forge.messageservice.entities.inputs
+package com.forge.messageservice.graphql.models.inputs
 
 data class PluginsInput(
     val plugins: List<PluginInput>

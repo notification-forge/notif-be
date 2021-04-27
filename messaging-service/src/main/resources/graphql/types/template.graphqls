@@ -22,8 +22,22 @@ type Template {
   One Template to Many Template Versions relationship
   """
   templateVersions: [TemplateVersion]
+  """
+  Audit Created Date
+  """
   createdDate: Date
+  """
+  Audit Created By
+  """
+  createdBy: String
+  """
+  Audit Last Modified Date
+  """
   lastModifiedDate: Date
+  """
+  Audit Last Modified By
+  """
+  lastModifiedBy: String
 }
 
 
@@ -32,20 +46,6 @@ Setting template Type to choose between email or teams messaging
 """
 enum AlertType {
     TEAMS, EMAIL
-}
-
-type TemplatePages {
-
-  totalElements: Int
-  totalPages: Int
-  content: [Template]
-  isEmpty: Boolean
-  isFirst: Boolean
-  isLast: Boolean
-  number:  Int
-  numberOfElements: Int
-  size: Int
-  sort: Sort
 }
 
 type TemplateVersion {
@@ -88,10 +88,26 @@ type TemplateVersion {
   Only PUBLISHED templates can be triggered to send notifications
   """
   status: TemplateStatus
+  """
+  Plugin details of Template Version
+  """
   plugins: [Plugin]
-
+  """
+  Audit Created Date
+  """
   createdDate: Date
+  """
+  Audit Created By
+  """
+  createdBy: String
+  """
+  Audit Last Modified Date
+  """
   lastModifiedDate: Date
+  """
+  Audit Last Modified By
+  """
+  lastModifiedBy: String
 }
 
 

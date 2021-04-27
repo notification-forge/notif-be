@@ -3,6 +3,22 @@ type Plugin {
     name: String
     appCode: String
     configurations: [Configuration]
+    """
+    Audit Created Date
+    """
+    createdDate: Date
+    """
+    Audit Created By
+    """
+    createdBy: String
+    """
+    Audit Last Modified Date
+    """
+    lastModifiedDate: Date
+    """
+    Audit Last Modified By
+    """
+    lastModifiedBy: String
 }
 
 type Configuration{

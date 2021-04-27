@@ -17,6 +17,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
 
     implementation("org.springframework.security:spring-security-ldap:5.4.6")
     implementation("org.springframework.security:spring-security-core:5.4.6")
@@ -33,6 +34,8 @@ dependencies {
     implementation("com.graphql-java-kickstart:playground-spring-boot-starter:11.0.0")
     implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:11.0.0")
     implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
+
+    implementation("io.pebbletemplates:pebble:3.1.4")
 
     implementation("org.hibernate.validator:hibernate-validator")
 

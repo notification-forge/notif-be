@@ -15,7 +15,7 @@ class PluginSettingToConfigurationEntityMapper {
     ): T {
 //        val cons: Constructor<*> = targetClass.getConstructor(KafkaConfiguration::class.java)
 //        val entityInstance = cons.newInstance()
-        val entityInstance = targetClass.getDeclaredConstructor().newInstance()
+        val entityInstance = targetClass.getConstructor().newInstance()
 
         val fields = targetClass.declaredFields
 

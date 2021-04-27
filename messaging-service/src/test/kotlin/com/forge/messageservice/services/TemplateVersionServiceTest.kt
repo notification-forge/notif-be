@@ -1,17 +1,13 @@
 package com.forge.messageservice.services
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplatePlugin
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.PUBLISHED
-import com.forge.messageservice.entities.inputs.ConfigurationInput
-import com.forge.messageservice.entities.inputs.PluginInput
-import com.forge.messageservice.entities.inputs.PluginsInput
-import com.forge.messageservice.exceptions.TemplateHashExistedException
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
-import com.forge.messageservice.graphql.models.inputs.CreateTemplateVersionInput
-import com.forge.messageservice.graphql.models.inputs.UpdateTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.*
 import com.forge.messageservice.repositories.TemplateRepository
 import com.forge.messageservice.repositories.TemplateVersionRepository
 import io.mockk.every
@@ -37,12 +33,15 @@ class TemplateVersionServiceTest {
     @MockK
     lateinit var templateVersionRepository: TemplateVersionRepository
 
+    @MockK
+    lateinit var objectMapper: ObjectMapper
+
     lateinit var templateVersionService: TemplateVersionService
 
     @BeforeEach
     fun setUp() {
         templateVersionService =
-            TemplateVersionService(templatePluginService, templateVersionRepository, templateRepository)
+            TemplateVersionService(templatePluginService, templateVersionRepository, templateRepository, objectMapper)
     }
 
     @AfterEach
@@ -116,8 +115,14 @@ class TemplateVersionServiceTest {
             listOf(
                 PluginInput(
                     1, listOf(
-                        ConfigurationInput("username", "Tommy"),
-                        ConfigurationInput("password", "abcde12345")
+                        ConfigurationInput(
+                            "username",
+                            "Tommy"
+                        ),
+                        ConfigurationInput(
+                            "password",
+                            "abcde12345"
+                        )
                     )
                 )
             )

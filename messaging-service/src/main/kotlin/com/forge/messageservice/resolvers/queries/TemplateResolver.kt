@@ -28,7 +28,7 @@ class TemplateResolver(
         return templateVersionService.getTemplateVersionById(templateVersionId)
     }
 
-    fun templatePages(name: String, appCodes: List<String>, pageRequestInput: PaginationInput): Connection<Template> {
+    fun templates(name: String, appCodes: List<String>, pageRequestInput: PaginationInput): Connection<Template> {
         val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(
             appCodes, name, pageRequestInput.asPageRequest()
         )

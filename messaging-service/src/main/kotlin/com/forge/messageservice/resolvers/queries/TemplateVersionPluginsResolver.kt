@@ -1,12 +1,8 @@
 package com.forge.messageservice.resolvers.queries
 
-import com.forge.messageservice.entities.Onboarding
-import com.forge.messageservice.entities.Plugin
 import com.forge.messageservice.entities.TemplateVersion
-import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.entities.responses.PluginResponse
 import com.forge.messageservice.resolvers.queries.responses.PluginResponseConverter
-import com.forge.messageservice.services.OnboardingService
 import com.forge.messageservice.services.PluginService
 import com.forge.messageservice.services.TemplatePluginService
 import graphql.kickstart.tools.GraphQLResolver
@@ -29,10 +25,11 @@ class TemplateVersionPluginsResolver(
     fun plugins(templateVersion: TemplateVersion?): CompletableFuture<List<PluginResponse>>? {
         return CompletableFuture.supplyAsync(
             Supplier {
-                templatePluginService.getTemplatePluginsByTemplateId(templateVersion!!.id!!).map {templatePlugin ->
-                    val plugin = pluginService.getPlugin(templatePlugin.pluginId!!)
-                    pluginResponseConverter.convertToPluginResponse(plugin)
-                }
+                templatePluginService.getTemplatePluginsByTemplateVersionId(templateVersion!!.id!!)
+                    .map { templatePlugin ->
+                        val plugin = pluginService.getPlugin(templatePlugin.pluginId!!)
+                        pluginResponseConverter.convertToPluginResponse(templateVersion.id!!, plugin)
+                    }
 
             },
             executorService

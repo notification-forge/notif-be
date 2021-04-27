@@ -2,6 +2,7 @@ package com.forge.messageservice.graphql.models
 
 import com.forge.messageservice.common.extensions.toBase64String
 import com.forge.messageservice.entities.Image
+import java.time.LocalDateTime
 
 data class GQLImage(
     val id: Long,
@@ -11,6 +12,10 @@ data class GQLImage(
     val fileSignature: String,
     val status: Image.ImageStatus,
     val imageData: String,
+    val createdDate: LocalDateTime?,
+    val createdBy: String?,
+    val lastModifiedDate: LocalDateTime?,
+    val lastModifiedBy: String?
 ) {
 
     companion object {
@@ -21,7 +26,11 @@ data class GQLImage(
             image.fileName,
             image.fileSignature,
             image.status,
-            image.imageData?.toBase64String() ?: "0x00"
+            image.imageData?.toBase64String() ?: "0x00",
+            image.createdDate,
+            image.createdBy,
+            image.lastModifiedDate,
+            image.lastModifiedBy
         )
     }
 

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TemplatePluginRepository : JpaRepository<TemplatePlugin, Long> {
     fun findAllByTemplateVersionId(templateVersionId: Long): List<TemplatePlugin>
+    fun findAllByTemplateVersionIdAndPluginId(templateVersionId: Long, pluginId: Long): TemplatePlugin?
 }
