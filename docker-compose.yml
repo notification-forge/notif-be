@@ -23,7 +23,7 @@ services:
   ldap:
     image: osixia/openldap:latest
     volumes:
-      - ./secret.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/ldap.ldif
+      - ./ldap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/ldap.ldif
     environment:
       - LDAP_ORGANISATION=alphamail
       - LDAP_DOMAIN=alphamail.com
