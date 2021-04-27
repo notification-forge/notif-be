@@ -5,7 +5,6 @@ import com.forge.messageservice.graphql.extensions.Connection
 import com.forge.messageservice.graphql.models.GQLImage
 import com.forge.messageservice.graphql.models.inputs.ImageSearchFilterInput
 import com.forge.messageservice.graphql.models.inputs.PaginationInput
-import com.forge.messageservice.resolvers.queries.helpers.GQLConnectionHelper
 import com.forge.messageservice.resolvers.queries.helpers.GQLConnectionHelper.gqlConnectionFor
 import com.forge.messageservice.services.ImageService
 import graphql.kickstart.tools.GraphQLQueryResolver

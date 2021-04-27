@@ -5,7 +5,6 @@ import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.graphql.CursorResolver
 import com.forge.messageservice.graphql.extensions.Connection
 import com.forge.messageservice.graphql.models.inputs.PaginationInput
-import com.forge.messageservice.resolvers.queries.helpers.GQLConnectionHelper
 import com.forge.messageservice.resolvers.queries.helpers.GQLConnectionHelper.gqlConnectionFor
 import com.forge.messageservice.services.TemplateService
 import com.forge.messageservice.services.TemplateVersionService
