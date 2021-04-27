@@ -10,6 +10,9 @@ open class LDAPConfigHolder {
 
     @Value("\${ldap.user.filter:sAMAccountName={0}}")
     lateinit var userSearchFilter: String
+
+    @Value("\${ldap.groupSearchBase.filter}")
+    lateinit var groupSearchBase: String
 }
 
 @Configuration

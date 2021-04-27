@@ -2,16 +2,26 @@ package com.forge.messageservice.entities
 
 import Auditable
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import javax.persistence.*
 
+/**
+ * This entity represents a tenant in Alphamail. A tenant is identified by its application code (referred to as appCode).
+ * A tenant may have submodules within it.
+ */
 @Entity
-@Table(name = "tenants")
-class Tenant : Auditable(){
+@Table(
+    name = "tenants", indexes = [
+        Index(name = "IDX_APPCODE_MODULE", columnList = "app_code, module")
+    ]
+)
+class Tenant : Auditable() {
 
     @Id
-    @Column(name = "app_code", length = 24, nullable = false, unique = true)
+    @Column(name = "app_code", length = 24, nullable = false)
     var appCode: String = ""
+
+    @Column(name = "module", length = 24)
+    var module: String? = null
 
     @Column(name = "display_name", length = 56, nullable = false)
     var displayName: String = ""
@@ -103,5 +113,5 @@ class Tenant : Auditable(){
 
     @OneToMany
     @JoinColumn(name = "app_code")
-    var onboardings : List<Onboarding>? = null
+    var onboardings: List<Onboarding>? = null
 }

@@ -4,3 +4,4 @@ build/
 .gradle
 volumes
 .mariadb
+secret.ldif

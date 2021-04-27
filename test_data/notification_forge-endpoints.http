@@ -13,6 +13,20 @@ client.global.set("token", response.body.accessToken)
 %}
 
 
+### LDAP authentication
+//@no-log
+POST http://{{host}}:{{port}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "dev1",
+  "password": "secret"
+}
+
+> {%
+client.global.set("token", response.body.accessToken)
+%}
+
 ###
 //@no-log
 POST http://{{host}}:{{port}}/v1/images/upload/Alphamail

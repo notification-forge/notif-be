@@ -1,3 +1,4 @@
+
 # Root Group
 dn: ou=groups,dc=alphamail,dc=com
 objectclass: top
@@ -11,7 +12,7 @@ objectclass: organizationalUnit
 ou: people
 
 # Actual User
-dn: uid=ops,ou=people,dc=alphamail,dc=com
+dn: uid=dev1,ou=people,dc=alphamail,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -21,15 +22,37 @@ sn: Dev1
 uid: dev1
 userPassword: secret
 
-# User Group Mapping
-dn: cn=sg_ops,ou=groups,dc=alphamail,dc=com
+dn: uid=dev2,ou=people,dc=alphamail,dc=com
 objectclass: top
-objectclass: groupOfNames
-cn: alphamail_developer
-member: uid=dev1,ou=people,dc=alphamail,dc=com
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Dev2
+sn: Dev2
+uid: dev2
+userPassword: secret
 
-dn: cn=sg_sale,ou=groups,dc=alphamail,dc=com
+dn: uid=dev3,ou=people,dc=alphamail,dc=com
 objectclass: top
-objectclass: groupOfNames
-cn: sendgrid_applead
-member: uid=dev1,ou=people,dc=alphamail,dc=com
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Dev3
+sn: Dev3
+uid: dev3
+userPassword: secret
+
+# User Group Mapping
+dn: cn=alphamail,ou=groups,dc=alphamail,dc=com
+objectclass: groupOfUniqueNames
+cn: alphamail
+description: Alphamail Developers
+uniqueMember: uid=dev1,ou=people,dc=alphamail,dc=com
+uniqueMember: uid=dev2,ou=people,dc=alphamail,dc=com
+
+dn: cn=sendgrid,ou=groups,dc=alphamail,dc=com
+objectclass: groupOfUniqueNames
+cn: sendgrid
+description: Sendgrid Developers
+uniqueMember: uid=dev1,ou=people,dc=alphamail,dc=com
+uniqueMember: uid=dev2,ou=people,dc=alphamail,dc=com

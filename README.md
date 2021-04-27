@@ -37,6 +37,11 @@ or just overriding the individual parameters. The parameter properties are as fo
 * `db.username` - Your database's username
 * `db.password` - Your database's password
 
+### LDAP 
+```shell
+$ ldapsearch -LLL -x -D cn=admin,dc=alphamail,dc=com -w secret -h localhost -b ou=people,dc=alphamail,dc=com uid=dev1 memberOf
+```
+
 ## Git Branching Strategy
 
 ### `feature`, `bug`, `chore`, `refactor` and `hot-fix`
