@@ -1,0 +1,25 @@
+input PluginsInput {
+    plugins: [PluginInput]
+}
+
+input PluginInput {
+    """
+    Unique Idenfitier for the plugin chosen
+    """
+    pluginId: ID
+    """
+    A list of key value pairs for plugin's configuration
+    """
+    configurations: [ConfigurationInput]
+}
+
+input ConfigurationInput {
+    """
+    Field in the configuration
+    """
+    key: String
+    """
+    Value to be placed into the field
+    """
+    value: String
+}

@@ -41,6 +41,11 @@ input CloneTemplateVersionInput{
     TEAMS MESSAGE -> JSON format
     """
     body: String
+    """
+    Plugins to be used when Template Version is being called
+    Add configurations for each plugins
+    """
+    plugins: PluginsInput
 }
 
 input UpdateTemplateVersionInput{
@@ -67,4 +72,9 @@ input UpdateTemplateVersionInput{
     Only PUBLISHED templates can be triggered to send notifications
     """
     status: TemplateStatus
+    """
+    Plugins to be used when Template Version is being called
+    Add configurations for each plugins
+    """
+    plugins: PluginsInput
 }

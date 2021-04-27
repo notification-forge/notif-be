@@ -1,14 +1,13 @@
 type Image {
     id: ID
     """
-    Connecting template to the application that uses this template
+    Connecting image to the application that uses this image
     """
     appCode: String
     """
     Content type of the image file
     """
     contentType: String
-
     """
     Name of the image
     """
@@ -25,6 +24,22 @@ type Image {
     ByteArray of the image
     """
     imageData: String
+    """
+    Audit Created Date
+    """
+    createdDate: Date
+    """
+    Audit Created By
+    """
+    createdBy: String
+    """
+    Audit Last Modified Date
+    """
+    lastModifiedDate: Date
+    """
+    Audit Last Modified By
+    """
+    lastModifiedBy: String
 }
 
 """

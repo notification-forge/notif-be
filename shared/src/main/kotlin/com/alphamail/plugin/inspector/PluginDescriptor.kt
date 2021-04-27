@@ -19,6 +19,8 @@ class PluginDescriptor {
                         name = field.name,
                         displayName = descriptor.displayName,
                         fieldType = descriptor.fieldType,
+                        description = descriptor.description,
+                        mandatory = descriptor.mandatory,
                         allowedOptions = descriptor.allowedOptions,
                         validationExpr = descriptor.validationExpression
                     )

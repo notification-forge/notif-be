@@ -1,5 +1,0 @@
-type Sort {
-    isSorted: Boolean
-    isUnsorted: Boolean
-    isEmpty: Boolean
-}

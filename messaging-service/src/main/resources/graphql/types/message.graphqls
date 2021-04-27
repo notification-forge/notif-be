@@ -1,0 +1,36 @@
+type Message {
+    id: ID
+    templateId: Int
+    templateVersionId: Int
+    appCode: String
+    content: String
+    settings: String
+    messageType: MessageType
+    messageStatus: MessageStatus
+    reason: String,
+    timesTriggered: Int
+    """
+    Audit Created Date
+    """
+    createdDate: Date
+    """
+    Audit Created By
+    """
+    createdBy: String
+    """
+    Audit Last Modified Date
+    """
+    lastModifiedDate: Date
+    """
+    Audit Last Modified By
+    """
+    lastModifiedBy: String
+}
+
+enum MessageType {
+    MAIL, TEAMS
+}
+
+enum MessageStatus {
+    PENDING, SENT, FAILED
+}

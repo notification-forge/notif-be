@@ -37,6 +37,11 @@ open class TemplateService(
         return templateRepository.findByNameAndAppCode(templateName, appCode)
     }
 
+    fun getTemplateByTemplateUUID(templateUUID: UUID): Template {
+        return templateRepository.findByUuid(templateUUID)
+            ?: throw TemplateDoesNotExistException("Template with template UUID $templateUUID does not exist")
+    }
+
     fun createTemplate(templateInput: CreateTemplateInput): Template {
         ensureNoTemplateWithSameNameAndAppCodeExist(templateInput.name, templateInput.appCode)
 

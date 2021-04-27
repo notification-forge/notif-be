@@ -19,7 +19,7 @@ class ImageResolver(
     private val imageService: ImageService
 ) : GraphQLQueryResolver {
 
-    fun getImages(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): Connection<GQLImage> {
+    fun images(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): Connection<GQLImage> {
         val paginatedList = imageService.findImagesWhoseFilenamesMatches(
             searchFilter.appCodes,
             searchFilter.fileNamePortion,
@@ -31,7 +31,7 @@ class ImageResolver(
         }
 
         return GraphQLConnection(
-            paginatedList.numberOfElements,
+            paginatedList.totalElements,
             edges,
             DefaultPageInfo(
                 startCursor(edges),

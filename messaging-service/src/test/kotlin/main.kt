@@ -1,22 +1,41 @@
-import com.alphamail.plugin.api.AlphamailPlugin
+import com.alphamail.plugin.api.PluginConfiguration
+import com.forge.messageservice.lib.kafka.KafkaConfiguration
 import java.net.URL
 import java.net.URLClassLoader
 import kotlin.jvm.internal.Reflection
-import kotlin.reflect.full.createInstance
+import kotlin.reflect.KClass
 
 class Loader {
 
     fun load(uri: String): Any? {
         val child = URLClassLoader(arrayOf(URL(uri)), this.javaClass.classLoader)
-        val classToLoad = Class.forName("me.cjavellana.lib.SomeLib", true, child)
+        val classToLoad = Class.forName("com.forge.messageservice.lib.kafka.KafkaConfiguration", true, child)
         val kClass = Reflection.createKotlinClass(classToLoad)
-
-        val instance = kClass.createInstance() as AlphamailPlugin
-        return instance.beforeSend()
+        val instance = kClass.createInstance("bal") as KafkaConfiguration
+        println(instance.kafkaServer)
+//        println(instance.beforeSend())
+        return instance
     }
-
 }
 
+private fun <T : Any> KClass<T>.createInstance(kafkaServer: String): T {
+//    Can use filter here if you have more than 1 constructor
+    val noArgsConstructor = constructors.first()
+//    If decided every plugin doesn't have other param, then this is good enough
+    val params = noArgsConstructor.parameters.associateWith { kafkaServer }
+//    Invoke constructor with param
+    return noArgsConstructor.callBy(params)
+}
+
+//Decorator to call create plugin instance with config
+fun <T : Any> KClass<T>.createInstance(config: PluginConfiguration): T {
+//    Can use filter here if you have more than 1 constructor
+    val noArgsConstructor = constructors.first()
+//    If decided every plugin doesn't have other param, then this is good enough
+    val params = noArgsConstructor.parameters.associateWith { config }
+//    Invoke constructor with param
+    return noArgsConstructor.callBy(params)
+}
 
 fun main(args: Array<String>) {
     val lib = "file:./lib/build/libs/lib-1.0.jar"

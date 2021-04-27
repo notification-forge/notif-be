@@ -20,6 +20,16 @@ data class FieldConfiguration(
     val fieldType: FieldType,
 
     /**
+     * Describes the usage of the field
+     */
+    val description: String,
+
+    /**
+     * Describes whether the field is mandatory
+     */
+    val mandatory: Boolean,
+
+    /**
      * When `fieldType` is `ENUM`, this field is used to supply the options
      */
     val allowedOptions: Array<String> = emptyArray(),
