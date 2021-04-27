@@ -215,6 +215,7 @@ class TemplateVersionServiceTest {
         } returns mockTemplateVersionTwoDraft()
         every { templateRepository.findById(templateIdExist) } returns Optional.of(mockTemplate())
         every { templateVersionRepository.save(mockTemplateVersion) } returns mockTemplateVersion
+        every { objectMapper.writeValueAsString(any()) } returns ""
 
         val templateVersion = templateVersionService.createTemplateVersion(createTemplateVersionInput)
 
