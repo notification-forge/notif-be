@@ -31,6 +31,7 @@ dependencies {
     implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:11.0.0")
     implementation("com.graphql-java-kickstart:playground-spring-boot-starter:11.0.0")
     implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:11.0.0")
+    implementation("com.graphql-java-kickstart:altair-spring-boot-starter:11.0.0")
     implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
 
     implementation("org.hibernate.validator:hibernate-validator")
