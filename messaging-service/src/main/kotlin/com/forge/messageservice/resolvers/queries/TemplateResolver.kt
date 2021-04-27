@@ -38,7 +38,7 @@ class TemplateResolver(
         }
 
         return GraphQLConnection(
-            templates.numberOfElements,
+            templates.totalElements.toInt(),
             edges,
             DefaultPageInfo(
                 CursorResolver.startCursor(edges),

@@ -12,9 +12,8 @@ import java.util.regex.Pattern
 class LdapRolePopulator : LdapAuthoritiesPopulator {
     companion object {
         private val logger = LoggerFactory.getLogger(LdapRolePopulator::class.java)
+        private const val LDAP_ROLE_PATTERN = "^CN=(?<role>.+?),.*\$"
     }
-
-    private val LDAP_ROLE_PATTERN = "^CN=(?<role>.+?),.*\$"
 
     override fun getGrantedAuthorities(userData: DirContextOperations, username: String): List<GrantedAuthority> {
         val groups = userData.getStringAttributes("memberOf")?.toSet()
