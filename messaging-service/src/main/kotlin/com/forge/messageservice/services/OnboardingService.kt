@@ -86,7 +86,7 @@ open class OnboardingService(
     }
 
     fun getTenantByAppCode(appCode: String): Tenant {
-        return tenantRepository.findByAppCode(appCode)
+        return tenantRepository.findTenant(appCode)
             ?: throw TenantDoesNotExistException("App with app code $appCode does not exist")
     }
 
