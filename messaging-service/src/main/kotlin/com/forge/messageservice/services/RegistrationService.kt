@@ -27,14 +27,14 @@ open class RegistrationService(
         val apps = authentication.authorities
             .asSequence()
             .map { it.authority.replace(Regex("^ROLE_"), "") }
-            .mapNotNull { auth -> groupRegex.find(auth)?.groupValues }
-            .map { it[2] } // our pattern will capture group2 (0 is entire string, 1 is DCIF, 2 is app name, 3 is user role
-            .map { it.split("_") }
-            .map { app ->
+            .mapNotNull { auth -> groupRegex.find(auth)?.groups }
+            .map { groups ->
+                val appCode = groups["appcode"]!!.value
+                val module = groups.get("module")?.value
                 Tenant().apply {
-                    appCode = app[0]
-                    module = if (app.size == 1) null else app[1]
-                    displayName = app[0]
+                    this.appCode = appCode
+                    this.module = module
+                    displayName = appCode
                     status = Tenant.AppStatus.ACTIVE
                     encryptionKey = "TODO"
                 }
