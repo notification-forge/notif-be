@@ -13,7 +13,7 @@ class OnboardingResolver(
     private val onboardingService: OnboardingService
 ) : GraphQLQueryResolver {
 
-    fun tenant(appCode: String): Tenant? {
+    fun app(appCode: String): Tenant? {
         return tenantService.findTenant(appCode)
     }
 

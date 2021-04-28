@@ -35,16 +35,16 @@ class Tenant : Auditable() {
     @Column(name = "description")
     var description: String? = null
 
-    @Column(name = "primary_owner_name", length = 256, nullable = false)
+    @Column(name = "primary_owner_name", length = 256, nullable = true)
     var primaryOwnerName: String? = null
 
-    @Column(name = "primary_owner_id", length = 24, nullable = false)
+    @Column(name = "primary_owner_id", length = 24, nullable = true)
     var primaryOwnerId: String? = null
 
-    @Column(name = "secondary_owner_name", length = 256, nullable = false)
+    @Column(name = "secondary_owner_name", length = 256, nullable = true)
     var secondaryOwnerName: String? = null
 
-    @Column(name = "secondary_owner_id", length = 24, nullable = false)
+    @Column(name = "secondary_owner_id", length = 24, nullable = true)
     var secondaryOwnerId: String? = null
 
     /**

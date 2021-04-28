@@ -9,7 +9,7 @@ import javax.persistence.*
 class Template : Auditable() {
 
     /**
-     * A user defined id of the template. Auto generated sequence.
+     * Auto generated sequence.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

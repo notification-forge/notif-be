@@ -41,15 +41,7 @@ class AuthController(
         )
 
         // creates tenant and tenant user mapping if necessary
-        registrationService.registerIfNecessary(authentication)
-
-        val groupsAllowed = (securityConfigHolder.groups).toMutableSet()
-        groupsAllowed.retainAll(authentication.authorities.map { it.authority.replace(Regex("^ROLE_"), "") })
-        logger.info("User groups in notification forge: $groupsAllowed")
-
-        if (groupsAllowed.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
-        }
+        registrationService.registerMissingApps(authentication)
 
         val jwt: String = jwtTokenProvider.generateToken(authentication)
         return ResponseEntity.ok(JwtAuthenticationResponse(jwt))

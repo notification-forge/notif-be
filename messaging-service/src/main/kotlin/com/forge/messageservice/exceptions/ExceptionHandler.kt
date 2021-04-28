@@ -15,8 +15,8 @@ class ExceptionHandler{
         return ThrowableGraphQLError(e)
     }
 
-    @ExceptionHandler(RuntimeException::class)
-    fun handle(e: RuntimeException): ThrowableGraphQLError{
-        return ThrowableGraphQLError(e, "Internal Server Error")
-    }
+//    @ExceptionHandler(RuntimeException::class)
+//    fun handle(e: RuntimeException): ThrowableGraphQLError{
+//        return ThrowableGraphQLError(e, "Internal Server Error")
+//    }
 }

@@ -5,6 +5,9 @@ annotation class FieldDescriptor(
     val displayName: String,
     val fieldType: FieldType,
 
+    val description: String = "",
+    val mandatory: Boolean = true,
+
     /**
      * Used in conjunction with FieldType ENUM. Provides the list of options for enum types
      */

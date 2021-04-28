@@ -22,8 +22,22 @@ type Template {
   One Template to Many Template Versions relationship
   """
   templateVersions: [TemplateVersion]
+  """
+  Audit Created Date
+  """
   createdDate: Date
+  """
+  Audit Created By
+  """
+  createdBy: String
+  """
+  Audit Last Modified Date
+  """
   lastModifiedDate: Date
+  """
+  Audit Last Modified By
+  """
+  lastModifiedBy: String
 }
 
 
@@ -34,28 +48,14 @@ enum AlertType {
     TEAMS, EMAIL
 }
 
-type TemplatePages {
-
-  totalElements: Int
-  totalPages: Int
-  content: [Template]
-  isEmpty: Boolean
-  isFirst: Boolean
-  isLast: Boolean
-  number:  Int
-  numberOfElements: Int
-  size: Int
-  sort: Sort
-}
-
 type TemplateVersion {
+  id: ID
   """
   Connecting template version to the template that owns this version
   Unique key of template
   Many Template Version to One Template relationship
   """
-  templateId: ID
-  id: Int
+  templateId: Int
   """
   Name of the template version
   """
@@ -88,8 +88,26 @@ type TemplateVersion {
   Only PUBLISHED templates can be triggered to send notifications
   """
   status: TemplateStatus
+  """
+  Plugin details of Template Version
+  """
+  plugins: [Plugin]
+  """
+  Audit Created Date
+  """
   createdDate: Date
+  """
+  Audit Created By
+  """
+  createdBy: String
+  """
+  Audit Last Modified Date
+  """
   lastModifiedDate: Date
+  """
+  Audit Last Modified By
+  """
+  lastModifiedBy: String
 }
 
 
