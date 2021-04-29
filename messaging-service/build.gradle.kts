@@ -6,6 +6,7 @@ plugins {
     application
     id("rt")
     idea
+    jacoco
 }
 
 dependencies {
@@ -39,8 +40,19 @@ dependencies {
 
     implementation("org.hibernate.validator:hibernate-validator")
 
+    implementation("io.github.microutils:kotlin-logging:1.12.0")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.integration:spring-integration-test")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
+    testImplementation("com.squareup.okhttp3:okhttp:3.14.9")
+    testImplementation("com.h2database:h2:1.4.194")
+
+    testImplementation("io.cucumber:cucumber-java8:6.8.0")
+    testImplementation("io.cucumber:cucumber-junit:6.8.0")
+    testImplementation("io.cucumber:cucumber-spring:6.8.0")
+
+    testImplementation("org.jacoco:org.jacoco.agent:0.8.5:runtime")
 
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
@@ -57,6 +69,52 @@ tasks.test {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
+}
+
+configurations.create("cucumberRuntime") {
+    extendsFrom(configurations["testImplementation"])
+}
+
+tasks.create("cucumber"){
+    dependsOn("assemble", "test", "compileTestKotlin")
+
+    val jacocoAgent = sourceSets["test"].runtimeClasspath.files
+        .first { f -> f.name == "org.jacoco.agent-0.8.5-runtime.jar" }.absoluteFile
+
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            jvmArgs(
+                "-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/test.exec,append=false",
+                "-Dspring.profiles.active=integration-test",
+                "-Dspring.config.location=src/test/resources/application-properties"
+            )
+            classpath = configurations["cucumberRuntime"] + sourceSets["test"].output + sourceSets["main"].output
+            args(
+                "--plugin", "html:build/reports/cucumber-reports.html",
+                "--glue", "features", "src/test/resources"
+            )
+        }
+    }
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/reports")
+}
+
+tasks.jacocoTestReport {
+    dependsOn("cucumber")
+    reports {
+        xml.isEnabled = false
+        csv.isEnabled = false
+        html.destination = file("${buildDir}/jacocoHtml")
+    }
+}
+
+tasks.check {
+    dependsOn("jacocoTestReport")
 }
 
 apply(plugin = "io.spring.dependency-management")
