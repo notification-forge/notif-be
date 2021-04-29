@@ -13,6 +13,20 @@ client.global.set("token", response.body.accessToken)
 %}
 
 
+### LDAP authentication
+//@no-log
+POST http://{{host}}:{{port}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "dev1",
+  "password": "secret"
+}
+
+> {%
+client.global.set("token", response.body.accessToken)
+%}
+
 ###
 //@no-log
 POST http://{{host}}:{{port}}/v1/images/upload/Alphamail
@@ -31,7 +45,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "query": "query getImages($filter: ImageSearchFilterInput, $paginationInput: PaginationInput) { getImages(searchFilter: $filter, paginationInput: $paginationInput) { totalCount edges { cursor node { id fileName } } pageInfo { endCursor hasNextPage } } }",
+  "query": "query getImages($filter: ImageSearchFilterInput, $pageRequestInput: PaginationInput) { getImages(searchFilter: $filter, pageRequestInput: $pageRequestInput) { totalCount edges { cursor node { id fileName } } pageInfo { endCursor hasNextPage } } }",
   "variables": {
     "filter": {
       "fileNamePortion": "headshot",
@@ -39,9 +53,9 @@ Authorization: Bearer {{token}}
         "FABK"
       ]
     },
-    "paginationInput": {
+    "pageRequestInput": {
       "pageNumber": 0,
-      "rowPerPage": 10,
+      "rowPerPage": 1,
       "sortDirection": "ASC",
       "sortField": "fileName"
     }

@@ -9,7 +9,7 @@ class User {
      * User's one bank id. Alphanumeric
      */
     @Id
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", length = 24, nullable = false)
     var username: String = ""
 
     @Column(name = "name")

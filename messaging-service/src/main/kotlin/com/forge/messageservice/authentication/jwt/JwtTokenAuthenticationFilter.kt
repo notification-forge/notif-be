@@ -30,9 +30,11 @@ class JwtTokenAuthenticationFilter (
     private val ldapUserService: LdapUserService,
     path: String
 ): OncePerRequestFilter(){
-
+    companion object {
+        private const val API_TOKEN_HEADER = "x-api-key"
+    }
     private val requestMatcher: RequestMatcher
-    private val API_TOKEN_HEADER = "x-api-key"
+
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         try {

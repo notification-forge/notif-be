@@ -14,11 +14,6 @@
       "name": "app.auth.auth-free.urls",
       "type": "java.lang.String",
       "description": "Description for app.auth.auth-free.urls."
-    },
-    {
-      "name": "app.auth.groups-permitted",
-      "type": "java.lang.String",
-      "description": "Description for app.auth.groups-permitted."
     }
   ]
 }

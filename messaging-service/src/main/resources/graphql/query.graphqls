@@ -10,7 +10,7 @@ type Query {
     appCodes -> filter by the List of app codes user wish to view
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
-    templates(name: String, appCodes: [String], pageRequestInput: PaginationInput): TemplateConnection @connection(for: "Template")
+    templatePages(name: String, appCodes: [String], pageRequestInput: PaginationInput): TemplateConnection @connection(for: "Template")
 
     """
     Query on an individual template version

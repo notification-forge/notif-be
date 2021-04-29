@@ -4,7 +4,7 @@ import graphql.kickstart.tools.TypeDefinitionFactory
 import graphql.language.*
 
 /**
- * A re-implementation of [RelayConnectionFactory] to add `totalCount` to the generated `*Connection` schema.
+ * A re-implementation of [RelayConnectionFactory](graphql.kickstart.tools.relay.RelayConnectionFactory) to add `totalCount` to the generated `*Connection` schema.
  *
  * This class is purposely declared open to allow subclasses to override schema generation behavior.
  */
