@@ -1,5 +1,5 @@
 type Image {
-    id: ID
+    id: Int
     """
     Connecting image to the application that uses this image
     """

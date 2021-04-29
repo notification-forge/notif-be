@@ -1,5 +1,5 @@
 type Plugin {
-    id: ID
+    id: Int
     name: String
     appCode: String
     configurations: [Configuration]
