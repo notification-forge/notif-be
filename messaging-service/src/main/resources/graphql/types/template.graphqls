@@ -1,5 +1,5 @@
 type Template {
-  id: ID
+  id: Int
   """
   Name of the template has to be unique to each application
   """
@@ -49,7 +49,7 @@ enum AlertType {
 }
 
 type TemplateVersion {
-  id: ID
+  id: Int
   """
   Connecting template version to the template that owns this version
   Unique key of template
