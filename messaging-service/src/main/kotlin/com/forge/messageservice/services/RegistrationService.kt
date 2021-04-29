@@ -30,10 +30,8 @@ open class RegistrationService(
             .mapNotNull { auth -> groupRegex.find(auth)?.groups }
             .map { groups ->
                 val appCode = groups["appcode"]!!.value
-                val module = groups.get("module")?.value
                 Tenant().apply {
                     this.appCode = appCode
-                    this.module = module
                     displayName = appCode
                     status = Tenant.AppStatus.ACTIVE
                     encryptionKey = "TODO"
