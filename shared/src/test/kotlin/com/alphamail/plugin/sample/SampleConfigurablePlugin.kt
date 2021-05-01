@@ -7,11 +7,11 @@ import com.alphamail.plugin.api.AlphamailPlugin
  */
 class SampleConfigurablePlugin(cfg: Configuration) : AlphamailPlugin {
 
-    override fun beforeSend(): Any? {
+    override fun execute(): Any? {
         TODO("Not yet implemented")
     }
 
-    override fun afterSend(): Any? {
-        TODO("Not yet implemented")
+    override fun type(): AlphamailPlugin.PluginType {
+        return AlphamailPlugin.PluginType.Both
     }
 }

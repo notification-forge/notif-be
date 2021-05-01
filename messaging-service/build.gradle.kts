@@ -52,12 +52,15 @@ dependencies {
     testImplementation("io.cucumber:cucumber-java8:6.8.0")
     testImplementation("io.cucumber:cucumber-junit:6.8.0")
     testImplementation("io.cucumber:cucumber-spring:6.8.0")
-    testImplementation ("org.junit.platform:junit-platform-commons:1.5.2")
+    testImplementation("org.junit.platform:junit-platform-commons:1.5.2")
 
     testImplementation("org.jacoco:org.jacoco.agent:0.8.5:runtime")
 
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
+
+    implementation("org.springframework.kafka:spring-kafka:2.7.0")
+    implementation("org.springframework.kafka:spring-kafka-test:2.7.0")
 
 }
 
@@ -77,7 +80,7 @@ configurations.create("cucumberRuntime") {
     extendsFrom(configurations["testImplementation"])
 }
 
-tasks.create("cucumber"){
+tasks.create("cucumber") {
     dependsOn("assemble", "test", "compileTestKotlin")
 
     val jacocoAgent = sourceSets["test"].runtimeClasspath.files
