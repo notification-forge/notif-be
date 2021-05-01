@@ -1,6 +1,11 @@
 version: "3.8"
 
 services:
+  mail:
+    image: bytemark/smtp
+    restart: always
+    ports:
+      - 5025:25
   mariadb:
     image: mariadb:10.5.9
     restart: always

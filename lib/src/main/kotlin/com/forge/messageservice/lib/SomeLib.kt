@@ -4,11 +4,11 @@ import com.alphamail.plugin.api.AlphamailPlugin
 
 class SomeLib : AlphamailPlugin {
 
-    override fun beforeSend(): Any? {
-        return "Hello"
+    override fun execute(): Any? {
+        TODO("Not yet implemented")
     }
 
-    override fun afterSend(): Any? {
-        TODO("Not yet implemented")
+    override fun type(): AlphamailPlugin.PluginType {
+        return AlphamailPlugin.PluginType.AfterSend
     }
 }
