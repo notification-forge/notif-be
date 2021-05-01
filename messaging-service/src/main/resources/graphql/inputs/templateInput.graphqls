@@ -76,5 +76,5 @@ input UpdateTemplateVersionInput{
     Plugins to be used when Template Version is being called
     Add configurations for each plugins
     """
-    plugins: [PluginInput]
+    plugins: PluginsInput
 }
