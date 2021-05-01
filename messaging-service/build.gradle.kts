@@ -52,6 +52,7 @@ dependencies {
     testImplementation("io.cucumber:cucumber-java8:6.8.0")
     testImplementation("io.cucumber:cucumber-junit:6.8.0")
     testImplementation("io.cucumber:cucumber-spring:6.8.0")
+    testImplementation ("org.junit.platform:junit-platform-commons:1.5.2")
 
     testImplementation("org.jacoco:org.jacoco.agent:0.8.5:runtime")
 
