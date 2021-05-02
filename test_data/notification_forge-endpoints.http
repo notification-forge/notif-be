@@ -12,6 +12,11 @@ Content-Type: application/json
 client.global.set("token", response.body.accessToken)
 %}
 
+###
+// @no-log
+POST http://{{host}}:{{port}}/v1/messages/112233
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###
 //@no-log

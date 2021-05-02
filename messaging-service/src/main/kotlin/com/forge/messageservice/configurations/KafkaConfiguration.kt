@@ -27,7 +27,7 @@ open class EmbeddedKafkaConfiguration {
 @Configuration
 open class KafkaProducerConfig {
     @Bean
-    open fun producerFactory(): ProducerFactory<Int?, String?>? {
+    open fun producerFactory(): ProducerFactory<String, String> {
         return DefaultKafkaProducerFactory(producerConfigs())
     }
 
@@ -42,7 +42,7 @@ open class KafkaProducerConfig {
     }
 
     @Bean
-    open fun kafkaTemplate(): KafkaTemplate<Int?, String?>? {
+    open fun kafkaTemplate(): KafkaTemplate<String, String> {
         return KafkaTemplate(producerFactory())
     }
 }
