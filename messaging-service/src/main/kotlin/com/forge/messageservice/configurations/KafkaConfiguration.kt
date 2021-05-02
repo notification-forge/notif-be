@@ -1,13 +1,14 @@
 package com.forge.messageservice.configurations
 
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.kafka.core.DefaultKafkaProducerFactory
-import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.kafka.core.ProducerFactory
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
+import org.springframework.kafka.core.*
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 
 
@@ -49,5 +50,22 @@ open class KafkaProducerConfig {
 
 @Configuration
 open class KafkaConsumerConfig {
+    @Bean
+    open fun consumerFactory(): ConsumerFactory<String?, String?> {
+        return DefaultKafkaConsumerFactory(
+            mapOf(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to "localhost:9092",
+                ConsumerConfig.GROUP_ID_CONFIG to "alphamail",
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java
+            )
+        )
+    }
 
+    @Bean
+    open fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String>? {
+        val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
+        factory.consumerFactory = consumerFactory()
+        return factory
+    }
 }
