@@ -41,8 +41,6 @@ dependencies {
 
     implementation("org.hibernate.validator:hibernate-validator")
 
-    implementation("io.github.microutils:kotlin-logging:1.12.0")
-
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.integration:spring-integration-test")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
@@ -59,6 +57,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
 
+    // Dev dependencies - Actual dependencies for kafka are resolved from the in-built plugins
     implementation("org.springframework.kafka:spring-kafka:2.7.0")
     implementation("org.springframework.kafka:spring-kafka-test:2.7.0")
 
