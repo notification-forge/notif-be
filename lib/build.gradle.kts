@@ -8,8 +8,7 @@ plugins {
 dependencies {
     implementation(project(":shared"))
 
-    implementation("org.springframework.kafka:spring-kafka:2.7.0")
-    implementation("org.springframework.kafka:spring-kafka-test:2.7.0")
+
 }
 
 tasks.test {
