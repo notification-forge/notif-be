@@ -2,7 +2,6 @@ package com.forge.messageservice.configurations.security
 
 import com.forge.messageservice.authentication.jwt.JwtAuthenticationEntryPoint
 import com.forge.messageservice.authentication.jwt.JwtTokenProvider
-import com.forge.messageservice.authentication.ldap.LdapRolePopulator
 import com.forge.messageservice.repositories.ApiClientRepository
 import com.forge.messageservice.services.LdapUserService
 import org.springframework.context.annotation.Bean
@@ -14,7 +13,6 @@ import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import kotlin.jvm.Throws
 
 
 @Configuration
@@ -42,7 +40,7 @@ open class WebSecurityConfigurations(
         auth.ldapAuthentication()
             .userSearchBase(ldapSearchConfigHolder.userSearchBase)
             .userSearchFilter(ldapSearchConfigHolder.userSearchFilter)
-            .ldapAuthoritiesPopulator(LdapRolePopulator())
+            .groupSearchBase(ldapSearchConfigHolder.groupSearchBase)
             .contextSource(contextSource)
     }
 

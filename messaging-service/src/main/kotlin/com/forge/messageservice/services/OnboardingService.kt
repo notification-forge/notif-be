@@ -25,10 +25,6 @@ open class OnboardingService(
     private val onboardingRepository: OnboardingRepository
 ) {
 
-    fun getAllApps(): List<Tenant> {
-        return tenantRepository.findAll()
-    }
-
     fun onboardApp(appInput: CreateAppInput): Tenant {
         ensureAppDoesNotExist(appInput.appCode)
 
@@ -90,7 +86,7 @@ open class OnboardingService(
     }
 
     fun getTenantByAppCode(appCode: String): Tenant {
-        return tenantRepository.findByAppCode(appCode)
+        return tenantRepository.findTenant(appCode)
             ?: throw TenantDoesNotExistException("App with app code $appCode does not exist")
     }
 
@@ -163,12 +159,12 @@ open class OnboardingService(
     }
 
     private fun ensureOwnersExist(owner: String?) {
-        if (!userExist(owner)){
+        if (!userExist(owner)) {
             throw OwnersMissingException("Owners cannot be missing when approving application")
         }
     }
 
-    private fun userExist(username : String?): Boolean{
+    private fun userExist(username: String?): Boolean {
         if (username == null) return false
         return userRepository.existsById(username)
     }
