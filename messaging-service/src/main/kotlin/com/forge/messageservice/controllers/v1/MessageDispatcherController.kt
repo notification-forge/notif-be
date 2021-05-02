@@ -21,7 +21,7 @@ class MessageDispatcherController(
      */
     @PostMapping("/{templateId}")
     fun send(@PathVariable templateId: String): ResponseEntity<String> {
-        messageDispatcher.dispatch()
+        messageDispatcher.enqueueMessage()
         return ResponseEntity.ok("ok")
     }
 
