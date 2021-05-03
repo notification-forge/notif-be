@@ -15,13 +15,18 @@ class MessageDispatcherController(
 ) {
 
     /**
-     * Sends a notification using the `templateId` specified.
+     * Sends a notification asynchronously using the specified `templateVersionId`.
+     *
+     * The `sendAsync` function enqueues notification messages as a [NotificationTask](com.forge.messageservice.common.messaging.NotificationTask)
+     * in kafka and are consumed by dispatcher workers separately (@see [MessageDispatcherService] for more details).
+     *
+     * This implementation is largely inspired by Python's Celery
      *
      * @param templateVersionId Identifies the [TemplateVersion](com.forge.messageservice.entities.TemplateVersion) to be used
      * @param messageParameter The parameter map to be used to replace placeholders in the template
      */
     @PostMapping("/{templateVersionId}")
-    fun send(
+    fun sendAsync(
         @PathVariable templateVersionId: String,
         @RequestBody messageParameter: Map<String, Any>
     ): ResponseEntity<String> {
