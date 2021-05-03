@@ -111,7 +111,6 @@ class Tenant : Auditable() {
     @Column(name = "rejected_reason")
     var rejectedReason: String? = null
 
-    @OneToMany
-    @JoinColumn(name = "app_code")
-    var onboardings: List<Onboarding>? = null
+    @OneToMany(mappedBy = "appCode", cascade = [CascadeType.ALL])
+    var tenantUsers: MutableSet<TenantUser> = mutableSetOf()
 }

@@ -2,9 +2,10 @@ package com.forge.messageservice.controllers.v1
 
 import com.forge.messageservice.authentication.jwt.JwtAuthenticationResponse
 import com.forge.messageservice.authentication.jwt.JwtTokenProvider
-import com.forge.messageservice.configurations.security.SecurityConfigHolder
 import com.forge.messageservice.controllers.v1.api.request.LoginRequest
 import com.forge.messageservice.controllers.v1.api.response.ApiResponse
+import com.forge.messageservice.entities.User
+import com.forge.messageservice.repositories.UserRepository
 import com.forge.messageservice.services.RegistrationService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -23,7 +24,7 @@ class AuthController(
     private val authenticationManager: AuthenticationManager,
     private val registrationService: RegistrationService,
     private val jwtTokenProvider: JwtTokenProvider,
-    private val securityConfigHolder: SecurityConfigHolder
+    private val userRepository: UserRepository
 ) {
     private val logger = LoggerFactory.getLogger(AuthController::class.java)
 
@@ -39,9 +40,10 @@ class AuthController(
                 loginRequest.password
             )
         )
-
+        val userOpt = userRepository.findById(loginRequest.username)
+        val user = if (userOpt.isEmpty) userRepository.save(User().apply { username=loginRequest.username }) else userOpt.get()
         // creates tenant and tenant user mapping if necessary
-        registrationService.registerMissingApps(authentication)
+        registrationService.registerMissingApps(user, authentication)
 
         val jwt: String = jwtTokenProvider.generateToken(authentication)
         return ResponseEntity.ok(JwtAuthenticationResponse(jwt))
