@@ -18,4 +18,8 @@ class User {
     @OneToMany
     @JoinColumn(name = "username")
     var onboardings : List<Onboarding>? = null
+
+    @OneToMany
+    @JoinColumn(name = "username")
+    var tenantUsers : List<TenantUser> = emptyList()
 }

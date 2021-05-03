@@ -20,7 +20,7 @@ open class TenantService(private val tenantRepository: TenantRepository) {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     open fun register(newTenant: Tenant): Tenant {
 
-        if (tenantRepository.findTenant(newTenant.appCode, newTenant.module) != null) {
+        if (tenantRepository.findTenant(newTenant.appCode) != null) {
             // Do nothing if tenant already exist.
             return newTenant
         }

@@ -21,7 +21,7 @@ class RequestLoggingInstrumentation(private val clock: Clock) : SimpleInstrument
         val executionId = parameters.executionInput.executionId
         logger.info("${executionId}: query: ${parameters.query} with variables: ${parameters.variables}")
 
-        return SimpleInstrumentationContext.whenCompleted {executionResult: ExecutionResult?, throwable: Throwable? ->
+        return SimpleInstrumentationContext.whenCompleted { _: ExecutionResult?, throwable: Throwable? ->
             val duration = Duration.between(start, Instant.now(clock))
             if (throwable == null) {
                 logger.info("${executionId}: completed successfully in: $duration")
