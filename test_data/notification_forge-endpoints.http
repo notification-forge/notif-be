@@ -18,6 +18,14 @@ POST http://{{host}}:{{port}}/v1/messages/112233
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
+{
+  "some": "stuff",
+  "foo": [
+    "bar",
+    "baz"
+  ]
+}
+
 ### LDAP authentication
 //@no-log
 POST http://{{host}}:{{port}}/api/v1/auth/login

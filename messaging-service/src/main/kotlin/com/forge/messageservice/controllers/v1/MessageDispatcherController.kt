@@ -2,10 +2,7 @@ package com.forge.messageservice.controllers.v1
 
 import com.forge.messageservice.services.MessageDispatcherService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  *
@@ -20,7 +17,7 @@ class MessageDispatcherController(
      * Sends a notification using the `templateId` specified.
      */
     @PostMapping("/{templateId}")
-    fun send(@PathVariable templateId: String): ResponseEntity<String> {
+    fun send(@PathVariable templateId: String, @RequestBody messageParameter: Map<String, Any>): ResponseEntity<String> {
         messageDispatcher.enqueueMessage()
         return ResponseEntity.ok("ok")
     }
