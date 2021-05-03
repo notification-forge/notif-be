@@ -5,6 +5,7 @@ import com.forge.messageservice.entities.Tenant
 import com.forge.messageservice.entities.TenantUser
 import com.forge.messageservice.entities.User
 import com.forge.messageservice.repositories.TenantUserRepo
+import com.forge.messageservice.repositories.UserRepository
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
@@ -16,8 +17,14 @@ import javax.transaction.Transactional
 open class RegistrationService(
     private val tenantService: TenantService,
     private val tenantUserRepo: TenantUserRepo,
-    private val securityConfigHolder: SecurityConfigHolder
+    private val securityConfigHolder: SecurityConfigHolder,
+    private val userRepository: UserRepository
 ) {
+
+    open fun registerMissingUser(username: String) : User {
+        val userOpt = userRepository.findById(username)
+        return if (userOpt.isEmpty) userRepository.save(User().apply { this.username=username }) else userOpt.get()
+    }
 
     /**
      * Given an [Authentication] check if user is a member of a developer group that's not a tenant yet, and
