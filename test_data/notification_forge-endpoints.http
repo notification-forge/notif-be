@@ -19,11 +19,19 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "some": "stuff",
-  "foo": [
-    "bar",
-    "baz"
-  ]
+  "recipients": {
+    "to": [
+      "hello@gmail.com"
+    ]
+  },
+  "subject": "Hello World",
+  "parameters": {
+    "some": "stuff",
+    "foo": [
+      "bar",
+      "baz"
+    ]
+  }
 }
 
 ### LDAP authentication
