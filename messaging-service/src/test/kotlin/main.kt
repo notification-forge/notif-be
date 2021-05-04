@@ -12,7 +12,7 @@ class Loader {
         val classToLoad = Class.forName("com.forge.messageservice.lib.kafka.KafkaConfiguration", true, child)
         val kClass = Reflection.createKotlinClass(classToLoad)
         val instance = kClass.createInstance("bal") as KafkaConfiguration
-        println(instance.kafkaServer)
+        println(instance.bootStrapAddress)
 //        println(instance.beforeSend())
         return instance
     }
