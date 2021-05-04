@@ -1,6 +1,8 @@
 package features
 
 import com.forge.messageservice.MessageServiceApplication
+import features.common.TestContext
+import features.setup.GlobalHooks
 import io.cucumber.java8.En
 import io.cucumber.spring.CucumberContextConfiguration
 import mu.KotlinLogging
@@ -19,7 +21,7 @@ private val LOGGER = KotlinLogging.logger {}
 class SpringSetup : En {
     init {
         Before { _ ->
-            println("run before")
+            TestContext.init()
         }
 
         After { _ ->
