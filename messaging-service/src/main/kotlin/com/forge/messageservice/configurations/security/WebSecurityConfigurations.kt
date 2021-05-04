@@ -19,7 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @Profile("!dev & !test & !integration-test")
-open class WebSecurityConfigurations(
+class WebSecurityConfigurations(
     jwtTokenProvider: JwtTokenProvider,
     private val contextSource: LdapContextSource,
     unauthorizedHandler: JwtAuthenticationEntryPoint,

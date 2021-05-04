@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-open class TemplateService(
+class TemplateService(
     private val templateRepository: TemplateRepository
 ) {
 

@@ -17,7 +17,7 @@ import java.net.URL
 import java.net.URLClassLoader
 
 @Service
-open class TemplatePluginService(
+class TemplatePluginService(
     private val templatePluginRepository: TemplatePluginRepository,
     private val pluginService: PluginService,
     private val objectMapper: ObjectMapper,
@@ -38,7 +38,7 @@ open class TemplatePluginService(
         return optionalTemplatePlugin.get()
     }
 
-    open fun createTemplatePlugins(templateVersionId: Long, pluginsInput: PluginsInput): List<TemplatePlugin> {
+    fun createTemplatePlugins(templateVersionId: Long, pluginsInput: PluginsInput): List<TemplatePlugin> {
         return pluginsInput.plugins.map{pluginInput ->
             pluginService.ensurePluginExist(pluginInput.pluginId)
 

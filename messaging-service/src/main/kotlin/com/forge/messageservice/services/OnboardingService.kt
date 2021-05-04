@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-open class OnboardingService(
+class OnboardingService(
     private val tenantRepository: TenantRepository,
     private val userRepository: UserRepository,
     private val onboardingRepository: OnboardingRepository

@@ -14,14 +14,14 @@ import javax.transaction.Transactional
  * Handles [Tenant] and [User] creation
  */
 @Service
-open class RegistrationService(
+class RegistrationService(
     private val tenantService: TenantService,
     private val tenantUserRepo: TenantUserRepo,
     private val securityConfigHolder: SecurityConfigHolder,
     private val userRepository: UserRepository
 ) {
 
-    open fun registerMissingUser(username: String) : User {
+    fun registerMissingUser(username: String) : User {
         val userOpt = userRepository.findById(username)
         return if (userOpt.isEmpty) userRepository.save(User().apply { this.username=username }) else userOpt.get()
     }
@@ -32,7 +32,7 @@ open class RegistrationService(
      *
      */
     @Transactional(Transactional.TxType.REQUIRED)
-    open fun registerMissingApps(user: User, authentication: Authentication): Set<Tenant> {
+    fun registerMissingApps(user: User, authentication: Authentication): Set<Tenant> {
         val groupRegex = Regex(securityConfigHolder.groupPattern)
 
         val apps = authentication.authorities
@@ -56,7 +56,7 @@ open class RegistrationService(
         return apps
     }
 
-    open fun registerMissingAppUser(user: User, apps: Set<Tenant>) {
+    fun registerMissingAppUser(user: User, apps: Set<Tenant>) {
         val currentUserApps = user.tenantUsers.map { it.appCode }.toSet()
         apps.filter{ app -> !currentUserApps.contains(app.appCode) }.forEach { app ->
             tenantUserRepo.save(TenantUser().apply {

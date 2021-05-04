@@ -20,22 +20,22 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class TemplateVersionService(
+class TemplateVersionService(
     private val templatePluginService: TemplatePluginService,
     private val templateVersionRepository: TemplateVersionRepository,
     private val templateRepository: TemplateRepository,
     private val objectMapper: ObjectMapper
 ) {
 
-    open fun getAllTemplateVersionsByTemplateId(templateId: Long): List<TemplateVersion> {
+    fun getAllTemplateVersionsByTemplateId(templateId: Long): List<TemplateVersion> {
         return templateVersionRepository.findAllByTemplateId(templateId)
     }
 
-    open fun findTemplateVersionsByTemplateHashAndTemplateId(templateHash: Int, templateId: Long): TemplateVersion? {
+    fun findTemplateVersionsByTemplateHashAndTemplateId(templateHash: Int, templateId: Long): TemplateVersion? {
         return templateVersionRepository.findByTemplateHashAndTemplateId(templateHash, templateId)
     }
 
-    open fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
+    fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
         val optionalTemplateVersion = templateVersionRepository.findById(templateVersionId)
 
         if (optionalTemplateVersion.isEmpty) {
@@ -51,7 +51,7 @@ open class TemplateVersionService(
         return templateVersionRepository.findByTemplateIdAndStatus(templateVersionId, status)
     }
 
-    open fun createTemplateVersion(templateVersionInput: CreateTemplateVersionInput): TemplateVersion {
+    fun createTemplateVersion(templateVersionInput: CreateTemplateVersionInput): TemplateVersion {
         val templateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
         val template = getTemplateExist(templateVersionInput.templateId)
@@ -73,7 +73,7 @@ open class TemplateVersionService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    open fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
+    fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
         val currentTemplateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 
         getTemplateExist(templateVersionInput.templateId)
@@ -112,7 +112,7 @@ open class TemplateVersionService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    open fun updateTemplateVersion(templateVersionInput: UpdateTemplateVersionInput): TemplateVersion {
+    fun updateTemplateVersion(templateVersionInput: UpdateTemplateVersionInput): TemplateVersion {
         val templateVersion = getTemplateVersionById(templateVersionInput.id)
 
         templateVersion.apply {

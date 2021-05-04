@@ -14,7 +14,7 @@ import java.io.Serializable
  * This service queues the message in kafka for consumption by delivery workers
  */
 @Service
-open class MessageDispatcherService(
+class MessageDispatcherService(
     private val kafkaTemplate: KafkaTemplate<String, Serializable>
 ) {
 

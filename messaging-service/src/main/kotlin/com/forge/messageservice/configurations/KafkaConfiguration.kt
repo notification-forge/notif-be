@@ -8,10 +8,10 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker
 
 @Configuration
 @Profile("dev | test | integration-test")
-open class EmbeddedKafkaConfiguration {
+class EmbeddedKafkaConfiguration {
 
     @Bean
-    open fun configure(): EmbeddedKafkaBroker {
+    fun configure(): EmbeddedKafkaBroker {
         val kafkaBroker = EmbeddedKafkaBroker(1)
         kafkaBroker.kafkaPorts(9092)
         return kafkaBroker

@@ -9,18 +9,18 @@ import java.time.Clock
 
 
 @Configuration
-open class ScalarConfiguration {
+class ScalarConfiguration {
 
     @Bean
-    open fun dateTime(): GraphQLScalarType = ExtendedScalars.DateTime
+    fun dateTime(): GraphQLScalarType = ExtendedScalars.DateTime
 
     @Bean
-    open fun date(): GraphQLScalarType = ExtendedScalars.Date
+    fun date(): GraphQLScalarType = ExtendedScalars.Date
 
     @Bean
-    open fun uploadScalar(): GraphQLScalarType = ApolloScalars.Upload
+    fun uploadScalar(): GraphQLScalarType = ApolloScalars.Upload
 
     @Bean
-    open fun clock(): Clock = Clock.systemUTC()
+    fun clock(): Clock = Clock.systemUTC()
 }
 

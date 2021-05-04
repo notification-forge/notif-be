@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class TenantService(private val tenantRepository: TenantRepository) {
+class TenantService(private val tenantRepository: TenantRepository) {
 
     /**
      * Register's a new tenant. Does nothing if tenant, tenant/module pair already exist.
@@ -18,7 +18,7 @@ open class TenantService(private val tenantRepository: TenantRepository) {
      * for the same appcode / module pair.
      */
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    open fun register(newTenant: Tenant): Tenant {
+    fun register(newTenant: Tenant): Tenant {
 
         if (tenantRepository.findTenant(newTenant.appCode) != null) {
             // Do nothing if tenant already exist.
@@ -29,7 +29,7 @@ open class TenantService(private val tenantRepository: TenantRepository) {
     }
 
     @Transactional(Transactional.TxType.NEVER)
-    open fun findTenant(appCode: String): Tenant? {
+    fun findTenant(appCode: String): Tenant? {
         return tenantRepository.findTenant(appCode)
     }
 
