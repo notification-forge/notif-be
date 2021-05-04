@@ -58,6 +58,23 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
+  "query": "mutation createTemplate($input: CreateTemplateInput!) { createTemplate(input: $input) { name uuid alertType appCode createdDate } }",
+  "variables": {
+    "input": {
+      "name": "new template 1",
+      "alertType": "EMAIL",
+      "appCode": "FABK"
+    }
+  }
+}
+
+###
+//@no-log
+POST http://{{host}}:{{port}}/graphql
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
   "query": "query getImages($filter: ImageSearchFilterInput, $pageRequestInput: PaginationInput) { getImages(searchFilter: $filter, pageRequestInput: $pageRequestInput) { totalCount edges { cursor node { id fileName } } pageInfo { endCursor hasNextPage } } }",
   "variables": {
     "filter": {
