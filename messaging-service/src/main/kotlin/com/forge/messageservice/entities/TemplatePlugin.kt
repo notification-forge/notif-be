@@ -23,4 +23,12 @@ class TemplatePlugin : Auditable() {
 
     @Column(name = "configuration", nullable = false, columnDefinition = "TEXT")
     var configuration: String? = null
+
+    @ManyToOne
+    @JoinColumn(name = "template_version_id", insertable = false, updatable = false)
+    val templateVersion: TemplateVersion? = null
+
+    @ManyToOne
+    @JoinColumn(name = "plugin_id", insertable = false, updatable = false)
+    val plugin: Plugin? = null
 }

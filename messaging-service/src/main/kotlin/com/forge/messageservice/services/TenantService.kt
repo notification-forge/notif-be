@@ -17,7 +17,7 @@ open class TenantService(private val tenantRepository: TenantRepository) {
     @Transactional(Transactional.TxType.REQUIRED)
     open fun register(newTenant: Tenant): Tenant {
 
-        if(tenantRepository.findByAppCode(newTenant.appCode) != null) {
+        if (tenantRepository.findByAppCode(newTenant.appCode) != null) {
             throw TenantAlreadyExistException("App code already exist.")
         }
 

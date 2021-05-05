@@ -3,6 +3,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     kotlin("jvm")
+    kotlin("plugin.spring") version "1.4.32"
     application
     id("rt")
     idea
@@ -52,11 +53,12 @@ dependencies {
     testImplementation("io.cucumber:cucumber-junit:6.8.0")
     testImplementation("io.cucumber:cucumber-spring:6.8.0")
 
+    testImplementation ("org.junit.platform:junit-platform-commons:1.5.2")
+
     testImplementation("org.jacoco:org.jacoco.agent:0.8.5:runtime")
 
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
-
 }
 
 tasks.compileJava {

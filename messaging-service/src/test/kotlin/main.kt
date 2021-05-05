@@ -1,5 +1,5 @@
 import com.alphamail.plugin.api.PluginConfiguration
-import com.forge.messageservice.lib.kafka.KafkaConfiguration
+import com.forge.messageservice.lib.kafka.KafkaPluginConfiguration
 import java.net.URL
 import java.net.URLClassLoader
 import kotlin.jvm.internal.Reflection
@@ -9,10 +9,10 @@ class Loader {
 
     fun load(uri: String): Any? {
         val child = URLClassLoader(arrayOf(URL(uri)), this.javaClass.classLoader)
-        val classToLoad = Class.forName("com.forge.messageservice.lib.kafka.KafkaConfiguration", true, child)
+        val classToLoad = Class.forName("com.forge.messageservice.lib.kafka.KafkaPluginConfiguration", true, child)
         val kClass = Reflection.createKotlinClass(classToLoad)
-        val instance = kClass.createInstance("bal") as KafkaConfiguration
-        println(instance.kafkaServer)
+        val instance = kClass.createInstance("bal") as KafkaPluginConfiguration
+        println(instance.topic)
 //        println(instance.beforeSend())
         return instance
     }

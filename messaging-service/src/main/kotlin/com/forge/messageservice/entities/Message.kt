@@ -1,6 +1,8 @@
 package com.forge.messageservice.entities
 
 import Auditable
+import com.alphamail.plugin.api.MessageStatus
+import com.alphamail.plugin.api.MessageType
 import javax.persistence.*
 
 @Entity
@@ -40,12 +42,4 @@ class Message : Auditable() {
 
     @Column(name = "times_triggered")
     var timesTriggered: Int = 0
-
-    enum class MessageStatus {
-        PENDING, SENT, FAILED
-    }
-
-    enum class MessageType {
-        MAIL, TEAMS
-    }
 }

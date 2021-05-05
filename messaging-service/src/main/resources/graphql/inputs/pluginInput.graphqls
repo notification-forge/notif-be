@@ -1,7 +1,3 @@
-input PluginsInput {
-    plugins: [PluginInput]
-}
-
 input PluginInput {
     """
     Unique Idenfitier for the plugin chosen

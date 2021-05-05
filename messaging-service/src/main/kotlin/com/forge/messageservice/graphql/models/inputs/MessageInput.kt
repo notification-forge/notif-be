@@ -1,6 +1,6 @@
 package com.forge.messageservice.graphql.models.inputs
 
-import com.forge.messageservice.entities.Message
+import com.alphamail.plugin.api.MessageType
 import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -15,5 +15,5 @@ data class MessageInput(
     @NotBlank
     val settings: String,
     @NotNull
-    val messageType: Message.MessageType
+    val messageType: MessageType
 )

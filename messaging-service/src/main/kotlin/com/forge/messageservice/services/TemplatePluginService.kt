@@ -38,8 +38,8 @@ open class TemplatePluginService(
         return optionalTemplatePlugin.get()
     }
 
-    open fun createTemplatePlugins(templateVersionId: Long, pluginsInput: PluginsInput): List<TemplatePlugin> {
-        return pluginsInput.plugins.map{pluginInput ->
+    open fun createTemplatePlugins(templateVersionId: Long, plugins: List<PluginInput>): List<TemplatePlugin> {
+        return plugins.map{pluginInput ->
             pluginService.ensurePluginExist(pluginInput.pluginId)
 
             templatePluginRepository.save(TemplatePlugin().apply {
@@ -76,7 +76,7 @@ open class TemplatePluginService(
     }
 
     private fun validateMandatory(configurationInput: ConfigurationInput){
-        if (configurationInput.value.isNullOrEmpty()){
+        if (configurationInput.value.isEmpty()){
             throw FieldValidationException("Field ${configurationInput.key} has Value ${configurationInput.value} is empty when it is supposed to be mandatory")
         }
     }

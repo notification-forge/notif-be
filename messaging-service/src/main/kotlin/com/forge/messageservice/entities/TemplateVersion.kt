@@ -77,4 +77,9 @@ class TemplateVersion : Auditable() {
     fun templateHash(): Int {
         return Objects.hash(settings, body)
     }
+
+    @ManyToOne
+    @JoinColumn(name = "template_id", insertable = false, updatable = false)
+    val template: Template? = null
+
 }
