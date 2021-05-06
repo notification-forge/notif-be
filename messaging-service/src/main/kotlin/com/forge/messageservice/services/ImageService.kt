@@ -2,6 +2,7 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.common.files.SimilarFilenameGenerator
 import com.forge.messageservice.entities.Image
+import com.forge.messageservice.exceptions.PageImageException
 import com.forge.messageservice.repositories.ImageRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -38,8 +39,13 @@ class ImageService(
     fun findImagesWhoseFilenamesMatches(
         appCodes: List<String>,
         fileNamePortion: String,
-        pageable: Pageable
+        pageable: Pageable,
+        sortField: String
     ): Page<Image> {
-        return imageRepository.findWithNamesLike(appCodes, fileNamePortion, pageable)
+        try {
+            return imageRepository.findWithNamesLike(appCodes, fileNamePortion, pageable)
+        } catch (e: Exception) {
+            throw PageImageException("sortField: ${sortField} is invalid")
+        }
     }
 }

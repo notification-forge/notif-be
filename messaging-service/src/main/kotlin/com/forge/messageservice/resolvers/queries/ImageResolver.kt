@@ -17,11 +17,15 @@ class ImageResolver(
 ) : GraphQLQueryResolver {
 
     fun getImages(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): Connection<GQLImage> {
+        if (pageRequestInput.sortField.isNullOrEmpty()) {
+            pageRequestInput.sortField = "fileName"
+        }
         return gqlConnectionFor({
             imageService.findImagesWhoseFilenamesMatches(
                 searchFilter.appCodes,
                 searchFilter.fileNamePortion,
-                pageRequestInput.asPageRequest()
+                pageRequestInput.asPageRequest(),
+                pageRequestInput.sortField!!
             )
         }) {
             DefaultEdge(GQLImage.from(it), from(it.id))

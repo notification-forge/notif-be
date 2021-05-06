@@ -1,10 +1,11 @@
 package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
-import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
-import com.forge.messageservice.graphql.models.inputs.UpdateTemplateInput
+import com.forge.messageservice.exceptions.PageTemplateException
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
+import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
+import com.forge.messageservice.graphql.models.inputs.UpdateTemplateInput
 import com.forge.messageservice.repositories.TemplateRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -19,9 +20,14 @@ class TemplateService(
     fun getAllTemplatesWithTemplateNameAndInAppCodes(
         appCodes: List<String>,
         name: String,
-        pageable: Pageable
+        pageable: Pageable,
+        sortField: String
     ): Page<Template> {
-        return templateRepository.findWithNamesLike(appCodes, name, pageable)
+        try {
+            return templateRepository.findWithNamesLike(appCodes, name, pageable)
+        } catch (e: Exception) {
+            throw PageTemplateException("sortField: ${sortField} is invalid")
+        }
     }
 
     fun getTemplateById(templateId: Long): Template {
