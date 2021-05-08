@@ -3,7 +3,7 @@ package com.forge.messageservice.exceptions
 import graphql.ErrorClassification
 import graphql.ErrorType
 
-open class PageImageException(
+open class GraphQLQueryException(
     errorMessage: String? = "",
     private val parameters: Map<String, Any>? = mutableMapOf()
 ) : GraphQLException(errorMessage) {

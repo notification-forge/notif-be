@@ -2,7 +2,7 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.common.files.SimilarFilenameGenerator
 import com.forge.messageservice.entities.Image
-import com.forge.messageservice.exceptions.PageImageException
+import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.repositories.ImageRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -45,7 +45,7 @@ class ImageService(
         try {
             return imageRepository.findWithNamesLike(appCodes, fileNamePortion, pageable)
         } catch (e: Exception) {
-            throw PageImageException("sortField: ${sortField} is invalid")
+            throw GraphQLQueryException("sortField: ${sortField} is invalid")
         }
     }
 }

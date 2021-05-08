@@ -1,7 +1,7 @@
 package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Image
-import com.forge.messageservice.exceptions.PageImageException
+import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.graphql.models.inputs.PaginationInput
 import com.forge.messageservice.repositories.ImageRepository
 import io.mockk.every
@@ -109,7 +109,7 @@ class ImageServiceTest {
             } throws Exception()
         }
 
-        assertThrows<PageImageException> {
+        assertThrows<GraphQLQueryException> {
             imageService.findImagesWhoseFilenamesMatches(
                 appCodes,
                 fileNames,

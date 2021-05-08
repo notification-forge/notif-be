@@ -1,7 +1,7 @@
 package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
-import com.forge.messageservice.exceptions.PageTemplateException
+import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
@@ -26,7 +26,7 @@ class TemplateService(
         try {
             return templateRepository.findWithNamesLike(appCodes, name, pageable)
         } catch (e: Exception) {
-            throw PageTemplateException("sortField: ${sortField} is invalid")
+            throw GraphQLQueryException("sortField: ${sortField} is invalid")
         }
     }
 

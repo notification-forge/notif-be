@@ -2,7 +2,7 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.Template.AlertType
-import com.forge.messageservice.exceptions.PageTemplateException
+import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
@@ -242,7 +242,7 @@ class TemplateServiceTest {
         } throws Exception()
 
 
-        assertThrows<PageTemplateException> {
+        assertThrows<GraphQLQueryException> {
             templateService.getAllTemplatesWithTemplateNameAndInAppCodes(
                 appCodes,
                 searchValue,
