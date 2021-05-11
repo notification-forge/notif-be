@@ -2,11 +2,12 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.Template.AlertType
+import com.forge.messageservice.exceptions.GraphQLQueryException
+import com.forge.messageservice.exceptions.TemplateDoesNotExistException
+import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.graphql.models.inputs.CreateTemplateInput
 import com.forge.messageservice.graphql.models.inputs.PaginationInput
 import com.forge.messageservice.graphql.models.inputs.UpdateTemplateInput
-import com.forge.messageservice.exceptions.TemplateDoesNotExistException
-import com.forge.messageservice.exceptions.TemplateExistedException
 import com.forge.messageservice.repositories.TemplateRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -79,14 +80,20 @@ class TemplateServiceTest {
             paginationInput.sortField
         )
 
-        every { templateRepository.findWithNamesLike(
+        every {
+            templateRepository.findWithNamesLike(
                 appCodes,
                 searchValue,
                 pageable
             )
         } returns mockListOfTemplates()
-        
-        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(appCodes, searchValue, pageable)
+
+        val templates = templateService.getAllTemplatesWithTemplateNameAndInAppCodes(
+            appCodes,
+            searchValue,
+            pageable,
+            paginationInput.sortField!!
+        )
 
         templates.forEach { template ->
             run {
@@ -136,7 +143,7 @@ class TemplateServiceTest {
     }
 
     @Test
-    fun itShouldThrowAnExceptionWhenCreatingTemplateWhereTemplateNameAndAppCodeAlreadyExist(){
+    fun itShouldThrowAnExceptionWhenCreatingTemplateWhereTemplateNameAndAppCodeAlreadyExist() {
         val templateNameExisted = "Apology Template One"
         val templateAppCode = "AppOne"
         val templateAlertType = AlertType.EMAIL
@@ -184,7 +191,7 @@ class TemplateServiceTest {
 
 
     @Test
-    fun itShouldThrowAnExceptionWhenUpdatingAnTemplateWhereTemplateIdDoesNotExist(){
+    fun itShouldThrowAnExceptionWhenUpdatingAnTemplateWhereTemplateIdDoesNotExist() {
         val templateIdDoesNotExist = 0L
         val templateName = "Apology Template One"
 
@@ -196,7 +203,7 @@ class TemplateServiceTest {
     }
 
     @Test
-    fun itShouldThrowAnExceptionWhenUpdatingTemplateWhereTemplateNameAndAppCodeAlreadyExist(){
+    fun itShouldThrowAnExceptionWhenUpdatingTemplateWhereTemplateNameAndAppCodeAlreadyExist() {
         val templateId = 1L
         val templateNameExisted = "Apology Template One"
         val templateAppCode = "AppOne"
@@ -212,5 +219,60 @@ class TemplateServiceTest {
         } returns mockTemplateOne()
 
         assertThrows<TemplateExistedException> { templateService.updateTemplate(updateTemplateExistedInput) }
+    }
+
+    @Test
+    fun itShouldThrowExceptionWhenReturnPageTemplateAndSortFieldInputInvalid() {
+        val searchValue = "Apology"
+        val appCodes = listOf("AppOne", "AppTwo")
+        val paginationInput = PaginationInput(1, 10, Sort.Direction.ASC, "names")
+        val pageable = PageRequest.of(
+            paginationInput.pageNumber,
+            paginationInput.rowPerPage,
+            paginationInput.sortDirection,
+            paginationInput.sortField
+        )
+
+        every {
+            templateRepository.findWithNamesLike(
+                appCodes,
+                searchValue,
+                pageable
+            )
+        } throws Exception()
+
+
+        assertThrows<GraphQLQueryException> {
+            templateService.getAllTemplatesWithTemplateNameAndInAppCodes(
+                appCodes,
+                searchValue,
+                pageable,
+                paginationInput.sortField!!
+            )
+        }
+    }
+
+    @Test
+    fun itShouldReturnPageTemplateAndSortFieldInputValid() {
+        val searchValue = "Apology"
+        val appCodes = listOf("AppOne", "AppTwo")
+        val paginationInput = PaginationInput(1, 10, Sort.Direction.ASC, "names")
+        val pageable = PageRequest.of(
+            paginationInput.pageNumber,
+            paginationInput.rowPerPage,
+            paginationInput.sortDirection,
+            paginationInput.sortField
+        )
+
+        every {
+            templateRepository.findWithNamesLike(
+                appCodes,
+                searchValue,
+                pageable
+            )
+        } returns mockListOfTemplates()
+
+        assert(!mockListOfTemplates().isEmpty)
+        assert(pageable.isPaged)
     }
 }
