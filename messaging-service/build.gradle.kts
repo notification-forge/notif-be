@@ -122,4 +122,8 @@ tasks.check {
     dependsOn("jacocoTestReport")
 }
 
+checkstyle {
+    configDir = file("$rootProject.projectDir/etc/checkstyle")
+}
+
 apply(plugin = "io.spring.dependency-management")
