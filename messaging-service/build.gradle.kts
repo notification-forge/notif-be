@@ -123,7 +123,9 @@ tasks.check {
 }
 
 checkstyle {
-    configDir = file("$rootProject.projectDir/etc/checkstyle")
+    toolVersion = "7.6.1"
+    configFile = file("${project.rootDir}/config/checkstyle.xml")
 }
+
 
 apply(plugin = "io.spring.dependency-management")
