@@ -17,7 +17,7 @@ import java.net.URL
 import java.net.URLClassLoader
 
 @Service
-open class TemplatePluginService(
+class TemplatePluginService(
     private val templatePluginRepository: TemplatePluginRepository,
     private val pluginService: PluginService,
     private val objectMapper: ObjectMapper,

@@ -14,7 +14,7 @@ data class TestUser(
 private val accessTokenPattern = "\"accessToken\":\\s*\"(?<accessToken>.*?)\"".toRegex()
 private const val ACCESS_TOKEN = "accessToken"
 
-fun login(username: String, password: String): TestUser{
+fun login(username: String, password: String): TestUser {
     val req = """
         {
             "username": "$username",
@@ -24,13 +24,13 @@ fun login(username: String, password: String): TestUser{
 
     val request = Request.Builder().post(
         RequestBody.create(MediaType.get("application/json"), req)
-    ).url("${CommonStepDefs.localhost}/auth/login").build()
+    ).url("${CommonStepDefs.apiBaseUrl}/auth/login").build()
 
     val response = client.newCall(request).execute()
 
-    if (response.isSuccessful){
+    if (response.isSuccessful) {
         val mr = accessTokenPattern.find(response.body()?.string()!!)
-        if (mr != null){
+        if (mr != null) {
             return TestUser(isAuthenticated = true, token = mr.groups[ACCESS_TOKEN]?.value!!, username = username)
         }
     }

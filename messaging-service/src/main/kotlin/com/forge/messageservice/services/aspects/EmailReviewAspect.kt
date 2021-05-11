@@ -1,5 +1,6 @@
 package com.forge.messageservice.services.aspects
 
+import com.alphamail.plugin.api.AlphamailPlugin
 import com.alphamail.plugin.api.MessageDetails
 import com.alphamail.plugin.api.PluginConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -42,13 +43,16 @@ class EmailReviewAspect(
 
         templatePlugins.map { templatePlugin ->
             val plugin = pluginService.loadPlugin(templatePlugin.plugin!!, templatePlugin.configuration!!)
-            try {
-                logger.info("Processing ${plugin.javaClass}")
-                plugin.beforeSend(convertToMessageDetails(message, templateVersion))
-            } catch (e: Exception) {
-                logger.error("Unable to execute ${plugin.javaClass}")
+
+            if (plugin.runsBefore()){
+                try {
+                    logger.info("Processing ${plugin.javaClass}")
+                    plugin.execute(convertToMessageDetails(message, templateVersion))
+                } catch (e: Exception) {
+                    logger.error("Unable to execute ${plugin.javaClass}")
+                }
+                logger.info("Processed ${plugin.javaClass}")
             }
-            logger.info("Processed ${plugin.javaClass}")
         }
 
         logger.info("(COMPLETE) Pre Processing Actions for ${message.id}")
@@ -64,11 +68,14 @@ class EmailReviewAspect(
 
         templatePlugins.map { templatePlugin ->
             val plugin = pluginService.loadPlugin(templatePlugin.plugin!!, templatePlugin.configuration!!)
-            try {
-                logger.info("Processing ${plugin.javaClass}")
-                plugin.afterSend(convertToMessageDetails(message, templateVersion))
-            } catch (e: Exception) {
-                logger.error("Unable to execute ${plugin.javaClass}")
+
+            if (plugin.runsAfter()) {
+                try {
+                    logger.info("Processing ${plugin.javaClass}")
+                    plugin.execute(convertToMessageDetails(message, templateVersion))
+                } catch (e: Exception) {
+                    logger.error("Unable to execute ${plugin.javaClass}")
+                }
             }
             logger.info("Processed ${plugin.javaClass}")
         }

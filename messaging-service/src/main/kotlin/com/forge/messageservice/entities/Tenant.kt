@@ -2,16 +2,26 @@ package com.forge.messageservice.entities
 
 import Auditable
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import javax.persistence.*
 
+/**
+ * This entity represents a tenant in Alphamail. A tenant is identified by its application code (referred to as appCode).
+ * A tenant may have submodules within it.
+ */
 @Entity
-@Table(name = "tenants")
-class Tenant : Auditable(){
+@Table(
+    name = "tenants", indexes = [
+        Index(name = "IDX_APPCODE_MODULE", columnList = "app_code, module")
+    ]
+)
+class Tenant : Auditable() {
 
     @Id
-    @Column(name = "app_code", length = 24, nullable = false, unique = true)
+    @Column(name = "app_code", length = 24, nullable = false)
     var appCode: String = ""
+
+    @Column(name = "module", length = 24)
+    var module: String? = null
 
     @Column(name = "display_name", length = 56, nullable = false)
     var displayName: String = ""
@@ -25,16 +35,16 @@ class Tenant : Auditable(){
     @Column(name = "description")
     var description: String? = null
 
-    @Column(name = "primary_owner_name", length = 256, nullable = false)
+    @Column(name = "primary_owner_name", length = 256, nullable = true)
     var primaryOwnerName: String? = null
 
-    @Column(name = "primary_owner_id", length = 24, nullable = false)
+    @Column(name = "primary_owner_id", length = 24, nullable = true)
     var primaryOwnerId: String? = null
 
-    @Column(name = "secondary_owner_name", length = 256, nullable = false)
+    @Column(name = "secondary_owner_name", length = 256, nullable = true)
     var secondaryOwnerName: String? = null
 
-    @Column(name = "secondary_owner_id", length = 24, nullable = false)
+    @Column(name = "secondary_owner_id", length = 24, nullable = true)
     var secondaryOwnerId: String? = null
 
     /**
@@ -101,7 +111,6 @@ class Tenant : Auditable(){
     @Column(name = "rejected_reason")
     var rejectedReason: String? = null
 
-    @OneToMany
-    @JoinColumn(name = "app_code")
-    var onboardings : List<Onboarding>? = null
+    @OneToMany(mappedBy = "appCode", cascade = [CascadeType.ALL])
+    var tenantUsers: MutableSet<TenantUser> = mutableSetOf()
 }

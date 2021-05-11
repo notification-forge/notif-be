@@ -12,4 +12,5 @@ import org.junit.runner.RunWith
     features = ["src/test/resources/features"],
     plugin = ["pretty", "html:target/cucumber-reports"]
 )
-class RunCucumberTest
+class
+RunCucumberTest

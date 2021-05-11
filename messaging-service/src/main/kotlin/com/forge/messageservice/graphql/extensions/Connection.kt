@@ -4,6 +4,6 @@ import graphql.relay.Connection
 
 interface Connection<T> : Connection<T>{
 
-    fun totalCount(): Long
+    fun totalCount(): Int
     
 }

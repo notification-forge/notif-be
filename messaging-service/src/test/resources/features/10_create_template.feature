@@ -1,23 +1,21 @@
 #lang: en
 Feature: 10 Create Template
 
+  @ignore
   Scenario: User creates a new template
     Given a user has logged in
     | username | ntfusr1 |
     | password | secret  |
     When we call GraphQL with requestBody
     """
-    mutation CREATE_TEMPLATE{
-      createTemplate(input:{
-        name: "new template 1"
-        alertType: EMAIL
-        appCode: "FABK"
-      }) {
-        name
-        uuid
-        alertType
-        appCode
-        createdDate
+    {
+      "query": "mutation createTemplate($input: CreateTemplateInput!) { createTemplate(input: $input) { name uuid alertType appCode createdDate } }",
+      "variables": {
+        "input": {
+          "name": "new template 1",
+          "alertType": "EMAIL",
+          "appCode": "FABK"
+        }
       }
     }
     """

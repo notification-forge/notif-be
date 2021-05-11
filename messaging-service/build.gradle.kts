@@ -3,7 +3,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     kotlin("jvm")
-    kotlin("plugin.spring") version "1.4.32"
+    kotlin("plugin.spring") version "1.5.0"
     application
     id("rt")
     idea
@@ -35,13 +35,12 @@ dependencies {
     implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:11.0.0")
     implementation("com.graphql-java-kickstart:playground-spring-boot-starter:11.0.0")
     implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:11.0.0")
+    implementation("com.graphql-java-kickstart:altair-spring-boot-starter:11.0.0")
     implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
 
     implementation("io.pebbletemplates:pebble:3.1.4")
 
     implementation("org.hibernate.validator:hibernate-validator")
-
-    implementation("io.github.microutils:kotlin-logging:1.12.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.integration:spring-integration-test")
@@ -52,6 +51,7 @@ dependencies {
     testImplementation("io.cucumber:cucumber-java8:6.8.0")
     testImplementation("io.cucumber:cucumber-junit:6.8.0")
     testImplementation("io.cucumber:cucumber-spring:6.8.0")
+    testImplementation("org.junit.platform:junit-platform-commons:1.5.2")
 
     testImplementation ("org.junit.platform:junit-platform-commons:1.5.2")
 
@@ -59,6 +59,11 @@ dependencies {
 
     runtimeOnly("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.6.0")
+
+    // Dev dependencies - Actual dependencies for kafka are resolved from the in-built plugins
+    implementation("org.springframework.kafka:spring-kafka:2.7.0")
+    implementation("org.springframework.kafka:spring-kafka-test:2.7.0")
+
 }
 
 tasks.compileJava {
@@ -77,7 +82,7 @@ configurations.create("cucumberRuntime") {
     extendsFrom(configurations["testImplementation"])
 }
 
-tasks.create("cucumber"){
+tasks.create("cucumber") {
     dependsOn("assemble", "test", "compileTestKotlin")
 
     val jacocoAgent = sourceSets["test"].runtimeClasspath.files

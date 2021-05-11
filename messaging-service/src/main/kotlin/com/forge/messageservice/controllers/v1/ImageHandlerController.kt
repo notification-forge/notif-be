@@ -36,7 +36,7 @@ class ImageHandlerController(
             val response = imageService.create(Image().apply {
                 this.appCode = tenant.appCode
                 this.fileName = file.originalFilename!!
-                this.contentType = file.contentType
+                this.contentType = file.contentType!!
                 this.imageData = file.bytes
             })
 

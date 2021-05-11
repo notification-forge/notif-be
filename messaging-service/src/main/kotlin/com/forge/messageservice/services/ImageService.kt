@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class ImageService(
+class ImageService(
     private val imageRepository: ImageRepository
 ) {
 
     @Transactional(Transactional.TxType.REQUIRED)
-    open fun create(image: Image): Image {
+    fun create(image: Image): Image {
         // check whether there is already an image having
         // similar name
         val imageHavingSimilarName = imageRepository.findImagesWithSimilarNames(
@@ -35,7 +35,7 @@ open class ImageService(
      * Returns images in the requested `appCodes` whose filenames matches a portion of the requested `fileNamePortion`
      */
     @Transactional(Transactional.TxType.NEVER)
-    open fun findImagesWhoseFilenamesMatches(
+    fun findImagesWhoseFilenamesMatches(
         appCodes: List<String>,
         fileNamePortion: String,
         pageable: Pageable

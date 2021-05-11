@@ -8,10 +8,10 @@ import java.util.*
 
 @Configuration
 @EnableJpaAuditing
-open class JpaAuditingConfiguration{
+class JpaAuditingConfiguration{
 
     @Bean
-    open fun auditorProvider(): AuditorAware<String> {
+    fun auditorProvider(): AuditorAware<String> {
         return LoggedInUsernameAuditorAware()
     }
 }

@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class CustomConfiguration {
+class CustomConfiguration {
 
     @Bean
-    open fun typeDefinitionFactories(): List<TypeDefinitionFactory> {
+    fun typeDefinitionFactories(): List<TypeDefinitionFactory> {
         return listOf(CustomConnectionFactory())
     }
 

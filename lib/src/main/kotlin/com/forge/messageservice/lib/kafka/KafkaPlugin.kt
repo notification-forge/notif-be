@@ -1,33 +1,60 @@
-package com.forge.messageservice.lib.kafka
-
-import com.alphamail.plugin.api.AlphamailPlugin
-import com.alphamail.plugin.api.MessageDetails
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import org.slf4j.LoggerFactory
-import org.springframework.kafka.core.KafkaTemplate
-
-class KafkaPlugin(
-    private val cfg: String
-) : AlphamailPlugin {
-
-    private val logger = LoggerFactory.getLogger(KafkaPlugin::class.java)
-    private val kafkaTemplate = SpringBeanUtil.getBean("kafkaTemplate") as KafkaTemplate<String, String>
-    private val objectMapper = ObjectMapper()
-
-    override fun beforeSend(message: MessageDetails): Any {
-        val configuration : KafkaPluginConfiguration = objectMapper.readValue(cfg)
-
-        val message = "This is to inform you that your message. " +
-                "Message Type: ${message.messageType}, Message Id: ${message.id}, " +
-                "Template Name: ${message.templateName}, Template Version Hash: ${message.templateVersionHash} " +
-                "has a status of ${message.messageStatus}"
-        kafkaTemplate.send(configuration.topic, message)
-
-        return "This is kafka plugin before sending, for ${configuration.topic}"
-    }
-
-    override fun afterSend(message: MessageDetails): Any {
-        return "This is kafka plugin after sending"
-    }
-}
+//package com.forge.messageservice.lib.kafka
+//
+//import com.alphamail.plugin.api.AlphamailPlugin
+//import com.alphamail.plugin.api.MessageDetails
+//import mu.KotlinLogging
+//import org.apache.kafka.clients.producer.ProducerConfig
+//import org.apache.kafka.common.serialization.StringSerializer
+//import org.springframework.kafka.core.DefaultKafkaProducerFactory
+//import org.springframework.kafka.core.KafkaTemplate
+//import org.springframework.kafka.support.SendResult
+//import org.springframework.util.concurrent.ListenableFutureCallback
+//
+///**
+// * Kafka plugin drops a message to a kafka topic indicating that a message has been
+// * sent.
+// *
+// * This class acts as a wrapper and delegates the actual message sending to [KafkaMessageProducer] to that
+// * unit test can be written for [KafkaMessageProducer]
+// */
+//class KafkaPlugin(cfg: KafkaPluginConfiguration) : AlphamailPlugin {
+//
+//    private val logger = KotlinLogging.logger {}
+//
+//    private val kafkaTemplate: KafkaTemplate<String, String>
+//    private val msgProducer: KafkaMessageProducer
+//
+//
+//    private val handler = object : ListenableFutureCallback<SendResult<String, String>> {
+//
+//        override fun onSuccess(result: SendResult<String, String>?) {
+//            logger.info { "Kafka message sent ${result?.recordMetadata?.offset()}" }
+//        }
+//
+//        override fun onFailure(ex: Throwable) {
+//            logger.error { ex }
+//        }
+//    }
+//
+//    init {
+//        val defaultKafkaProducerFactory = DefaultKafkaProducerFactory<String, String>(
+//            mapOf(
+//                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to cfg.brokerAddress,
+//                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::javaClass,
+//                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::javaClass
+//            )
+//        )
+//        kafkaTemplate = KafkaTemplate(defaultKafkaProducerFactory)
+//        msgProducer = KafkaMessageProducer(cfg, kafkaTemplate, handler)
+//    }
+//
+//    override fun execute(messageDetails: MessageDetails): Any? {
+//        // TODO: Update `execute()` signature to pass the message to be sent
+//        msgProducer.send(messageDetails.body)
+//        return null
+//    }
+//
+//    override fun type(): AlphamailPlugin.PluginType {
+//        return AlphamailPlugin.PluginType.AfterSend
+//    }
+//}

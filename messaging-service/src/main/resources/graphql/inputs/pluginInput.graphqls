@@ -1,6 +1,6 @@
 input PluginInput {
     """
-    Unique Idenfitier for the plugin chosen
+    Unique Identifier for the plugin chosen
     """
     pluginId: ID
     """

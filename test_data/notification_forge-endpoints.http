@@ -12,6 +12,41 @@ Content-Type: application/json
 client.global.set("token", response.body.accessToken)
 %}
 
+###
+// @no-log
+POST http://{{host}}:{{port}}/v1/messages/112233
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "recipients": {
+    "to": [
+      "hello@gmail.com"
+    ]
+  },
+  "subject": "Hello World",
+  "parameters": {
+    "some": "stuff",
+    "foo": [
+      "bar",
+      "baz"
+    ]
+  }
+}
+
+### LDAP authentication
+//@no-log
+POST http://{{host}}:{{port}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "dev1",
+  "password": "secret"
+}
+
+> {%
+client.global.set("token", response.body.accessToken)
+%}
 
 ###
 //@no-log
@@ -31,7 +66,24 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "query": "query getImages($filter: ImageSearchFilterInput, $paginationInput: PaginationInput) { getImages(searchFilter: $filter, paginationInput: $paginationInput) { totalCount edges { cursor node { id fileName } } pageInfo { endCursor hasNextPage } } }",
+  "query": "mutation createTemplate($input: CreateTemplateInput!) { createTemplate(input: $input) { name uuid alertType appCode createdDate } }",
+  "variables": {
+    "input": {
+      "name": "new template 1",
+      "alertType": "EMAIL",
+      "appCode": "FABK"
+    }
+  }
+}
+
+###
+//@no-log
+POST http://{{host}}:{{port}}/graphql
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query getImages($filter: ImageSearchFilterInput, $pageRequestInput: PaginationInput) { getImages(searchFilter: $filter, pageRequestInput: $pageRequestInput) { totalCount edges { cursor node { id fileName } } pageInfo { endCursor hasNextPage } } }",
   "variables": {
     "filter": {
       "fileNamePortion": "headshot",
@@ -39,9 +91,9 @@ Authorization: Bearer {{token}}
         "FABK"
       ]
     },
-    "paginationInput": {
+    "pageRequestInput": {
       "pageNumber": 0,
-      "rowPerPage": 10,
+      "rowPerPage": 1,
       "sortDirection": "ASC",
       "sortField": "fileName"
     }

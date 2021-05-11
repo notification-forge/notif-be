@@ -24,7 +24,7 @@ import kotlin.jvm.Throws
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @Profile("dev | test | integration-test")
-open class DevSecurityConfigurations(
+class DevSecurityConfigurations(
     private val jwtTokenProvider: JwtTokenProvider,
     private val unauthorizedHandler: JwtAuthenticationEntryPoint,
     private val apiClientRepository: ApiClientRepository,

@@ -5,10 +5,10 @@ import graphql.relay.DefaultConnection
 import graphql.relay.Edge
 import graphql.relay.PageInfo
 
-class GraphQLConnection<T>(private val totalCount: Long, edges: List<Edge<T>>, pageInfo: PageInfo) :
+class GraphQLConnection<T>(private val totalCount: Int, edges: List<Edge<T>>, pageInfo: PageInfo) :
     DefaultConnection<T>(edges, pageInfo), Connection<T> {
 
-    override fun totalCount(): Long {
+    override fun totalCount(): Int {
         return totalCount
     }
 }

@@ -162,7 +162,7 @@ class OnboardingServiceTest {
     fun itShouldReturnUserWhenOnboardingUser() {
         val onboardUserInput = mockOnboardUserInput()
 
-        every { tenantRepository.findByAppCode(onboardUserInput.appCode) } returns mockTenant()
+        every { tenantRepository.findTenant(onboardUserInput.appCode) } returns mockTenant()
         every { userRepository.findById(onboardUserInput.username) } returns Optional.of(mockUser())
         every { userRepository.save(mockUser()) } returns mockUser()
         every { onboardingRepository.save(any()) } returns mockOnboarding()
@@ -177,7 +177,7 @@ class OnboardingServiceTest {
     @Test
     fun itShouldThrowExceptionWhenOnboardingUserOntoAnAppThatDoesNotExist() {
         val onboardUserInput = mockOnboardUserInput()
-        every { tenantRepository.findByAppCode(onboardUserInput.appCode) } returns null
+        every { tenantRepository.findTenant(onboardUserInput.appCode) } returns null
         every { userRepository.findById(onboardUserInput.username) } returns Optional.of(mockUser())
         assertThrows<TenantDoesNotExistException> { onboardingService.onboardUser(onboardUserInput) }
     }
@@ -188,7 +188,7 @@ class OnboardingServiceTest {
 
         every { userRepository.findById(updateAppInput.primaryOwnerId) } returns Optional.empty()
         every { userRepository.findById(updateAppInput.secondaryOwnerId) } returns Optional.empty()
-        every { tenantRepository.findByAppCode(updateAppInput.appCode) } returns mockTenant()
+        every { tenantRepository.findTenant(updateAppInput.appCode) } returns mockTenant()
         every { userRepository.save(any()) } returns mockUser()
         every { tenantRepository.save(any()) } returns mockTenant()
 
@@ -203,7 +203,7 @@ class OnboardingServiceTest {
         val mockTenant = mockTenant()
         mockTenant.status =  Tenant.AppStatus.ACTIVE
 
-        every { tenantRepository.findByAppCode(approvalAppInput.appCode) } returns mockTenant()
+        every { tenantRepository.findTenant(approvalAppInput.appCode) } returns mockTenant()
         every { userRepository.save(any()) } returns mockUser()
         every { tenantRepository.save(any()) } returns mockTenant
         every { userRepository.existsById(any()) } returns true
@@ -222,7 +222,7 @@ class OnboardingServiceTest {
         mockTenant.status =  Tenant.AppStatus.REJECTED
         mockTenant.rejectedReason = approvalAppInput.rejectedReason
 
-        every { tenantRepository.findByAppCode(approvalAppInput.appCode) } returns mockTenant()
+        every { tenantRepository.findTenant(approvalAppInput.appCode) } returns mockTenant()
         every { userRepository.save(any()) } returns mockUser()
         every { tenantRepository.save(any()) } returns mockTenant
 
@@ -235,7 +235,7 @@ class OnboardingServiceTest {
 
     @Test
     fun itShouldReturnTenantByAppCode() {
-        every { tenantRepository.findByAppCode(mockAppCode) } returns mockTenant()
+        every { tenantRepository.findTenant(mockAppCode) } returns mockTenant()
         val tenant = onboardingService.getTenantByAppCode(mockAppCode)
         assert(tenant.appCode == mockAppCode)
     }
@@ -265,7 +265,7 @@ class OnboardingServiceTest {
     @Test
     fun itShouldReturnAllAppsOwnedByUser(){
         every { onboardingRepository.findAllByUsername(mockPrimaryOwnerId) } returns listOf(mockOnboarding())
-        every { tenantRepository.findByAppCode(mockAppCode) } returns mockTenant()
+        every { tenantRepository.findTenant(mockAppCode) } returns mockTenant()
         val tenants = onboardingService.getAppsOwnsByUser(mockPrimaryOwnerId)
         assert(tenants.isNotEmpty())
         tenants.map{

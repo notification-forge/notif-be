@@ -1,6 +1,11 @@
 version: "3.8"
 
 services:
+  mail:
+    image: bytemark/smtp
+    restart: always
+    ports:
+      - 5025:25
   mariadb:
     image: mariadb:10.5.9
     restart: always
@@ -21,9 +26,9 @@ services:
     ports:
     - 8080:8080
   ldap:
-    image: osixia/openldap:1.2.3
+    image: osixia/openldap:latest
     volumes:
-      - ./ldap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+      - ./ldap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/ldap.ldif
     environment:
       - LDAP_ORGANISATION=alphamail
       - LDAP_DOMAIN=alphamail.com
