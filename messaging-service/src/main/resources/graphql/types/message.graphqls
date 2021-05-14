@@ -1,13 +1,43 @@
 type Message {
     id: ID
+    """
+    Template related to Message
+    """
     templateId: Int
+    """
+    Template Version related to Message
+    """
     templateVersionId: Int
+    """
+    App code related to Message
+    """
     appCode: String
+    """
+    Content to fit into Template Body
+    """
     content: String
+    """
+    Settings to be set within the template.
+    Note: EMAILS and TEAMS_MESSAGE have different settings
+    refer to template version entity for more info
+    """
     settings: String
+    """
+    Setting template Type to choose between email or teams messaging
+    """
     messageType: MessageType
+    """
+    Status of the message
+    Enum for PENDING / SENT / FAILED
+    """
     messageStatus: MessageStatus
+    """
+    Reason for FAILED
+    """
     reason: String,
+    """
+    Number of times triggered
+    """
     timesTriggered: Int
     """
     Audit Created Date

@@ -84,7 +84,7 @@ class EmailReviewAspect(
     }
 
     private fun convertToMessageDetails(message: Message, templateVersion: TemplateVersion): MessageDetails {
-        val messageContent: Map<String, Any> = objectMapper.readValue(message.content)
+        val messageContent = objectMapper.readValue(message.content) as Map<String, Any>
         return MessageDetails(
             message.id!!,
             templateVersion.template!!.name!!,

@@ -9,16 +9,23 @@ import com.forge.messageservice.common.engines.TemplatingEngine
 import com.forge.messageservice.entities.MailSettings
 import com.forge.messageservice.entities.Message
 import com.forge.messageservice.entities.TeamsSettings
+import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.responses.TeamsWebhookResponse
+import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.exceptions.InvalidTemplateSettingFormatException
+import com.forge.messageservice.exceptions.MessageDoesNotExistException
 import com.forge.messageservice.graphql.models.inputs.MessageInput
 import com.forge.messageservice.repositories.MessageRepository
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
 import java.util.*
@@ -37,12 +44,36 @@ open class MessageService(
     @Value("\${app.message.retry.limit}") private val retryLimit: Int
 ) {
 
+    @Transactional(readOnly = true)
     fun getAllPendingMessages(): List<Message> {
         return messageRepository.findByMessageStatus(PENDING)
     }
 
-    fun saveMessage(messageInput: MessageInput): Message {
+    @Transactional(readOnly = true)
+    fun getMessage(messageId: Long): Message {
+        val message = messageRepository.findById(messageId)
+            ?: throw MessageDoesNotExistException("Unable to find message $messageId")
+        return message.get()
+    }
 
+    @Transactional(readOnly = true)
+    fun getAllMessagesWithTemplateNameAndInAppCode(
+        appCode: String,
+        name: String,
+        pageable: Pageable,
+        sortField: String
+    ): Page<Message> {
+        try {
+            val template = templateService.getTemplateByTemplateNameAndAppCode(name, appCode)
+            return messageRepository.findWithNamesLike(appCode, template.id!!, pageable)
+        } catch (e: Exception) {
+            throw GraphQLQueryException("sortField: $sortField is invalid")
+        }
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    fun saveMessage(messageInput: MessageInput): Message {
         val template = templateService.getTemplateByTemplateUUID(UUID.fromString(messageInput.templateUUID))
         val templateVersion = templateVersionService.findTemplateVersionsByTemplateHashAndTemplateId(
             messageInput.templateHash,

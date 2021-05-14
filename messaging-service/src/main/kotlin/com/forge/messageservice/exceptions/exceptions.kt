@@ -1,8 +1,6 @@
 package com.forge.messageservice.exceptions
 
 
-import graphql.GraphQLException
-
 class TemplateExistedException(message: String) : BusinessException(message)
 class TemplateDoesNotExistException(message: String) : BusinessException(message)
 class TemplateVersionExistedException(message: String) : BusinessException(message)
@@ -24,3 +22,5 @@ class FieldValidationException(message: String) : BusinessException(message)
 open class BusinessException(msg: String) : GraphQLException(msg)
 class TenantAlreadyExistException(msg: String) : BusinessException(msg)
 class TenantNotFoundException(msg: String) : BusinessException(msg)
+
+class MessageDoesNotExistException(message: String) : BusinessException(message)

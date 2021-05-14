@@ -27,9 +27,12 @@ class TemplateResolver(
     }
 
     fun templates(name: String, appCodes: List<String>, pageRequestInput: PaginationInput): Connection<Template> {
+        if (pageRequestInput.sortField.isNullOrEmpty()) {
+            pageRequestInput.sortField = "name"
+        }
         return gqlConnectionFor({
             templateService.getAllTemplatesWithTemplateNameAndInAppCodes(
-                appCodes, name, pageRequestInput.asPageRequest()
+                appCodes, name, pageRequestInput.asPageRequest(), pageRequestInput.sortField!!
             )
         }) {
             DefaultEdge(it, CursorResolver.from(it.id!!))
