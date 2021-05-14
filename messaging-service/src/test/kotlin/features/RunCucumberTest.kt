@@ -9,7 +9,8 @@ import org.junit.runner.RunWith
     strict = true,
     glue = ["features"],
     stepNotifications = true,
-    features = ["src/test/resources"],
+    features = ["src/test/resources/features"],
     plugin = ["pretty", "html:target/cucumber-reports"]
 )
-class RunCucumberTest
+class
+RunCucumberTest

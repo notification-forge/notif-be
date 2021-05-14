@@ -16,6 +16,8 @@ import com.forge.messageservice.repositories.OnboardingRepository
 import com.forge.messageservice.repositories.TenantRepository
 import com.forge.messageservice.repositories.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -25,6 +27,7 @@ class OnboardingService(
     private val onboardingRepository: OnboardingRepository
 ) {
 
+    @Transactional(propagation = Propagation.REQUIRED)
     fun onboardApp(appInput: CreateAppInput): Tenant {
         ensureAppDoesNotExist(appInput.appCode)
 
@@ -50,6 +53,7 @@ class OnboardingService(
         })
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     fun onboardUser(onboardUserInput: OnboardUserInput): User {
         val user = createOrGetCurrentUser(User().apply {
             username = onboardUserInput.username
@@ -73,23 +77,29 @@ class OnboardingService(
         }
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRED)
     fun updateApp(appInput: UpdateAppInput): Tenant {
         val tenant = getTenantByAppCode(appInput.appCode)
         update(tenant, appInput)
         return tenantRepository.save(tenant)
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRED)
     fun approveOrRejectApp(appInput: ApprovalAppInput): Tenant {
         val tenant = getTenantByAppCode(appInput.appCode)
         approveOrReject(tenant, appInput)
         return tenantRepository.save(tenant)
     }
 
+    @Transactional(readOnly = true)
     fun getTenantByAppCode(appCode: String): Tenant {
         return tenantRepository.findTenant(appCode)
             ?: throw TenantDoesNotExistException("App with app code $appCode does not exist")
     }
 
+    @Transactional(readOnly = true)
     fun getUserByUsername(username: String): User {
         val user = userRepository.findById(username)
         if (user.isEmpty) {
@@ -98,14 +108,17 @@ class OnboardingService(
         return user.get()
     }
 
+    @Transactional(readOnly = true)
     fun getOnboardingsByAppCode(appCode: String): List<Onboarding> {
         return onboardingRepository.findAllByAppCode(appCode)
     }
 
+    @Transactional(readOnly = true)
     fun getOnboardingsByUsername(username: String): List<Onboarding> {
         return onboardingRepository.findAllByUsername(username)
     }
 
+    @Transactional(readOnly = true)
     fun getAppsOwnsByUser(username: String): List<Tenant> {
         return getOnboardingsByUsername(username).map {
             getTenantByAppCode(it.appCode!!)

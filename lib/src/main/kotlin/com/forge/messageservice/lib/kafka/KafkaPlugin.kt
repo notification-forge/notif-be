@@ -1,6 +1,9 @@
 package com.forge.messageservice.lib.kafka
 
 import com.alphamail.plugin.api.AlphamailPlugin
+import com.alphamail.plugin.api.MessageDetails
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import mu.KotlinLogging
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
@@ -16,7 +19,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback
  * This class acts as a wrapper and delegates the actual message sending to [KafkaMessageProducer] to that
  * unit test can be written for [KafkaMessageProducer]
  */
-class KafkaPlugin(cfg: KafkaConfiguration) : AlphamailPlugin {
+class KafkaPlugin(cfg: KafkaConfiguration): AlphamailPlugin {
 
     private val logger = KotlinLogging.logger {}
 
@@ -46,9 +49,11 @@ class KafkaPlugin(cfg: KafkaConfiguration) : AlphamailPlugin {
         msgProducer = KafkaMessageProducer(cfg, kafkaTemplate, handler)
     }
 
-    override fun execute(): Any? {
+    override fun execute(messageDetails: MessageDetails): Any? {
         // TODO: Update `execute()` signature to pass the message to be sent
-        msgProducer.send("")
+        msgProducer.send("Message ${messageDetails.id} of type ${messageDetails.messageType}" +
+                " with Template ${messageDetails.templateName} and Template Version ${messageDetails.templateVersionHash}" +
+                " have a status of ${messageDetails.messageStatus}")
         return null
     }
 

@@ -9,10 +9,9 @@ class Loader {
 
     fun load(uri: String): Any? {
         val child = URLClassLoader(arrayOf(URL(uri)), this.javaClass.classLoader)
-        val classToLoad = Class.forName("com.forge.messageservice.lib.kafka.KafkaConfiguration", true, child)
+        val classToLoad = Class.forName("com.forge.messageservice.lib.kafka.KafkaPluginConfiguration", true, child)
         val kClass = Reflection.createKotlinClass(classToLoad)
         val instance = kClass.createInstance("bal") as KafkaConfiguration
-        println(instance.kafkaServer)
 //        println(instance.beforeSend())
         return instance
     }

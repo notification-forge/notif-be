@@ -1,8 +1,10 @@
 package com.forge.messageservice.controllers.v1
 
+import com.forge.messageservice.controllers.v1.api.request.MessageDispatchRequest
 import com.forge.messageservice.services.MessageDispatcherService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * This controller handles incoming messages from clients. Messages received by this controller
@@ -28,7 +30,8 @@ class MessageDispatcherController(
     @PostMapping("/{templateVersionId}")
     fun sendAsync(
         @PathVariable templateVersionId: String,
-        @RequestBody messageParameter: Map<String, Any>
+        @RequestBody messageDispatchRequest: MessageDispatchRequest,
+        @RequestPart("attachments", required = false) attachments: Array<MultipartFile>?
     ): ResponseEntity<String> {
         messageDispatcher.enqueueMessage()
         return ResponseEntity.ok("ok")

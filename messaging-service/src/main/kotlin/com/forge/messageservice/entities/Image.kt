@@ -1,6 +1,5 @@
 package com.forge.messageservice.entities
 
-
 import Auditable
 import com.forge.messageservice.common.extensions.toHexString
 import java.security.MessageDigest

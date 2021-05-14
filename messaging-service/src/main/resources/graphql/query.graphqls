@@ -11,20 +11,17 @@ type Query {
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
     templates(name: String, appCodes: [String], pageRequestInput: PaginationInput): TemplateConnection @connection(for: "Template")
-
     """
     Query on an individual template version
     id -> Template Version's id
     """
     templateVersion(id: ID): TemplateVersion
-
     """
     Query on templates with pagination
     searchFilter -> The search criteria
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
     images(searchFilter: ImageSearchFilterInput, pageRequestInput: PaginationInput): ImageConnection @connection(for: "Image")
-
     """
     Query on an individual app
     id -> App's app code
@@ -40,4 +37,16 @@ type Query {
     appCode -> App code onboarded
     """
     plugins(appCode: String): [Plugin]
+    """
+    Query on an individual message
+    id -> Message's id
+    """
+    message(id: ID): Message
+    """
+    Query on messages with pagination
+    name -> search for template name
+    appCode -> filter by the app code user wish to view
+    paginationInput -> pagination inputs such as current page, page limit and sort
+    """
+    messages(name: String, appCode: String, pageRequestInput: PaginationInput): MessageConnection @connection(for: "Message")
 }

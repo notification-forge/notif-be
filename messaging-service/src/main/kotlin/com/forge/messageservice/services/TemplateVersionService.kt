@@ -27,14 +27,17 @@ class TemplateVersionService(
     private val objectMapper: ObjectMapper
 ) {
 
+    @Transactional(readOnly = true)
     fun getAllTemplateVersionsByTemplateId(templateId: Long): List<TemplateVersion> {
         return templateVersionRepository.findAllByTemplateId(templateId)
     }
 
+    @Transactional(readOnly = true)
     fun findTemplateVersionsByTemplateHashAndTemplateId(templateHash: Int, templateId: Long): TemplateVersion? {
         return templateVersionRepository.findByTemplateHashAndTemplateId(templateHash, templateId)
     }
 
+    @Transactional(readOnly = true)
     fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
         val optionalTemplateVersion = templateVersionRepository.findById(templateVersionId)
 
@@ -44,6 +47,7 @@ class TemplateVersionService(
         return optionalTemplateVersion.get()
     }
 
+    @Transactional(readOnly = true)
     private fun findTemplateVersionByTemplateIdAndStatus(
         templateVersionId: Long,
         status: TemplateStatus
@@ -51,6 +55,7 @@ class TemplateVersionService(
         return templateVersionRepository.findByTemplateIdAndStatus(templateVersionId, status)
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     fun createTemplateVersion(templateVersionInput: CreateTemplateVersionInput): TemplateVersion {
         val templateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
 

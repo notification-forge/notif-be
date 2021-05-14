@@ -22,3 +22,5 @@ class FieldValidationException(message: String) : BusinessException(message)
 open class BusinessException(msg: String) : GraphQLException(msg)
 class TenantAlreadyExistException(msg: String) : BusinessException(msg)
 class TenantNotFoundException(msg: String) : BusinessException(msg)
+
+class MessageDoesNotExistException(message: String) : BusinessException(message)

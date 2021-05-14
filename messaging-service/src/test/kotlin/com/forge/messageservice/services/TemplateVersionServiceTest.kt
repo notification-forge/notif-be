@@ -7,7 +7,10 @@ import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.PUBLISHED
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
-import com.forge.messageservice.graphql.models.inputs.*
+import com.forge.messageservice.graphql.models.inputs.ConfigurationInput
+import com.forge.messageservice.graphql.models.inputs.CreateTemplateVersionInput
+import com.forge.messageservice.graphql.models.inputs.PluginInput
+import com.forge.messageservice.graphql.models.inputs.UpdateTemplateVersionInput
 import com.forge.messageservice.repositories.TemplateRepository
 import com.forge.messageservice.repositories.TemplateVersionRepository
 import io.mockk.every
@@ -110,19 +113,17 @@ class TemplateVersionServiceTest {
         }
     }
 
-    private fun mockPluginsInput(): PluginsInput {
-        return PluginsInput(
-            listOf(
-                PluginInput(
-                    1, listOf(
-                        ConfigurationInput(
-                            "username",
-                            "Tommy"
-                        ),
-                        ConfigurationInput(
-                            "password",
-                            "abcde12345"
-                        )
+    private fun mockPluginsInput(): List<PluginInput> {
+        return listOf(
+            PluginInput(
+                1, listOf(
+                    ConfigurationInput(
+                        "username",
+                        "Tommy"
+                    ),
+                    ConfigurationInput(
+                        "password",
+                        "abcde12345"
                     )
                 )
             )
