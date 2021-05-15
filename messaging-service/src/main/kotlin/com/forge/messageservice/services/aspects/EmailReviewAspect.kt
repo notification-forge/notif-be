@@ -1,13 +1,10 @@
 package com.forge.messageservice.services.aspects
 
-import com.alphamail.plugin.api.AlphamailPlugin
 import com.alphamail.plugin.api.MessageDetails
-import com.alphamail.plugin.api.PluginConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.forge.messageservice.common.engines.TemplatingEngine
 import com.forge.messageservice.entities.Message
-import com.forge.messageservice.entities.TemplatePlugin
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.services.PluginService
 import com.forge.messageservice.services.TemplatePluginService
@@ -44,7 +41,7 @@ class EmailReviewAspect(
         templatePlugins.map { templatePlugin ->
             val plugin = pluginService.loadPlugin(templatePlugin.plugin!!, templatePlugin.configuration!!)
 
-            if (plugin.runsBefore()){
+            if (plugin.runsBefore()) {
                 try {
                     logger.info("Processing ${plugin.javaClass}")
                     plugin.execute(convertToMessageDetails(message, templateVersion))

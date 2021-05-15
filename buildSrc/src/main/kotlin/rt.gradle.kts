@@ -17,6 +17,7 @@ dependencies {
 
     implementation("org.springframework.kafka:spring-kafka:2.7.0")
     implementation("org.springframework.kafka:spring-kafka-test:2.7.0")
+    implementation("commons-codec:commons-codec:1.15")
 
     testImplementation("io.mockk:mockk:${mockkVersion}")
     testImplementation(kotlin("test-junit5"))

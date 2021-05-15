@@ -23,18 +23,8 @@ class MessageDispatcherService(
     /**
      * Queues a message in kafka to be consumed by worker dispatchers
      */
-    fun enqueueMessage() {
-        kafkaTemplate.send(
-            "internal-message-queue", NotificationTask(
-                channel = Template.AlertType.EMAIL,
-                message = NotificationMessage(
-                    recipients = Recipients(
-                        to = listOf("")
-                    ),
-                    messageBody = "Hello World"
-                )
-            )
-        )
+    fun enqueueMessage(task: NotificationTask) {
+        kafkaTemplate.send("internal-message-queue", task)
     }
 
     /**

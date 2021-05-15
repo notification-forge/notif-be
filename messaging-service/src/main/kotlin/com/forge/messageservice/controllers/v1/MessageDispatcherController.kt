@@ -1,6 +1,10 @@
 package com.forge.messageservice.controllers.v1
 
+import com.forge.messageservice.common.messaging.NotificationMessage
+import com.forge.messageservice.common.messaging.NotificationTask
+import com.forge.messageservice.common.messaging.Recipients
 import com.forge.messageservice.controllers.v1.api.request.MessageDispatchRequest
+import com.forge.messageservice.entities.Template
 import com.forge.messageservice.services.MessageDispatcherService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -33,8 +37,22 @@ class MessageDispatcherController(
         @RequestBody messageDispatchRequest: MessageDispatchRequest,
         @RequestPart("attachments", required = false) attachments: Array<MultipartFile>?
     ): ResponseEntity<String> {
-        messageDispatcher.enqueueMessage()
+
+
+
+        messageDispatcher.enqueueMessage(
+            NotificationTask(
+                channel = Template.AlertType.EMAIL,
+                message = NotificationMessage(
+                    recipients = Recipients(
+                        to = listOf("")
+                    ),
+                    messageBody = "Hello World"
+                )
+            )
+        )
         return ResponseEntity.ok("ok")
     }
+
 
 }

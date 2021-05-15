@@ -1,18 +1,13 @@
 package com.forge.messageservice.entities
 
 import Auditable
-import org.hibernate.internal.util.collections.ArrayHelper.hash
-import java.util.*
-import java.util.Objects.hash
+import org.apache.commons.codec.digest.DigestUtils
 import javax.persistence.*
 
 @Entity
 @Table(name = "template_versions")
 class TemplateVersion : Auditable() {
 
-    /**
-     * A user defined id of the template version. Alphanumeric, dashes and dots only
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_version_id")
@@ -47,6 +42,10 @@ class TemplateVersion : Auditable() {
      */
     @Column(name = "settings", columnDefinition = "MEDIUMTEXT", nullable = false)
     var settings: String = ""
+        set(value) {
+            field = value
+            isDirty = true
+        }
 
     /**
      * Since the field `version` can be used for optimistic locking and to identify this entity's version, we use
@@ -55,13 +54,22 @@ class TemplateVersion : Auditable() {
      * `TemplateHash` is the SHA256 of the template body.
      */
     @Column(name = "template_hash", nullable = false)
-        var templateHash: Int? = null
+    var templateHash: String? = null
+        private set
+        get() {
+            generateHashWhenHashIsEmpty()
+            return field
+        }
 
     /**
      * The body of the template. Can
      */
     @Column(name = "body", columnDefinition = "MEDIUMTEXT", nullable = false)
     var body: String = ""
+        set(value) {
+            field = value
+            isDirty = true
+        }
 
     @Column(name = "version")
     var version: Long? = 0
@@ -74,12 +82,18 @@ class TemplateVersion : Auditable() {
     @Column(name = "template_status", length = 24, nullable = false)
     var status: TemplateStatus = TemplateStatus.DRAFT
 
-    fun templateHash(): Int {
-        return Objects.hash(settings, body)
-    }
-
     @ManyToOne
     @JoinColumn(name = "template_id", insertable = false, updatable = false)
-    val template: Template? = null
+    var template: Template? = null
 
+    @Transient
+    var isDirty: Boolean = false
+
+    @PrePersist
+    @PreUpdate
+    fun generateHashWhenHashIsEmpty(){
+        if (isDirty) {
+            this.templateHash = DigestUtils.sha256Hex(settings + body)
+        }
+    }
 }

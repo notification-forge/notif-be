@@ -48,7 +48,7 @@ class TemplateVersionService(
     }
 
     @Transactional(readOnly = true)
-    private fun findTemplateVersionByTemplateIdAndStatus(
+    fun findTemplateVersionByTemplateIdAndStatus(
         templateVersionId: Long,
         status: TemplateStatus
     ): TemplateVersion? {
@@ -64,7 +64,6 @@ class TemplateVersionService(
         val newTemplateVersion = TemplateVersion().apply {
             templateId = templateVersionInput.templateId
             status = DRAFT
-            templateHash = 0
             settings = getTemplateSetting(template)
         }
 
@@ -99,7 +98,6 @@ class TemplateVersionService(
                 templateVersionRepository.findCurrentVersionNumberByTemplateId(newTemplateVersion.templateId!!) + 1
             status = DRAFT
         }
-        newTemplateVersion.templateHash = newTemplateVersion.templateHash()
 
         val savedTemplateVersion = saveTemplateVersion(newTemplateVersion)
 
@@ -112,7 +110,6 @@ class TemplateVersionService(
     }
 
     private fun saveTemplateVersion(templateVersion: TemplateVersion): TemplateVersion {
-//        ensureTemplateHashDoesNotExist(templateVersion)
         return templateVersionRepository.save(templateVersion)
     }
 
@@ -127,7 +124,6 @@ class TemplateVersionService(
             version = templateVersionRepository.findCurrentVersionNumberByTemplateId(templateVersion.templateId!!) + 1
             status = templateVersionInput.status
         }
-        templateVersion.templateHash = templateVersion.templateHash()
 
         val savedTemplateVersion = saveTemplateVersion(templateVersion)
 
