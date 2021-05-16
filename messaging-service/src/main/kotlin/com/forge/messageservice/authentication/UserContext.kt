@@ -21,7 +21,11 @@ object UserContext {
         return JwtUser("SYSTEM", "SYSTEM", Date.from(Instant.now()), listOf())
     }
 
-    fun loggedInUsername() = loggedInUser().username
+    fun loggedInUsername(): String = try {
+        loggedInUser().username
+    } catch (e: Exception) {
+        apiClient().applicationCode
+    }
 
     fun apiClient(): JwtApiClient {
         val auth = SecurityContextHolder.getContext().authentication
