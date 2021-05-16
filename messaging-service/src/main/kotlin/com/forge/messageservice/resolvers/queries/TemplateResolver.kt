@@ -23,7 +23,7 @@ class TemplateResolver(
     }
 
     fun templateVersion(templateVersionId: Long): TemplateVersion {
-        return templateVersionService.getTemplateVersionById(templateVersionId)
+        return templateVersionService.getTemplateVersion(templateVersionId)
     }
 
     fun templates(name: String, appCodes: List<String>, pageRequestInput: PaginationInput): Connection<Template> {

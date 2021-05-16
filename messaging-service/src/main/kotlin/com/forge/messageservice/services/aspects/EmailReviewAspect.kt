@@ -1,13 +1,10 @@
 package com.forge.messageservice.services.aspects
 
-import com.alphamail.plugin.api.AlphamailPlugin
 import com.alphamail.plugin.api.MessageDetails
-import com.alphamail.plugin.api.PluginConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.forge.messageservice.common.engines.TemplatingEngine
 import com.forge.messageservice.entities.Message
-import com.forge.messageservice.entities.TemplatePlugin
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.services.PluginService
 import com.forge.messageservice.services.TemplatePluginService
@@ -38,13 +35,13 @@ class EmailReviewAspect(
         val message = joinPoint.args[0] as Message
         logger.info("(START) Pre Processing Actions for ${message.id}")
 
-        val templateVersion = templateVersionService.getTemplateVersionById(message.templateVersionId!!)
+        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
         val templatePlugins = templatePluginService.getTemplatePluginsByTemplateVersionId(templateVersion.id!!)
 
         templatePlugins.map { templatePlugin ->
             val plugin = pluginService.loadPlugin(templatePlugin.plugin!!, templatePlugin.configuration!!)
 
-            if (plugin.runsBefore()){
+            if (plugin.runsBefore()) {
                 try {
                     logger.info("Processing ${plugin.javaClass}")
                     plugin.execute(convertToMessageDetails(message, templateVersion))
@@ -63,7 +60,7 @@ class EmailReviewAspect(
         val message = retVal as Message
         logger.info("(START) Post Processing Actions for ${message.id}")
 
-        val templateVersion = templateVersionService.getTemplateVersionById(message.templateVersionId!!)
+        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
         val templatePlugins = templatePluginService.getTemplatePluginsByTemplateVersionId(templateVersion.id!!)
 
         templatePlugins.map { templatePlugin ->
@@ -88,7 +85,7 @@ class EmailReviewAspect(
         return MessageDetails(
             message.id!!,
             templateVersion.template!!.name!!,
-            templateVersion.templateHash!!,
+            templateVersion.templateDigest!!,
             message.appCode!!,
             templatingEngine.parseTemplate(templateVersion.body, messageContent),
             message.messageType,

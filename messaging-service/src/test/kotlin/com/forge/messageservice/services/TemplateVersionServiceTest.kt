@@ -70,7 +70,6 @@ class TemplateVersionServiceTest {
                     "\"subject\": \"Bill Alert for the month of {{ month }} {{ year }}\", " +
                     "\"sender\": [\"{{ app.emails.defaultSender }}\"], " +
                     " \"format\": \"html | rich text\" }"
-            templateHash = 1234567
             body = "Hi, Bill Alert for the month of {{ month }} {{ year }}"
             version = 1L
             status = PUBLISHED
@@ -88,7 +87,6 @@ class TemplateVersionServiceTest {
                     "\"subject\": \"Bill Alert for the month of {{ month }} {{ year }}\", " +
                     "\"sender\": [\"{{ app.emails.defaultSender }}\"], " +
                     " \"format\": \"html | rich text\" }"
-            templateHash = 2345678
             body = "Hi, Bill Alert for the month of {{ month }} {{ year }}"
             version = 0L
             status = DRAFT
@@ -106,7 +104,6 @@ class TemplateVersionServiceTest {
                     "\"subject\": \"Bill Alert for the month of {{ month }} {{ year }}\", " +
                     "\"sender\": [\"{{ app.emails.defaultSender }}\"], " +
                     " \"format\": \"html | rich text\" }"
-            templateHash = 2345678
             body = "Hi, Bill Alert for the month of {{ month }} {{ year }}"
             version = 0L
             status = DRAFT
@@ -147,7 +144,7 @@ class TemplateVersionServiceTest {
 
         every { templateVersionRepository.findAllByTemplateId(templateId) } returns mockListOfTemplateVersions()
 
-        val templateVersions = templateVersionService.getAllTemplateVersionsByTemplateId(templateId)
+        val templateVersions = templateVersionService.getAllTemplateVersionsOf(templateId)
 
         assert(templateVersions.isNotEmpty())
         templateVersions.forEach { templateVersion ->
@@ -165,7 +162,7 @@ class TemplateVersionServiceTest {
         every { templateVersionRepository.findAllByTemplateId(templateIdThatDoesNotExist) } returns listOf()
 
         val blankTemplateVersions =
-            templateVersionService.getAllTemplateVersionsByTemplateId(templateIdThatDoesNotExist)
+            templateVersionService.getAllTemplateVersionsOf(templateIdThatDoesNotExist)
 
         assert(blankTemplateVersions.isNullOrEmpty())
     }
@@ -178,7 +175,7 @@ class TemplateVersionServiceTest {
             mockTemplateVersionOnePublished()
         )
 
-        val templateVersion = templateVersionService.getTemplateVersionById(templateVersionIdExist)
+        val templateVersion = templateVersionService.getTemplateVersion(templateVersionIdExist)
 
         assert(templateVersion.id == templateVersionIdExist)
     }
@@ -190,7 +187,7 @@ class TemplateVersionServiceTest {
         every { templateVersionRepository.findById(templateVersionIdDoesNotExist) } returns Optional.empty()
 
         assertThrows<TemplateVersionDoesNotExistException> {
-            templateVersionService.getTemplateVersionById(
+            templateVersionService.getTemplateVersion(
                 templateVersionIdDoesNotExist
             )
         }
@@ -205,7 +202,6 @@ class TemplateVersionServiceTest {
         val mockTemplateVersion = TemplateVersion().apply {
             templateId = templateIdExist
             status = DRAFT
-            templateHash = 0
         }
 
         every {
@@ -222,7 +218,7 @@ class TemplateVersionServiceTest {
 
         assert(templateVersion.id == templateIdExist)
         assert(templateVersion.status == DRAFT)
-        assert(templateVersion.templateHash == 0)
+
     }
 
     @Test
@@ -265,7 +261,6 @@ class TemplateVersionServiceTest {
             version = 3L
             status = PUBLISHED
         }
-        mockPublishedTemplateVersion.templateHash = mockPublishedTemplateVersion.templateHash()
 
         every { templateVersionRepository.findById(templateVersionId) } returns Optional.of(mockTemplateVersionOneDraft())
         every { templateVersionRepository.save(any()) } returns mockPublishedTemplateVersion
@@ -278,9 +273,9 @@ class TemplateVersionServiceTest {
         } returns mockTemplatePlugins()
 
         every {
-            templateVersionRepository.existsByTemplateIdAndTemplateHash(
+            templateVersionRepository.existsByTemplateIdAndTemplateDigest(
                 1L,
-                mockPublishedTemplateVersion.templateHash!!
+                mockPublishedTemplateVersion.templateDigest!!
             )
         } returns false
 
@@ -314,57 +309,5 @@ class TemplateVersionServiceTest {
             )
         }
     }
-
-
-    //TODO: Template Hash giving some issue now. Will fix when there's time.
-//    @Test
-//    fun itShouldThrowsAnExceptionWhenUpdatingTemplateVersionWhereBodyAndSettingAlreadyExist() {
-//        val templateVersionId = 1L
-//        val templateVersionName = "New Template Version Name"
-//        val templateVersionSettings = "{ \"to\": [\"receipient@company.com\"] }"
-//        val templateVersionBody = "Hi {{ username }}, this email is to inform you about your bill alert."
-//
-//        val updatePublishTemplateVersionInput = UpdateTemplateVersionInput(
-//            templateVersionId,
-//            templateVersionName,
-//            templateVersionSettings,
-//            templateVersionBody,
-//            PUBLISHED,
-//            mockPluginsInput()
-//        )
-//
-//        val mockPublishedTemplateVersion = TemplateVersion().apply {
-//            id = templateVersionId
-//            name = templateVersionName
-//            settings = templateVersionSettings
-//            body = templateVersionBody
-//            version = 3L
-//            status = PUBLISHED
-//        }
-//        mockPublishedTemplateVersion.templateHash = mockPublishedTemplateVersion.templateHash()
-//
-//        every { templateVersionRepository.findById(templateVersionId) } returns Optional.of(mockTemplateVersionOneDraft())
-//        every { templateVersionRepository.save(any()) } returns mockPublishedTemplateVersion
-//        every { templateVersionRepository.findCurrentVersionNumberByTemplateId(1L) } returns 3L
-//        every {
-//            templatePluginService.createTemplatePlugins(
-//                templateVersionId,
-//                mockPluginsInput()
-//            )
-//        } returns mockTemplatePlugins()
-//
-//        every {
-//            templateVersionRepository.existsByTemplateIdAndTemplateHash(
-//                1L,
-//                mockPublishedTemplateVersion.templateHash!!
-//            )
-//        } returns true
-//
-//        assertThrows<TemplateHashExistedException> {
-//            templateVersionService.updateTemplateVersion(
-//                updatePublishTemplateVersionInput
-//            )
-//        }
-//    }
 
 }

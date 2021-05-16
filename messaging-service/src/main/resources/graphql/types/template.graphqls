@@ -61,11 +61,11 @@ type TemplateVersion {
   """
   name: String
   """
-  Hash of the template version
+  Digest of the template version
   Ensuring that each template version is different
-  Hashing -> TemplateId, body, settings, status
+  Digest of -> body, settings
   """
-  templateHash: String
+  templateDigest: String
   """
   Template body
   EMAILS -> HTML format

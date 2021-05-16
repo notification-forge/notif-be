@@ -2,8 +2,9 @@ package com.forge.messageservice.services
 
 import com.forge.messageservice.common.messaging.NotificationMessage
 import com.forge.messageservice.common.messaging.NotificationTask
-import com.forge.messageservice.common.messaging.Recipients
+import com.forge.messageservice.common.messaging.SendMessageRequest
 import com.forge.messageservice.entities.Template
+import com.forge.messageservice.repositories.TemplateVersionRepository
 import mu.KotlinLogging
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.core.KafkaTemplate
@@ -15,7 +16,8 @@ import java.io.Serializable
  */
 @Service
 class MessageDispatcherService(
-    private val kafkaTemplate: KafkaTemplate<String, Serializable>
+    private val kafkaTemplate: KafkaTemplate<String, Serializable>,
+    private val templateVersionRepository: TemplateVersionRepository
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -23,14 +25,17 @@ class MessageDispatcherService(
     /**
      * Queues a message in kafka to be consumed by worker dispatchers
      */
-    fun enqueueMessage() {
+    fun enqueueMessage(request: SendMessageRequest) {
+
+        // take subject from request otherwise use defaults
+        val subject = request.subject ?: ""
+
         kafkaTemplate.send(
             "internal-message-queue", NotificationTask(
                 channel = Template.AlertType.EMAIL,
+                subject = subject,
                 message = NotificationMessage(
-                    recipients = Recipients(
-                        to = listOf("")
-                    ),
+                    recipients = request.recipients,
                     messageBody = "Hello World"
                 )
             )

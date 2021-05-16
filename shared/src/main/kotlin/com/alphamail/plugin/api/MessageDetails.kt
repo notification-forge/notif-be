@@ -3,7 +3,7 @@ package com.alphamail.plugin.api
 class MessageDetails(
     val id: Long,
     val templateName: String,
-    val templateVersionHash: Int,
+    val templateVersionHash: String,
     val appCode: String,
     val body: String,
     val messageType: MessageType,

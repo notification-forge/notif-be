@@ -8,9 +8,6 @@ import javax.persistence.*
 @Table(name = "templates")
 class Template : Auditable() {
 
-    /**
-     * Auto generated sequence.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id")

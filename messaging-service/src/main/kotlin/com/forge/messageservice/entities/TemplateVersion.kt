@@ -1,18 +1,13 @@
 package com.forge.messageservice.entities
 
 import Auditable
-import org.hibernate.internal.util.collections.ArrayHelper.hash
-import java.util.*
-import java.util.Objects.hash
+import org.apache.commons.codec.digest.DigestUtils
 import javax.persistence.*
 
 @Entity
 @Table(name = "template_versions")
 class TemplateVersion : Auditable() {
 
-    /**
-     * A user defined id of the template version. Alphanumeric, dashes and dots only
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_version_id")
@@ -27,6 +22,10 @@ class TemplateVersion : Auditable() {
      */
     @Column(name = "template_id")
     var templateId: Long? = null
+
+    @ManyToOne
+    @JoinColumn(name = "template_id", insertable = false, updatable = false)
+    var template: Template? = null
 
     /**
      * A JSON encoded field containing the configuration for the given alert. For emails typical settings may be as follows:
@@ -47,21 +46,34 @@ class TemplateVersion : Auditable() {
      */
     @Column(name = "settings", columnDefinition = "MEDIUMTEXT", nullable = false)
     var settings: String = ""
+        set(value) {
+            field = value
+            isDirty = true
+        }
 
     /**
      * Since the field `version` can be used for optimistic locking and to identify this entity's version, we use
-     * templateHash here instead.
+     * templateDigest here instead.
      *
-     * `TemplateHash` is the SHA256 of the template body.
+     * `templateDigest` is the SHA256 of the template body + settings.
      */
-    @Column(name = "template_hash", nullable = false)
-        var templateHash: Int? = null
+    @Column(name = "template_digest", nullable = false)
+    var templateDigest: String? = null
+        private set
+        get() {
+            generateTemplateVersionDigestWhenEmpty()
+            return field
+        }
 
     /**
      * The body of the template. Can
      */
     @Column(name = "body", columnDefinition = "MEDIUMTEXT", nullable = false)
     var body: String = ""
+        set(value) {
+            field = value
+            isDirty = true
+        }
 
     @Column(name = "version")
     var version: Long? = 0
@@ -74,12 +86,14 @@ class TemplateVersion : Auditable() {
     @Column(name = "template_status", length = 24, nullable = false)
     var status: TemplateStatus = TemplateStatus.DRAFT
 
-    fun templateHash(): Int {
-        return Objects.hash(settings, body)
+    @Transient
+    var isDirty: Boolean = false
+
+    @PrePersist
+    @PreUpdate
+    fun generateTemplateVersionDigestWhenEmpty(){
+        if (isDirty) {
+            this.templateDigest = DigestUtils.sha256Hex(settings + body)
+        }
     }
-
-    @ManyToOne
-    @JoinColumn(name = "template_id", insertable = false, updatable = false)
-    val template: Template? = null
-
 }
