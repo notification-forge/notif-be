@@ -8,11 +8,11 @@ internal class TemplateVersionTest {
     @Test
     fun itGeneratesSha256HashOfTheSettingsAndMessageBody() {
         val templateVersion = TemplateVersion().apply {
-            settings = ""
-            body = ""
+            settings = "{}"
+            body = "{}"
         }
 
-        Assertions.assertNotNull(templateVersion.templateHash)
+        Assertions.assertNotNull(templateVersion.templateDigest)
     }
 
 }

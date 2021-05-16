@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull
 data class MessageInput(
     @NotBlank
     val templateUUID: String,
-    val templateHash: Int,
+    val templateDigest: String,
+
     @NotBlank
     val content: String,
     @NotBlank

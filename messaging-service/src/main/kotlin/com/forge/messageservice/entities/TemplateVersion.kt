@@ -23,6 +23,10 @@ class TemplateVersion : Auditable() {
     @Column(name = "template_id")
     var templateId: Long? = null
 
+    @ManyToOne
+    @JoinColumn(name = "template_id", insertable = false, updatable = false)
+    var template: Template? = null
+
     /**
      * A JSON encoded field containing the configuration for the given alert. For emails typical settings may be as follows:
      * ```
@@ -49,15 +53,15 @@ class TemplateVersion : Auditable() {
 
     /**
      * Since the field `version` can be used for optimistic locking and to identify this entity's version, we use
-     * templateHash here instead.
+     * templateDigest here instead.
      *
-     * `TemplateHash` is the SHA256 of the template body.
+     * `templateDigest` is the SHA256 of the template body + settings.
      */
-    @Column(name = "template_hash", nullable = false)
-    var templateHash: String? = null
+    @Column(name = "template_digest", nullable = false)
+    var templateDigest: String? = null
         private set
         get() {
-            generateHashWhenHashIsEmpty()
+            generateTemplateVersionDigestWhenEmpty()
             return field
         }
 
@@ -82,18 +86,14 @@ class TemplateVersion : Auditable() {
     @Column(name = "template_status", length = 24, nullable = false)
     var status: TemplateStatus = TemplateStatus.DRAFT
 
-    @ManyToOne
-    @JoinColumn(name = "template_id", insertable = false, updatable = false)
-    var template: Template? = null
-
     @Transient
     var isDirty: Boolean = false
 
     @PrePersist
     @PreUpdate
-    fun generateHashWhenHashIsEmpty(){
+    fun generateTemplateVersionDigestWhenEmpty(){
         if (isDirty) {
-            this.templateHash = DigestUtils.sha256Hex(settings + body)
+            this.templateDigest = DigestUtils.sha256Hex(settings + body)
         }
     }
 }

@@ -144,7 +144,7 @@ class TemplateVersionServiceTest {
 
         every { templateVersionRepository.findAllByTemplateId(templateId) } returns mockListOfTemplateVersions()
 
-        val templateVersions = templateVersionService.getAllTemplateVersionsByTemplateId(templateId)
+        val templateVersions = templateVersionService.getAllTemplateVersionsOf(templateId)
 
         assert(templateVersions.isNotEmpty())
         templateVersions.forEach { templateVersion ->
@@ -162,7 +162,7 @@ class TemplateVersionServiceTest {
         every { templateVersionRepository.findAllByTemplateId(templateIdThatDoesNotExist) } returns listOf()
 
         val blankTemplateVersions =
-            templateVersionService.getAllTemplateVersionsByTemplateId(templateIdThatDoesNotExist)
+            templateVersionService.getAllTemplateVersionsOf(templateIdThatDoesNotExist)
 
         assert(blankTemplateVersions.isNullOrEmpty())
     }
@@ -175,7 +175,7 @@ class TemplateVersionServiceTest {
             mockTemplateVersionOnePublished()
         )
 
-        val templateVersion = templateVersionService.getTemplateVersionById(templateVersionIdExist)
+        val templateVersion = templateVersionService.getTemplateVersion(templateVersionIdExist)
 
         assert(templateVersion.id == templateVersionIdExist)
     }
@@ -187,7 +187,7 @@ class TemplateVersionServiceTest {
         every { templateVersionRepository.findById(templateVersionIdDoesNotExist) } returns Optional.empty()
 
         assertThrows<TemplateVersionDoesNotExistException> {
-            templateVersionService.getTemplateVersionById(
+            templateVersionService.getTemplateVersion(
                 templateVersionIdDoesNotExist
             )
         }
@@ -273,9 +273,9 @@ class TemplateVersionServiceTest {
         } returns mockTemplatePlugins()
 
         every {
-            templateVersionRepository.existsByTemplateIdAndTemplateHash(
+            templateVersionRepository.existsByTemplateIdAndTemplateDigest(
                 1L,
-                mockPublishedTemplateVersion.templateHash!!
+                mockPublishedTemplateVersion.templateDigest!!
             )
         } returns false
 

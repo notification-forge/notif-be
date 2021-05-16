@@ -8,7 +8,7 @@ import com.forge.messageservice.entities.Template.AlertType.TEAMS
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
-import com.forge.messageservice.exceptions.TemplateHashExistedException
+
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.graphql.models.inputs.CloneTemplateVersionInput
 import com.forge.messageservice.graphql.models.inputs.CreateTemplateVersionInput
@@ -28,17 +28,24 @@ class TemplateVersionService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getAllTemplateVersionsByTemplateId(templateId: Long): List<TemplateVersion> {
+    fun getAllTemplateVersionsOf(templateId: Long): List<TemplateVersion> {
         return templateVersionRepository.findAllByTemplateId(templateId)
     }
 
     @Transactional(readOnly = true)
-    fun findTemplateVersionsByTemplateHashAndTemplateId(templateHash: Int, templateId: Long): TemplateVersion? {
-        return templateVersionRepository.findByTemplateHashAndTemplateId(templateHash, templateId)
+    fun findTemplateVersion(templateDigest: String, templateId: Long): TemplateVersion? {
+        return templateVersionRepository.findByTemplateDigestAndTemplateId(templateDigest, templateId)
     }
 
+    /**
+     * Returns a [TemplateVersion] identified by `templateVersionId`.
+     *
+     * @throws TemplateVersionDoesNotExistException when there is no [TemplateVersion]
+     *  with the given `templateVersionId`.
+     *
+     */
     @Transactional(readOnly = true)
-    fun getTemplateVersionById(templateVersionId: Long): TemplateVersion {
+    fun getTemplateVersion(templateVersionId: Long): TemplateVersion {
         val optionalTemplateVersion = templateVersionRepository.findById(templateVersionId)
 
         if (optionalTemplateVersion.isEmpty) {
@@ -48,7 +55,7 @@ class TemplateVersionService(
     }
 
     @Transactional(readOnly = true)
-    fun findTemplateVersionByTemplateIdAndStatus(
+    fun findTemplateVersion(
         templateVersionId: Long,
         status: TemplateStatus
     ): TemplateVersion? {
@@ -57,7 +64,7 @@ class TemplateVersionService(
 
     @Transactional(propagation = Propagation.REQUIRED)
     fun createTemplateVersion(templateVersionInput: CreateTemplateVersionInput): TemplateVersion {
-        val templateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
+        val templateVersion = findTemplateVersion(templateVersionInput.templateId, DRAFT)
 
         val template = getTemplateExist(templateVersionInput.templateId)
 
@@ -78,7 +85,8 @@ class TemplateVersionService(
 
     @Transactional(propagation = Propagation.REQUIRED)
     fun cloneTemplateVersion(templateVersionInput: CloneTemplateVersionInput): TemplateVersion {
-        val currentTemplateVersion = findTemplateVersionByTemplateIdAndStatus(templateVersionInput.templateId, DRAFT)
+        val currentTemplateVersion =
+            findTemplateVersion(templateVersionInput.templateId, DRAFT)
 
         getTemplateExist(templateVersionInput.templateId)
 
@@ -115,7 +123,7 @@ class TemplateVersionService(
 
     @Transactional(propagation = Propagation.REQUIRED)
     fun updateTemplateVersion(templateVersionInput: UpdateTemplateVersionInput): TemplateVersion {
-        val templateVersion = getTemplateVersionById(templateVersionInput.id)
+        val templateVersion = getTemplateVersion(templateVersionInput.id)
 
         templateVersion.apply {
             name = templateVersionInput.name
@@ -135,7 +143,7 @@ class TemplateVersionService(
         return savedTemplateVersion
     }
 
-    private fun getTemplateSetting(template: Template, ): String {
+    private fun getTemplateSetting(template: Template): String {
         return when (template.alertType) {
             EMAIL -> {
                 objectMapper.writeValueAsString(MailSettings())
@@ -154,13 +162,4 @@ class TemplateVersionService(
         return optionalTemplate.get()
     }
 
-    private fun ensureTemplateHashDoesNotExist(templateVersion: TemplateVersion) {
-        if (templateVersionRepository.existsByTemplateIdAndTemplateHash(
-                templateVersion.templateId!!,
-                templateVersion.templateHash!!
-            )
-        ) {
-            throw TemplateHashExistedException("Template with the exact same body and setting has already exist")
-        }
-    }
 }

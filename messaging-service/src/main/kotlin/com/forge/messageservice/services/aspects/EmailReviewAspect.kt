@@ -35,7 +35,7 @@ class EmailReviewAspect(
         val message = joinPoint.args[0] as Message
         logger.info("(START) Pre Processing Actions for ${message.id}")
 
-        val templateVersion = templateVersionService.getTemplateVersionById(message.templateVersionId!!)
+        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
         val templatePlugins = templatePluginService.getTemplatePluginsByTemplateVersionId(templateVersion.id!!)
 
         templatePlugins.map { templatePlugin ->
@@ -60,7 +60,7 @@ class EmailReviewAspect(
         val message = retVal as Message
         logger.info("(START) Post Processing Actions for ${message.id}")
 
-        val templateVersion = templateVersionService.getTemplateVersionById(message.templateVersionId!!)
+        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
         val templatePlugins = templatePluginService.getTemplatePluginsByTemplateVersionId(templateVersion.id!!)
 
         templatePlugins.map { templatePlugin ->
@@ -85,7 +85,7 @@ class EmailReviewAspect(
         return MessageDetails(
             message.id!!,
             templateVersion.template!!.name!!,
-            templateVersion.templateHash!!,
+            templateVersion.templateDigest!!,
             message.appCode!!,
             templatingEngine.parseTemplate(templateVersion.body, messageContent),
             message.messageType,

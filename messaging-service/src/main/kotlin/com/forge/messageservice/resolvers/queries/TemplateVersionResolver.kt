@@ -21,7 +21,7 @@ class TemplateVersionResolver(
     fun templateVersions(template: Template?): CompletableFuture<List<TemplateVersion>>? {
         return CompletableFuture.supplyAsync(
             Supplier {
-                templateVersionService.getAllTemplateVersionsByTemplateId(template!!.id!!)
+                templateVersionService.getAllTemplateVersionsOf(template!!.id!!)
             },
             executorService
         )

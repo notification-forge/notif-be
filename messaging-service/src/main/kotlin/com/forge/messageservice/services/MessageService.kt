@@ -9,7 +9,6 @@ import com.forge.messageservice.common.engines.TemplatingEngine
 import com.forge.messageservice.entities.MailSettings
 import com.forge.messageservice.entities.Message
 import com.forge.messageservice.entities.TeamsSettings
-import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.responses.TeamsWebhookResponse
 import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.exceptions.InvalidTemplateSettingFormatException
@@ -75,8 +74,9 @@ open class MessageService(
     @Transactional(propagation = Propagation.REQUIRED)
     fun saveMessage(messageInput: MessageInput): Message {
         val template = templateService.getTemplateByTemplateUUID(UUID.fromString(messageInput.templateUUID))
-        val templateVersion = templateVersionService.findTemplateVersionsByTemplateHashAndTemplateId(
-            messageInput.templateHash,
+
+        val templateVersion = templateVersionService.findTemplateVersion(
+            messageInput.templateDigest,
             template.id!!
         )
 
@@ -93,7 +93,7 @@ open class MessageService(
     }
 
     fun sendTeamsMessage(message: Message) {
-        val templateVersion = templateVersionService.getTemplateVersionById(message.templateVersionId!!)
+        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
         val teamsSettings = getTeamsSettings(message.content)
         val templateSettings = getTeamsSettings(templateVersion.settings)
 
@@ -121,7 +121,7 @@ open class MessageService(
 
     fun sendMail(message: Message): Message {
         val mimeMessage = javaMailSender.createMimeMessage()
-        val templateVersion = templateVersionService.getTemplateVersionById(message.templateVersionId!!)
+        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
         try {
             val mailSettings = getMailSettings(message.settings)
             val templateSettings = getMailSettings(templateVersion.settings)
@@ -149,7 +149,7 @@ open class MessageService(
             message.messageStatus = SENT
         } catch (e: IOException) {
             message.reason =
-                "Unable to dispatch mail ${message.id}. Reason: Invalid param provided for template: ${templateVersion.templateHash}"
+                "Unable to dispatch mail ${message.id}. Reason: Invalid param provided for template: ${templateVersion.templateDigest}"
             message.messageStatus = FAILED
         } catch (e: MessagingException) {
             message.reason = "Unable to dispatch mail ${message.id}. Reason: Invalid mail inputs"
