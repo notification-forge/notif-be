@@ -1,25 +1,22 @@
 package com.forge.messageservice.services
 
 import com.alphamail.plugin.api.MessageStatus.*
-import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.forge.messageservice.common.engines.TemplatingEngine
-import com.forge.messageservice.entities.MailSettings
+import com.forge.messageservice.common.messaging.MailNotificationTask
+import com.forge.messageservice.common.messaging.TeamsNotificationTask
 import com.forge.messageservice.entities.Message
-import com.forge.messageservice.entities.TeamsSettings
 import com.forge.messageservice.entities.responses.TeamsWebhookResponse
 import com.forge.messageservice.exceptions.GraphQLQueryException
-import com.forge.messageservice.exceptions.InvalidTemplateSettingFormatException
 import com.forge.messageservice.exceptions.MessageDoesNotExistException
-import com.forge.messageservice.graphql.models.inputs.MessageInput
+import com.forge.messageservice.exceptions.MessageRetryLimitException
 import com.forge.messageservice.repositories.MessageRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.mail.MailException
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
@@ -27,17 +24,14 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
-import java.util.*
 import javax.mail.MessagingException
 import javax.mail.internet.InternetAddress
-import com.fasterxml.jackson.databind.JsonMappingException as JsonMappingException1
 
 @Service
-open class MessageService(
+class MessageService(
     private val messageRepository: MessageRepository,
     private val templateService: TemplateService,
     private val templateVersionService: TemplateVersionService,
-    private val templatingEngine: TemplatingEngine,
     private val javaMailSender: JavaMailSender,
     private val objectMapper: ObjectMapper,
     @Value("\${app.message.retry.limit}") private val retryLimit: Int
@@ -45,7 +39,7 @@ open class MessageService(
 
     @Transactional(readOnly = true)
     fun getAllPendingMessages(): List<Message> {
-        return messageRepository.findByMessageStatus(PENDING)
+        return messageRepository.findByStatus(PENDING)
     }
 
     @Transactional(readOnly = true)
@@ -72,89 +66,63 @@ open class MessageService(
 
 
     @Transactional(propagation = Propagation.REQUIRED)
-    fun saveMessage(messageInput: MessageInput): Message {
-        val template = templateService.getTemplateByTemplateUUID(UUID.fromString(messageInput.templateUUID))
-
-        val templateVersion = templateVersionService.findTemplateVersion(
-            messageInput.templateDigest,
-            template.id!!
-        )
-
-        val message = Message().apply {
-            templateId = template.id
-            templateVersionId = templateVersion?.templateId
-            appCode = template.appCode
-            content = messageInput.content
-            settings = messageInput.settings
-            messageType = messageInput.messageType
-        }
-
+    fun saveMessage(message: Message): Message {
         return messageRepository.save(message)
     }
 
-    fun sendTeamsMessage(message: Message) {
-        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
-        val teamsSettings = getTeamsSettings(message.content)
-        val templateSettings = getTeamsSettings(templateVersion.settings)
-
-        val teamsWebHookUrl = replaceIfNotEmpty(teamsSettings.teamsWebhookUrl, templateSettings.teamsWebhookUrl)
-        val messageContent: Map<String, Any> = objectMapper.readValue(message.content)
-        val body = templatingEngine.parseTemplate(templateVersion.body, messageContent)
-
+    fun sendMessage(task: TeamsNotificationTask): Message {
+        val teamSettings = task.teamSettings
+        val message = getMessage(task.messageId)
+        ensureRetryable(message.timesTriggered)
         try {
-            val request = HttpEntity(body)
+            val request = HttpEntity(task.body)
             val restTemplate = RestTemplate()
-            restTemplate.exchange(teamsWebHookUrl, HttpMethod.POST, request, TeamsWebhookResponse::class.java)
+            restTemplate.exchange(
+                teamSettings.teamsWebhookUrl!!,
+                HttpMethod.POST,
+                request,
+                TeamsWebhookResponse::class.java
+            )
             message.reason = ""
-            message.messageStatus = SENT
+            message.status = SENT
         } catch (e: JsonProcessingException) {
             message.reason =
                 "Unable to dispatch teams message ${message.id}. Reason: Invalid param provided for templates"
-            message.messageStatus = FAILED
+            message.status = FAILED
         } catch (e: Exception) {
             retryMessage(
                 message,
                 "Unable to dispatch teams message ${message.id}. Reason: Invalid param provided for templates"
             )
+        } finally {
+            return messageRepository.save(message)
         }
     }
 
-    fun sendMail(message: Message): Message {
+    fun sendMessage(task: MailNotificationTask): Message {
         val mimeMessage = javaMailSender.createMimeMessage()
-        val templateVersion = templateVersionService.getTemplateVersion(message.templateVersionId!!)
+        val mailSettings = task.mailSettings
+        val message = getMessage(task.messageId)
+        ensureRetryable(message.timesTriggered)
         try {
-            val mailSettings = getMailSettings(message.settings)
-            val templateSettings = getMailSettings(templateVersion.settings)
-            val messageHelper = MimeMessageHelper(mimeMessage, mailSettings.hasAttachments!!)
-
-            val messageContent: Map<String, Any> = objectMapper.readValue(message.content)
-
-            val importance = replaceIfNotEmpty(mailSettings.importance, templateSettings.importance)
-            val from = replaceIfNotEmpty(mailSettings.sender, templateSettings.sender)
-            val to = replaceIfNotEmpty(mailSettings.recipients, templateSettings.recipients)
-            val cc = replaceIfNotEmpty(mailSettings.ccRecipients, templateSettings.ccRecipients)
-            val bcc = replaceIfNotEmpty(mailSettings.bccRecipients, templateSettings.bccRecipients)
-            val subject = replaceIfNotEmpty(mailSettings.subject, templateSettings.subject)
-            val body = templatingEngine.parseTemplate(templateVersion.body, messageContent)
-
-            mimeMessage.setHeader("Importance", importance)
-            messageHelper.setFrom(from)
-            messageHelper.setTo(InternetAddress.parse(to))
-            if (cc != null && cc.isNotEmpty()) messageHelper.setCc(InternetAddress.parse(cc))
-            if (bcc != null && bcc.isNotEmpty()) messageHelper.setBcc(InternetAddress.parse(bcc))
-            messageHelper.setSubject(subject)
-            messageHelper.setText(body, true)
+            val messageHelper = MimeMessageHelper(mimeMessage, false)
+            mimeMessage.setHeader("Importance", mailSettings.importance)
+            messageHelper.setFrom(mailSettings.sender)
+            messageHelper.setTo(InternetAddress.parse(mailSettings.recipients))
+            if (mailSettings.ccRecipients.isNotEmpty()) messageHelper.setCc(InternetAddress.parse(mailSettings.ccRecipients))
+            if (mailSettings.bccRecipients.isNotEmpty()) messageHelper.setBcc(InternetAddress.parse(mailSettings.bccRecipients))
+            messageHelper.setSubject(mailSettings.subject)
+            messageHelper.setText(task.body, true)
 
             javaMailSender.send(mimeMessage)
-            message.messageStatus = SENT
+            message.status = SENT
         } catch (e: IOException) {
-            message.reason =
-                "Unable to dispatch mail ${message.id}. Reason: Invalid param provided for template: ${templateVersion.templateDigest}"
-            message.messageStatus = FAILED
+            message.reason = "Unable to dispatch mail ${message.id}. Reason: Invalid param provided for template"
+            message.status = FAILED
         } catch (e: MessagingException) {
             message.reason = "Unable to dispatch mail ${message.id}. Reason: Invalid mail inputs"
-            message.messageStatus = FAILED
-        } catch (e: MessagingException) {
+            message.status = FAILED
+        } catch (e: MailException) {
             retryMessage(message, "Unable to dispatch mail ${message.id}. Reason: Unable to connect to SMTP Server")
         } catch (e: Exception) {
             retryMessage(message, "Unable to dispatch mail ${message.id}. Reason: Generic Exception")
@@ -163,39 +131,17 @@ open class MessageService(
         }
     }
 
+    private fun ensureRetryable(timesTriggered: Int) {
+        if (timesTriggered >= retryLimit) {
+            throw MessageRetryLimitException("Message retry limit has met")
+        }
+    }
+
     private fun retryMessage(message: Message, reason: String) {
+        message.timesTriggered += 1
         if (message.timesTriggered == retryLimit) {
             message.reason = reason
-            message.messageStatus = FAILED
-        } else {
-            message.timesTriggered += 1
+            message.status = FAILED
         }
-    }
-
-    private fun getMailSettings(setting: String): MailSettings {
-        try {
-            return objectMapper.readValue(setting)
-        } catch (e: JsonParseException) {
-            throw InvalidTemplateSettingFormatException("Invalid Mail Setting format")
-        } catch (e: JsonMappingException1) {
-            throw InvalidTemplateSettingFormatException("Invalid Mail Setting format")
-        }
-    }
-
-    private fun getTeamsSettings(setting: String): TeamsSettings {
-        try {
-            return objectMapper.readValue(setting)
-        } catch (e: JsonParseException) {
-            throw InvalidTemplateSettingFormatException("Invalid Teams Setting format")
-        } catch (e: JsonMappingException1) {
-            throw InvalidTemplateSettingFormatException("Invalid Teams Setting format")
-        }
-    }
-
-    private fun replaceIfNotEmpty(mailSettingContent: String?, templateSettingContent: String?): String? {
-        if (mailSettingContent.isNullOrEmpty()) {
-            return templateSettingContent
-        }
-        return mailSettingContent
     }
 }

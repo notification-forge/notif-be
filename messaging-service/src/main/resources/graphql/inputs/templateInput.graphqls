@@ -6,7 +6,7 @@ input CreateTemplateInput {
     """
     choosing between email or teams messaging
     """
-    alertType: AlertType
+    type: MessageType
     appCode: String
 }
 

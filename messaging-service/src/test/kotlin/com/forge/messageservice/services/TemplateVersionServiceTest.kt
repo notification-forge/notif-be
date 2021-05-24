@@ -1,5 +1,6 @@
 package com.forge.messageservice.services
 
+import com.alphamail.plugin.api.MessageType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplatePlugin
@@ -55,7 +56,7 @@ class TemplateVersionServiceTest {
             id = 1L
             name = "Apology Template One"
             appCode = "AppOne"
-            alertType = Template.AlertType.EMAIL
+            type = MessageType.EMAIL
         }
     }
 

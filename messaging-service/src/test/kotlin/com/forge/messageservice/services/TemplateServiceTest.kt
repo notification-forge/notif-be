@@ -1,7 +1,7 @@
 package com.forge.messageservice.services
 
+import com.alphamail.plugin.api.MessageType
 import com.forge.messageservice.entities.Template
-import com.forge.messageservice.entities.Template.AlertType
 import com.forge.messageservice.exceptions.GraphQLQueryException
 import com.forge.messageservice.exceptions.TemplateDoesNotExistException
 import com.forge.messageservice.exceptions.TemplateExistedException
@@ -44,7 +44,7 @@ class TemplateServiceTest {
             id = 1L
             name = "Apology Template One"
             appCode = "AppOne"
-            alertType = AlertType.EMAIL
+            type = MessageType.EMAIL
         }
     }
 
@@ -53,7 +53,7 @@ class TemplateServiceTest {
             id = 2L
             name = "Apology Template Two"
             appCode = "AppTwo"
-            alertType = AlertType.EMAIL
+            type = MessageType.EMAIL
         }
     }
 
@@ -62,7 +62,7 @@ class TemplateServiceTest {
             id = 3L
             name = "Apology Template Three"
             appCode = "AppOne"
-            alertType = AlertType.EMAIL
+            type = MessageType.EMAIL
         }
     }
 
@@ -121,13 +121,13 @@ class TemplateServiceTest {
     fun itShouldReturnTemplateWhenCreatingTemplate() {
         val templateName = "Apology Template Four"
         val templateAppCode = "AppOne"
-        val templateAlertType = AlertType.EMAIL
+        val templateMessageType = MessageType.EMAIL
 
-        val createTemplateInput = CreateTemplateInput(templateName, templateAlertType, templateAppCode)
+        val createTemplateInput = CreateTemplateInput(templateName, templateMessageType, templateAppCode)
 
         val mockTemplate = Template().apply {
             name = templateName
-            alertType = templateAlertType
+            type = templateMessageType
             appCode = templateAppCode
         }
 
@@ -137,7 +137,7 @@ class TemplateServiceTest {
         val template = templateService.createTemplate(createTemplateInput)
 
         assert(template.name == templateName)
-        assert(template.alertType == templateAlertType)
+        assert(template.type == templateMessageType)
         assert(template.appCode == templateAppCode)
 
     }
@@ -146,9 +146,9 @@ class TemplateServiceTest {
     fun itShouldThrowAnExceptionWhenCreatingTemplateWhereTemplateNameAndAppCodeAlreadyExist() {
         val templateNameExisted = "Apology Template One"
         val templateAppCode = "AppOne"
-        val templateAlertType = AlertType.EMAIL
+        val templateMessageType = MessageType.EMAIL
 
-        val createTemplateExistedInput = CreateTemplateInput(templateNameExisted, templateAlertType, templateAppCode)
+        val createTemplateExistedInput = CreateTemplateInput(templateNameExisted, templateMessageType, templateAppCode)
         every {
             templateRepository.findByNameAndAppCode(
                 templateNameExisted,
@@ -165,7 +165,7 @@ class TemplateServiceTest {
         val templateId = 1L
         val templateName = "Apology Template Four"
         val templateAppCode = "AppOne"
-        val templateAlertType = AlertType.EMAIL
+        val templateMessageType = MessageType.EMAIL
 
         val updateTemplateInput = UpdateTemplateInput(templateId, templateName)
 
@@ -173,7 +173,7 @@ class TemplateServiceTest {
             id = templateId
             name = templateName
             appCode = templateAppCode
-            alertType = templateAlertType
+            type = templateMessageType
         }
 
         every { templateRepository.findById(templateId) } returns Optional.of(mockTemplateOne())
@@ -184,7 +184,7 @@ class TemplateServiceTest {
         val template = templateService.updateTemplate(updateTemplateInput)
         assert(template.id == templateId)
         assert(template.name == templateName)
-        assert(template.alertType == templateAlertType)
+        assert(template.type == templateMessageType)
         assert(template.appCode == templateAppCode)
 
     }

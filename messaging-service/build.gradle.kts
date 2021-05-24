@@ -40,6 +40,8 @@ dependencies {
 
     implementation("io.pebbletemplates:pebble:3.1.4")
 
+    implementation("commons-codec:commons-codec:1.15")
+
     implementation("org.hibernate.validator:hibernate-validator")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

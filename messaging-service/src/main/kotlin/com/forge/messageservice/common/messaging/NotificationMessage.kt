@@ -7,8 +7,3 @@ data class Recipients(
     val cc: List<String> = emptyList(),
     val bcc: List<String> = emptyList()
 ) : Serializable
-
-data class NotificationMessage(
-    val recipients: Recipients,
-    val messageBody: String
-) : Serializable

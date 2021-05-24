@@ -1,10 +1,17 @@
 package com.forge.messageservice.common.messaging
 
-import com.forge.messageservice.entities.Template
+import com.forge.messageservice.entities.MailSettings
+import com.forge.messageservice.entities.TeamsSettings
 import java.io.Serializable
 
-data class NotificationTask(
-    val channel: Template.AlertType,
-    val subject: String,
-    val message: NotificationMessage
+data class MailNotificationTask(
+    val messageId: Long,
+    val mailSettings: MailSettings,
+    val body: String
+) : Serializable
+
+data class TeamsNotificationTask(
+    val messageId: Long,
+    val teamSettings: TeamsSettings,
+    val body: String
 ) : Serializable

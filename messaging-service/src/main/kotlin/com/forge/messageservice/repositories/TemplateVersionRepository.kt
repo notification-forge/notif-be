@@ -15,6 +15,9 @@ interface TemplateVersionRepository : JpaRepository<TemplateVersion, Long> {
 
     fun findByTemplateDigestAndTemplateId(templateDigest: String, templateId: Long): TemplateVersion?
 
+    @Query("SELECT MAX(t.version) FROM TemplateVersion t where t.templateId = :templateId and template_status = 'PUBLISHED'")
+    fun findCurrentPublishedVersionNumberByTemplateId(templateId: Long): Long
+
     @Query("SELECT MAX(t.version) FROM TemplateVersion t where t.templateId = :templateId")
     fun findCurrentVersionNumberByTemplateId(templateId: Long): Long
 

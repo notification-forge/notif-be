@@ -31,15 +31,23 @@ class Message : Auditable() {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "message_type")
-    var messageType: MessageType = MessageType.MAIL
+    var type: MessageType = MessageType.EMAIL
 
     @Enumerated(EnumType.STRING)
     @Column(name = "message_status")
-    var messageStatus: MessageStatus = MessageStatus.PENDING
+    var status: MessageStatus = MessageStatus.PENDING
 
     @Column(name = "reason", length = 2000)
     var reason: String? = null
 
     @Column(name = "times_triggered")
     var timesTriggered: Int = 0
+
+    @ManyToOne
+    @JoinColumn(name = "template_id", insertable = false, updatable = false)
+    var template: Template? = null
+
+    @ManyToOne
+    @JoinColumn(name = "template_version_id", insertable = false, updatable = false)
+    var templateVersion: TemplateVersion? = null
 }

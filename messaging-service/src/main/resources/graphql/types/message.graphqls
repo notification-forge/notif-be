@@ -25,12 +25,12 @@ type Message {
     """
     Setting template Type to choose between email or teams messaging
     """
-    messageType: MessageType
+    type: MessageType
     """
     Status of the message
     Enum for PENDING / SENT / FAILED
     """
-    messageStatus: MessageStatus
+    status: MessageStatus
     """
     Reason for FAILED
     """
@@ -58,7 +58,7 @@ type Message {
 }
 
 enum MessageType {
-    MAIL, TEAMS
+    EMAIL, TEAMS
 }
 
 enum MessageStatus {
