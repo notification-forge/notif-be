@@ -40,7 +40,6 @@ type Template {
   lastModifiedBy: String
 }
 
-
 type TemplateVersion {
   id: Int
   """
@@ -101,6 +100,10 @@ type TemplateVersion {
   Audit Last Modified By
   """
   lastModifiedBy: String
+  """
+  Template of template version
+  """
+  template: Template
 }
 
 
