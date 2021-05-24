@@ -22,4 +22,5 @@ INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mand
 INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "bccRecipients", "", TRUE, "SYSTEM", NOW());
 INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "subject", "", TRUE, "SYSTEM", NOW());
 INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "importance", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "hasAttachments", "", TRUE, "SYSTEM", NOW());
 INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('TEAMS', "teamsWebhookUrl", "", TRUE, "SYSTEM", NOW());
