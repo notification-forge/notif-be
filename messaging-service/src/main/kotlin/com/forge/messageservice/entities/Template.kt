@@ -1,6 +1,7 @@
 package com.forge.messageservice.entities
 
 import Auditable
+import com.alphamail.plugin.api.MessageType
 import java.util.*
 import javax.persistence.*
 
@@ -20,13 +21,9 @@ class Template : Auditable() {
     @Column(name = "template_UUID")
     var uuid: UUID? = null
 
-    enum class AlertType {
-        TEAMS, EMAIL
-    }
-
     @Enumerated(EnumType.STRING)
     @Column(name = "notification_type", length = 24, nullable = false)
-    var alertType: AlertType = AlertType.EMAIL
+    var type: MessageType = MessageType.EMAIL
 
     @Column(name = "app_code")
     var appCode: String? = null

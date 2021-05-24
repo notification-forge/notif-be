@@ -1,6 +1,6 @@
 input MessageInput {
     templateUUID: String
-    templateHash: Int,
+    templateDigest: String,
     content: String,
     settings: String,
     messageType: MessageType

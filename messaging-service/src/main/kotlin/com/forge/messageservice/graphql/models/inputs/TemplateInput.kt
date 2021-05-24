@@ -1,6 +1,6 @@
 package com.forge.messageservice.graphql.models.inputs
 
-import com.forge.messageservice.entities.Template
+import com.alphamail.plugin.api.MessageType
 import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank
 data class CreateTemplateInput(
     @NotBlank
     val name: String,
-    val alertType: Template.AlertType,
+    val alertType: MessageType,
     @NotBlank
     val appCode: String
 )

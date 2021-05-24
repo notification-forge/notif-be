@@ -12,3 +12,14 @@ INSERT INTO ONBOARDING (username, app_code, created_by, created_timestamp) VALUE
 INSERT INTO ONBOARDING (username, app_code, created_by, created_timestamp) VALUES ('ntfapvr', 'FABK', 'SYSTEM', NOW());
 INSERT INTO ONBOARDING (username, app_code, created_by, created_timestamp) VALUES ('ntfapvr', 'INST', 'SYSTEM', NOW());
 INSERT INTO ONBOARDING (username, app_code, created_by, created_timestamp) VALUES ('ntfapvr', 'TWIT', 'SYSTEM', NOW());
+
+INSERT INTO TEMPLATE_CFGS (name) VALUES ('EMAIL');
+INSERT INTO TEMPLATE_CFGS (name) VALUES ('TEAMS');
+
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "sender", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "recipients", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "ccRecipients", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "bccRecipients", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "subject", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('EMAIL', "importance", "", TRUE, "SYSTEM", NOW());
+INSERT INTO TEMPLATE_CFG_DETAILS (template_cfg_name, field_name, format, is_mandatory, created_by, created_timestamp) VALUES ('TEAMS', "teamsWebhookUrl", "", TRUE, "SYSTEM", NOW());

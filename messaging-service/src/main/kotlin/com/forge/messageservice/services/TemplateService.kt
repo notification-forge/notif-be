@@ -66,7 +66,7 @@ class TemplateService(
         return saveTemplate(Template().apply {
             uuid = UUID.randomUUID()
             name = templateInput.name
-            alertType = templateInput.alertType
+            type = templateInput.alertType
             appCode = templateInput.appCode
         })
     }

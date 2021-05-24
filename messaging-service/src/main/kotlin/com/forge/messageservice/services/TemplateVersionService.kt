@@ -1,14 +1,13 @@
 package com.forge.messageservice.services
 
+import com.alphamail.plugin.api.MessageType.EMAIL
+import com.alphamail.plugin.api.MessageType.TEAMS
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.forge.messageservice.entities.MailSettings
 import com.forge.messageservice.entities.Template
-import com.forge.messageservice.entities.Template.AlertType.EMAIL
-import com.forge.messageservice.entities.Template.AlertType.TEAMS
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus.DRAFT
-
 import com.forge.messageservice.exceptions.TemplateVersionDoesNotExistException
 import com.forge.messageservice.graphql.models.inputs.CloneTemplateVersionInput
 import com.forge.messageservice.graphql.models.inputs.CreateTemplateVersionInput
@@ -33,8 +32,11 @@ class TemplateVersionService(
     }
 
     @Transactional(readOnly = true)
-    fun findTemplateVersion(templateDigest: String, templateId: Long): TemplateVersion? {
-        return templateVersionRepository.findByTemplateDigestAndTemplateId(templateDigest, templateId)
+    fun getTemplateVersion(templateDigest: String, templateId: Long): TemplateVersion {
+        val templateVersion = templateVersionRepository.findByTemplateDigestAndTemplateId(templateDigest, templateId)
+        if (templateVersion != null) return templateVersion
+        val currentVersion = templateVersionRepository.findCurrentPublishedVersionNumberByTemplateId(templateId)
+        return templateVersionRepository.findById(currentVersion).get()
     }
 
     /**
@@ -144,7 +146,7 @@ class TemplateVersionService(
     }
 
     private fun getTemplateSetting(template: Template): String {
-        return when (template.alertType) {
+        return when (template.type) {
             EMAIL -> {
                 objectMapper.writeValueAsString(MailSettings())
             }

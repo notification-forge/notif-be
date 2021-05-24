@@ -11,7 +11,7 @@ type Template {
   """
   Setting template Type to choose between email or teams messaging
   """
-  alertType: String
+  type: MessageType
   """
   Connecting template to the application that uses this template
   """
@@ -40,13 +40,6 @@ type Template {
   lastModifiedBy: String
 }
 
-
-"""
-Setting template Type to choose between email or teams messaging
-"""
-enum AlertType {
-    TEAMS, EMAIL
-}
 
 type TemplateVersion {
   id: Int

@@ -88,8 +88,8 @@ class EmailReviewAspect(
             templateVersion.templateDigest!!,
             message.appCode!!,
             templatingEngine.parseTemplate(templateVersion.body, messageContent),
-            message.messageType,
-            message.messageStatus,
+            message.type,
+            message.status,
             message.reason!!
         )
     }

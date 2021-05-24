@@ -17,5 +17,5 @@ enum class MessageStatus {
 }
 
 enum class MessageType {
-    MAIL, TEAMS
+    EMAIL, TEAMS
 }
