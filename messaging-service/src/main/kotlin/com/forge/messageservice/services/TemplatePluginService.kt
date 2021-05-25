@@ -38,7 +38,7 @@ class TemplatePluginService(
     }
 
     @Transactional(readOnly = true)
-    fun getTemplatePlugin(templatePluginId: Long): TemplatePlugin{
+    fun getTemplatePlugin(templatePluginId: Long): TemplatePlugin {
         val optionalTemplatePlugin = templatePluginRepository.findById(templatePluginId)
         return optionalTemplatePlugin.get()
     }
@@ -67,10 +67,10 @@ class TemplatePluginService(
         }
     }
 
-    private fun convertPluginConfiguration(pluginInput: PluginInput): PluginConfiguration{
+    private fun convertPluginConfiguration(pluginInput: PluginInput): PluginConfiguration {
         val plugin = pluginService.getPlugin(pluginInput.pluginId)
         val fieldConfigurations: List<FieldConfiguration> = objectMapper.readValue(plugin.configurationDescriptors!!)
-        val fieldConfigurationMap = fieldConfigurations.map {fieldConfiguration ->
+        val fieldConfigurationMap = fieldConfigurations.map { fieldConfiguration ->
             fieldConfiguration.name to fieldConfiguration
         }.toMap()
 
@@ -87,13 +87,13 @@ class TemplatePluginService(
                 Class.forName(plugin.configurationClassName, true, child)
             )
             return entityInstance as PluginConfiguration
-        } catch (e: ClassNotFoundException){
+        } catch (e: ClassNotFoundException) {
             throw FieldValidationException("Unable to find configuration class")
         }
     }
 
-    private fun validateMandatory(configurationInput: ConfigurationInput){
-        if (configurationInput.value.isEmpty()){
+    private fun validateMandatory(configurationInput: ConfigurationInput) {
+        if (configurationInput.value.isEmpty()) {
             throw FieldValidationException("Field ${configurationInput.key} has Value ${configurationInput.value} is empty when it is supposed to be mandatory")
         }
     }
