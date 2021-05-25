@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank
 data class CreateTemplateInput(
     @NotBlank
     val name: String,
-    val alertType: MessageType,
+    val type: MessageType,
     @NotBlank
     val appCode: String
 )
