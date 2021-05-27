@@ -4,6 +4,7 @@ import com.alphamail.plugin.api.MessageType.EMAIL
 import com.alphamail.plugin.api.MessageType.TEAMS
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.forge.messageservice.entities.MailSettings
+import com.forge.messageservice.entities.TeamsSettings
 import com.forge.messageservice.entities.Template
 import com.forge.messageservice.entities.TemplateVersion
 import com.forge.messageservice.entities.TemplateVersion.TemplateStatus
@@ -151,7 +152,7 @@ class TemplateVersionService(
                 objectMapper.writeValueAsString(MailSettings())
             }
             TEAMS -> {
-                ""
+                objectMapper.writeValueAsString(TeamsSettings())
             }
         }
     }

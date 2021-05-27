@@ -49,4 +49,9 @@ type Query {
     paginationInput -> pagination inputs such as current page, page limit and sort
     """
     messages(name: String, appCode: String, pageRequestInput: PaginationInput): MessageConnection @connection(for: "Message")
+    """
+    Query on an individual template
+    id -> Template's id
+    """
+    preview(template: String, context: String): TemplatePreview
 }

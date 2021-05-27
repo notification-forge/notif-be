@@ -106,6 +106,13 @@ type TemplateVersion {
   template: Template
 }
 
+type TemplatePreview {
+  """
+  Template body with context provided
+  """
+  templateBody: String
+}
+
 
 """
 Status of the template version
